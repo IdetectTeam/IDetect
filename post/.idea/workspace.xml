@@ -13,11 +13,25 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/jesonFile.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="284">
               <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
               <folding>
                 <element signature="e#127#141#0" expanded="true" />
               </folding>
+=======
+            <state relative-caret-position="108">
+              <caret line="37" column="16" lean-forward="true" selection-start-line="37" selection-start-column="16" selection-end-line="37" selection-end-column="16" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/codecs.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="162">
+              <caret line="323" selection-start-line="323" selection-end-line="323" />
+>>>>>>> place in json
             </state>
           </provider>
         </entry>
@@ -25,8 +39,13 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/res.json">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="132">
               <caret line="27" column="32" selection-start-line="27" selection-start-column="26" selection-end-line="27" selection-end-column="32" />
+=======
+            <state relative-caret-position="154">
+              <caret line="166" column="26" selection-start-line="166" selection-start-column="26" selection-end-line="166" selection-end-column="26" />
+>>>>>>> place in json
             </state>
           </provider>
         </entry>
@@ -44,6 +63,10 @@
     <findStrings>
       <find>Traveler</find>
       <find>T</find>
+<<<<<<< HEAD
+=======
+      <find>indexOfWord</find>
+>>>>>>> place in json
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -165,14 +188,21 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+<<<<<<< HEAD
     <editor active="true" />
+=======
+>>>>>>> place in json
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.2559524" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
+<<<<<<< HEAD
       <window_info anchor="bottom" id="Run" order="2" weight="0.27168575" />
+=======
+      <window_info anchor="bottom" id="Run" order="2" weight="0.16693944" />
+>>>>>>> place in json
       <window_info anchor="bottom" id="Debug" order="3" weight="0.44844517" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -210,6 +240,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/jesonFile.py</url>
+<<<<<<< HEAD
           <line>15</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
@@ -223,20 +254,73 @@
           <line>36</line>
           <option name="timeStamp" value="11" />
         </line-breakpoint>
+=======
+          <line>67</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+>>>>>>> place in json
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
+<<<<<<< HEAD
         <watch expression="statment" language="Python" />
         <watch expression="s" language="Python" />
         <watch expression="f" language="Python" />
         <watch expression="c" language="Python" />
+=======
+        <watch expression="idfields[s]" language="Python" />
+>>>>>>> place in json
       </configuration>
     </watches-manager>
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="watch">
       <expression>
+<<<<<<< HEAD
+        <expression-string>f['description'][i]:</expression-string>
+=======
+        <expression-string>idfields[s]</expression-string>
+>>>>>>> place in json
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+<<<<<<< HEAD
+        <expression-string>c</expression-string>
+=======
+        <expression-string>fields[index]</expression-string>
+>>>>>>> place in json
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+<<<<<<< HEAD
+        <expression-string>f</expression-string>
+=======
+        <expression-string>idfields[fields[index]]</expression-string>
+>>>>>>> place in json
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+<<<<<<< HEAD
+        <expression-string>s</expression-string>
+=======
+        <expression-string>idfields[fields[index]]+s.count()</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>f['description'][i]</expression-string>
+>>>>>>> place in json
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+<<<<<<< HEAD
+        <expression-string>statment</expression-string>
+=======
         <expression-string>f['description'][i]:</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
@@ -253,11 +337,7 @@
       </expression>
       <expression>
         <expression-string>s</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>statment</expression-string>
+>>>>>>> place in json
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
@@ -285,6 +365,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/codecs.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="96">
@@ -292,6 +373,8 @@
         </state>
       </provider>
     </entry>
+=======
+>>>>>>> place in json
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/_bootlocale.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="264">
@@ -301,18 +384,35 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/res.json">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="132">
           <caret line="27" column="32" selection-start-line="27" selection-start-column="26" selection-end-line="27" selection-end-column="32" />
+=======
+        <state relative-caret-position="154">
+          <caret line="166" column="26" selection-start-line="166" selection-start-column="26" selection-end-line="166" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/codecs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="323" selection-start-line="323" selection-end-line="323" />
+>>>>>>> place in json
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/jesonFile.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="284">
           <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
           <folding>
             <element signature="e#127#141#0" expanded="true" />
           </folding>
+=======
+        <state relative-caret-position="108">
+          <caret line="37" column="16" lean-forward="true" selection-start-line="37" selection-start-column="16" selection-end-line="37" selection-end-column="16" />
+>>>>>>> place in json
         </state>
       </provider>
     </entry>

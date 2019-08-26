@@ -1,0 +1,10 @@
+1. get function, recive picture and send to id_to_text function.
+2. id_to_text func, return json with the data.
+
+
+
+
+to ApiOcr:
+1. send to ocr
+2. calculate if the angle of picture is good
+if not revolve this by "united state"'s angle 

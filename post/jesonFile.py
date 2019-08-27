@@ -4,7 +4,16 @@
 
 import os.path
 import json
+import nltk
 
+def Similarity(var,fields=['Passpord Card no','Nationality','Surname','Given Names','Sex','Date of Birth','Place of Birth']):
+    min=len(var)/3
+    fieldMin=''
+    for field in fields:
+        if nltk.edit_distance(field, var)<=min:
+            min=nltk.edit_distance(field, var)
+            fieldMin=field
+    return fieldMin
 
 def call_google_ocr_api(id_image_path):
     file = open("res.json")

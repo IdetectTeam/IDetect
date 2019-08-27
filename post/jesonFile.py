@@ -5,6 +5,7 @@
 import os.path
 import json
 import nltk
+import extrac_field_content
 
 
 def Similarity(var, fields=['Passpord Card no', 'Nationality', 'Surname', 'Given Names', 'Sex', 'Date of Birth',
@@ -36,7 +37,9 @@ def getSentenseplace(id_image_path):
     statment = json.dumps(res['responses'][0]['textAnnotations'][0]['description'])
     # array that contains the fields from the picture
     statment = statment.split("\\n")
-    idfieldsplace = {}
+
+    idfieldsplaces={}
+    idfields={}
     fields = ['Passpord Card no', 'Nationality', 'Surname', 'Given Names', 'Sex', 'Date of Birth', 'Place of Birth']
     statment[0] = statment[0][1:]
     # !!!!!!!!!check spelling for the data that comes from ocr-esti
@@ -48,21 +51,22 @@ def getSentenseplace(id_image_path):
     index = 0
     for s in statment:
         print(s)
-    print("the values..........................................................")
     # find the positions in the json filed for every field
     for s in statment:
         cnt = s.count(' ') + 1
         #     if s in fields
         currentNameField = Similarity(s)
         if (currentNameField != ' '):
-            # idfields[fields[index]]=fieldvalue() elisheva function
-            idfieldsplace[currentNameField] = indexOfWord
+            idfields[currentNameField] = extrac_field_content.get_filed_value(indexOfWord, res)
+            idfieldsplaces[currentNameField] = indexOfWord
         indexOfWord += cnt
         index += 1
-    for key, val in idfieldsplace.items():
+    print("the fields .........................................................")
+    for key, val in idfieldsplaces.items():
         print("{} :{}".format(key, val), end="\n")
-
-
+    print("the positions........................................................")
+    for key, val in idfields.items():
+        print("{} :{}".format(key, val), end="\n")
 """
      place in json
 def getSentense(id_image_path):

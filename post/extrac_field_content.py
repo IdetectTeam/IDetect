@@ -30,6 +30,8 @@ def search_for_start_value(start_key_x, words):  # Gets a filed key index and re
 
 
 def find_in_full_text(start_value, all_words):  # Gets first word of filed value and return all text
+    if start_value == '':
+        return ''
     start_ind = all_words.find(start_value)
     end_ind = all_words.find('\n', start_ind)
     all_value = all_words[start_ind:end_ind]

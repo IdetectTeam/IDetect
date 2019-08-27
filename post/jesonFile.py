@@ -16,7 +16,7 @@ def Similarity(var,fields=['Passpord Card no','Nationality','Surname','Given Nam
     return fieldMin
 
 def call_google_ocr_api(id_image_path):
-    file = open("C:\\Users\\ABRAHAM KAMAJI\\Desktop\\post\\res.json")
+    file = open("res.json")
     res = file.read()
     file.close()
     return res

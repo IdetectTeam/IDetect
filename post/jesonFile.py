@@ -4,7 +4,16 @@
 
 import os.path
 import json
+import nltk
 
+def Similarity(var,fields=['Passpord Card no','Nationality','Surname','Given Names','Sex','Date of Birth','Place of Birth']):
+    min=len(var)/3
+    fieldMin=' '
+    for field in fields:
+        if nltk.edit_distance(field, var)<=min:
+            min=nltk.edit_distance(field, var)
+            fieldMin=field
+    return fieldMin
 
 def call_google_ocr_api(id_image_path):
     file = open("res.json")
@@ -41,11 +50,12 @@ def getSentenseplace(id_image_path):
     for s in statment:
         cnt = s.count(' ') + 1
         #     if s in fields
-        # if(contains(s)==True) esti function:
-        # idfields[fields[index]]=fieldvalue() elisheva function
-        idfieldsplace[s] = indexOfWord
-        indexOfWord += cnt
-        index += 1
+        currentNameField=Similarity(s)
+        if(currentNameField!=' '):
+            #idfields[fields[index]]=fieldvalue() elisheva function
+            idfieldsplace[currentNameField] = indexOfWord
+            indexOfWord += cnt
+            index += 1
     for key, val in idfieldsplace.items():
         print("{} :{}".format(key, val), end="\n")
 

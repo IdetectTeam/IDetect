@@ -29,13 +29,9 @@ def search_for_start_value(start_key_x, words):  # Gets a field key index and re
     return value
 
 
-<<<<<<< HEAD
-def find_in_full_text(start_value, all_words):  # Gets first word of filed value and return all text
+def find_in_full_text(start_value, all_words):  # Gets first word of field value and return all text
     if start_value == '':
         return ''
-=======
-def find_in_full_text(start_value, all_words):  # Gets first word of field value and return all text
->>>>>>> 6184842e84c316033889f375e839350e2099b2f8
     start_ind = all_words.find(start_value)
     end_ind = all_words.find('\n', start_ind)
     all_value = all_words[start_ind:end_ind]
@@ -58,7 +54,7 @@ def find_top_left_corner(vertices):  # Return top left corner from vertices
         return None
 
 
-def get_field_value(field_key_index, response):  # Gets a field key index and returns its value
+def get_filed_value(field_key_index, response):  # Gets a field key index and returns its value
     words = response['responses'][0]['textAnnotations']
     key_verteces = words[field_key_index]['boundingPoly']['vertices']
     start_key_x = find_top_left_corner(key_verteces)  # Search for top left corner from vertices
@@ -71,4 +67,4 @@ def get_field_value(field_key_index, response):  # Gets a field key index and re
 
 if __name__ == "__main__":
     res = call_google_ocr_api()
-    get_field_value(10, res)
+    get_filed_value(10, res)

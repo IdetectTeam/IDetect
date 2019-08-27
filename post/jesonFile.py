@@ -16,7 +16,7 @@ def Similarity(var,fields=['Passpord Card no','Nationality','Surname','Given Nam
     return fieldMin
 
 def call_google_ocr_api(id_image_path):
-    file = open("res.json")
+    file = open("C:\\Users\\ABRAHAM KAMAJI\\Desktop\\post\\res.json")
     res = file.read()
     file.close()
     return res
@@ -54,8 +54,8 @@ def getSentenseplace(id_image_path):
         if(currentNameField!=' '):
             #idfields[fields[index]]=fieldvalue() elisheva function
             idfieldsplace[currentNameField] = indexOfWord
-            indexOfWord += cnt
-            index += 1
+        indexOfWord += cnt
+        index += 1
     for key, val in idfieldsplace.items():
         print("{} :{}".format(key, val), end="\n")
 

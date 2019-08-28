@@ -38,8 +38,8 @@ def getSentenseplace(id_image_path):
     # array that contains the fields from the picture
     statment = statment.split("\\n")
 
-    idfieldsplaces={}
-    idfields={}
+    idfieldsplaces = {}
+    idfields = {}
     fields = ['Passpord Card no', 'Nationality', 'Surname', 'Given Names', 'Sex', 'Date of Birth', 'Place of Birth']
     statment[0] = statment[0][1:]
     # !!!!!!!!!check spelling for the data that comes from ocr-esti
@@ -67,6 +67,10 @@ def getSentenseplace(id_image_path):
     print("the positions........................................................")
     for key, val in idfields.items():
         print("{} :{}".format(key, val), end="\n")
+    idfields = json.dumps(idfields)
+    print(idfields)
+
+
 """
      place in json
 def getSentense(id_image_path):

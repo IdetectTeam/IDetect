@@ -29,14 +29,23 @@ def getSentenseplace(id_image_path):
     statment = []
     response = call_google_ocr_api(id_image_path)
     # all the fiels togezer
-    res = json.loads(response)
+    ###res = json.loads
+    res = response
     # print(res['responses'][0]['textAnnotations'][0]['description'])
     # statment = response[0]['textAnnotations'][0]['description'].split('\n')
     # the array that contains all the details mevulgan
+    FILENAME = r'C:\Users\מחשב\Documents\google project\IDetect\post\ocrresponse.json'
+    f = open(FILENAME, 'w')
+    f.write(res)
+    f.close()
+    #print(res['responses'][0]['textAnnotations'][0]['description'])
+    print(res['textAnnotations'][0]['description'])
+    print()
     statment = json.dumps(res['responses'][0]['textAnnotations'][0]['description'])
+    print()
     # array that contains the fields from the picture
     statment = statment.split("\\n")
-
+    print()
     idfieldsplaces = {}
     idfields = {}
     fields = ['Passpord Card no', 'Nationality', 'Surname', 'Given Names', 'Sex', 'Date of Birth', 'Place of Birth']
@@ -140,4 +149,4 @@ def getSentense(id_image_path):
 """
 
 if __name__ == "__main__":
-    getSentenseplace("")
+    getSentenseplace('C:\\Users\\tichnut\\passport.jpg')

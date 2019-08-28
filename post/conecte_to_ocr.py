@@ -6,11 +6,15 @@ import os
 # Imports the Google Cloud client library
 from google.cloud import vision
 from google.cloud.vision import types
+from google.protobuf.json_format import MessageToDict
+
+
+from google.api_core.grpc_helpers import create_channel
 
 
 def call_google_ocr_api(id_image_path):
-    credentials = service_account.Credentials.from_service_account_file("C:\\try project-739ea8757b20.json")
-
+    credentials = service_account.Credentials.from_service_account_file("C:\\Users\\tichnut\\IDetectsari-ee3681f1f2e9.json")
+    # create_channel(target, credentials=None, scopes=None, ssl_credentials="C:\ProgramData\NetFree\CA\netfree-ca-bundle-curl.crt", **kwargs)
     # Instantiates a client
     client = vision.ImageAnnotatorClient(credentials=credentials)
     file_name = id_image_path
@@ -23,6 +27,11 @@ def call_google_ocr_api(id_image_path):
 
     # Performs label detection on the image file
     response = client.text_detection(image=image)
+    print(response)
 
-    # print(response)
-    return response
+    # Convert the response to dictionary
+    response = MessageToDict(response)
+    # Convert to Json
+    res_json = json.dumps(response)
+    print(res_json)
+    return res_json

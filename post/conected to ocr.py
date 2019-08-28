@@ -6,12 +6,12 @@ import os
 # Imports the Google Cloud client library
 from google.cloud import vision
 from google.cloud.vision import types
-credentials = service_account.Credentials. from_service_account_file("C:\\try project-739ea8757b20.json")
+credentials = service_account.Credentials. from_service_account_file("D:\\google\\google cloud\\My Project 13006-213d69c6a9b9.json")
 
 
 # Instantiates a client
 client = vision.ImageAnnotatorClient(credentials=credentials)
-file_name = 'C:\\Users\\ABRAHAM KAMAJI\\Downloads\\try5.jpg'
+file_name = 'D:\\תמונות\\תמונות ואיורים\\חפצים\\6 (3).jpg'
 
 # Loads the image into memory
 with io.open(file_name, 'rb') as image_file:

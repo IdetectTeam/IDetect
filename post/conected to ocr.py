@@ -11,7 +11,7 @@ credentials = service_account.Credentials. from_service_account_file("D:\\google
 
 # Instantiates a client
 client = vision.ImageAnnotatorClient(credentials=credentials)
-file_name = 'D:\\תמונות\\תמונות ואיורים\\חפצים\\6 (3).jpg'
+file_name = 'C:\\Users\\User\\Downloads\\id\\img.jpg'
 
 # Loads the image into memory
 with io.open(file_name, 'rb') as image_file:

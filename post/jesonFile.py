@@ -6,6 +6,7 @@ import os.path
 import json
 import nltk
 import extrac_field_content
+import conecte_to_ocr
 
 
 def Similarity(var, fields=['Passpord Card no', 'Nationality', 'Surname', 'Given Names', 'Sex', 'Date of Birth',
@@ -20,9 +21,7 @@ def Similarity(var, fields=['Passpord Card no', 'Nationality', 'Surname', 'Given
 
 
 def call_google_ocr_api(id_image_path):
-    file = open("res.json")
-    res = file.read()
-    file.close()
+    res = conecte_to_ocr.call_google_ocr_api(id_image_path)
     return res
 
 
@@ -141,4 +140,4 @@ def getSentense(id_image_path):
 """
 
 if __name__ == "__main__":
-    getSentenseplace("C:\\Users\\This_User\\Pictures\\Camera Roll\\WIN_20190813_10_33_43_Pro.jp")
+    getSentenseplace("")

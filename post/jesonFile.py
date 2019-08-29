@@ -14,7 +14,7 @@ def Similarity(var, fields=['Passpord Card no', 'Nationality', 'Surname', 'Given
     min = len(var) / 3
     fieldMin = ' '
     for field in fields:
-        if nltk.edit_distance(field, var) <= min:
+        if nltk.edit_distance(field, var) <= min or field.__contains__(var):
             min = nltk.edit_distance(field, var)
             fieldMin = field
     return fieldMin
@@ -65,7 +65,13 @@ def getSentenseplace(id_image_path):
         cnt = s.count(' ') + 1
         #     if s in fields
         currentNameField = Similarity(s)
+
         if (currentNameField != ' '):
+            if cnt > 1:
+                currentNameF = s.find(currentNameField)
+                if currentNameF > 0:
+                    indexOfWord += currentNameF-1
+                    cnt -= currentNameF-1
             idfields[currentNameField] = extrac_field_content.get_filed_value(indexOfWord, res)
             idfieldsplaces[currentNameField] = indexOfWord
         indexOfWord += cnt
@@ -150,4 +156,5 @@ def getSentense(id_image_path):
 """
 
 if __name__ == "__main__":
+    # getSentenseplace('C:\\Users\\מחשב\\Pictures\\Camera Roll\\sheyna.jpg')
     getSentenseplace('C:\\Users\\tichnut\\passport.jpg')

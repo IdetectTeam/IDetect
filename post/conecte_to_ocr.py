@@ -13,7 +13,7 @@ from google.api_core.grpc_helpers import create_channel
 
 
 def call_google_ocr_api(id_image_path):
-    credentials = service_account.Credentials.from_service_account_file("C:\\Users\\tichnut\\IDetectsari-ee3681f1f2e9.json")
+    credentials = service_account.Credentials.from_service_account_file('D:\google\google cloud\My Project 13006-213d69c6a9b9.json')
     # create_channel(target, credentials=None, scopes=None, ssl_credentials="C:\ProgramData\NetFree\CA\netfree-ca-bundle-curl.crt", **kwargs)
     # Instantiates a client
     client = vision.ImageAnnotatorClient(credentials=credentials)

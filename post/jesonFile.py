@@ -38,11 +38,12 @@ def getSentenseplace(id_image_path):
     f = open(FILENAME, 'w')
     f.write(res)
     f.close()
-    #print(res['responses'][0]['textAnnotations'][0]['description'])
-    print(res['textAnnotations'][0]['description'])
-    print()
-    statment = json.dumps(res['responses'][0]['textAnnotations'][0]['description'])
-    print()
+    res = json.loads(res)
+    # print(res['responses'][0]['textAnnotations'][0]['description'])
+    # print(res['textAnnotations'][0]['description'])
+    # print()
+    statment = json.dumps(res['textAnnotations'][0]['description'])
+    print(statment)
     # array that contains the fields from the picture
     statment = statment.split("\\n")
     print()
@@ -52,7 +53,7 @@ def getSentenseplace(id_image_path):
     statment[0] = statment[0][1:]
     # !!!!!!!!!check spelling for the data that comes from ocr-esti
     # and organize the word
-    sfield = res['responses'][0]['textAnnotations']
+    sfield = res['textAnnotations']
     sfield = sfield[1:]
 
     indexOfWord = 1

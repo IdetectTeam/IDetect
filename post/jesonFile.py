@@ -34,11 +34,7 @@ def getSentenseplace(id_image_path):
     # print(res['responses'][0]['textAnnotations'][0]['description'])
     # statment = response[0]['textAnnotations'][0]['description'].split('\n')
     # the array that contains all the details mevulgan
-<<<<<<< HEAD
-    FILENAME = r'ocrresponse.json'
-=======
     FILENAME = r'D:\google\google cloud\My Project 13006-213d69c6a9b9.json'
->>>>>>> 96c073d4c9135abb16ea5b1084c6c6d45af1023f
     f = open(FILENAME, 'w')
     f.write(res)
     f.close()
@@ -92,13 +88,6 @@ def getSentenseplace(id_image_path):
 
 
 if __name__ == "__main__":
-<<<<<<< HEAD
-    getSentenseplace('C:\\Users\\User\\Downloads\\id\\img.jpg')
-=======
     # getSentenseplace('C:\\Users\\מחשב\\Pictures\\Camera Roll\\sheyna.jpg')
-<<<<<<< HEAD
-    getSentenseplace("C:\\Users\\This_User\\Downloads\\sheyna.jpg")
-=======
     getSentenseplace('C:\\Users\\tichnut\\passport.jpg')
->>>>>>> 175ab2a538ca63874a318de6378f93cfddded306
->>>>>>> 96c073d4c9135abb16ea5b1084c6c6d45af1023f
+

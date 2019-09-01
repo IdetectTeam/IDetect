@@ -20,7 +20,7 @@ def call_google_ocr_api(id_image_path):
 
     # Loads the image into memory
     with io.open(file_name, 'rb') as image_file:
-        content = image_file.read()
+        content = image_file.read()#מומלץ לשלוח base64
 
     image = types.Image(content=content)
 

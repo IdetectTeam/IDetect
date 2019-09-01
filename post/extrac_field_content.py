@@ -14,7 +14,8 @@ def dist(point1, point2):  # Find distance between 2 vertices
     return math.sqrt(math.pow(point1['x'] - point2['x'], 2) + math.pow(point1['y'] - point2['y'], 2))
 
 
-def search_for_closest_value(start_key_top_left_corner, words):  # Gets a field key index and returns the closest part of its value
+def search_for_closest_value(start_key_top_left_corner,
+                             words):  # Gets a field key index and returns the closest part of its value
     closest_value = sys.maxsize
     value = ""
     for w in words:
@@ -29,12 +30,11 @@ def search_for_closest_value(start_key_top_left_corner, words):  # Gets a field 
     return value
 
 
-
 def find_in_full_text(closest_value, all_words):  # Gets any word of field value and return all text
     if closest_value == '':
         return ''
     mid_ind = all_words.find(closest_value)
-    start_ind = all_words.rfind('\n',0,mid_ind)
+    start_ind = all_words.rfind('\n', 0, mid_ind)
     end_ind = all_words.find('\n', mid_ind)
     all_value = all_words[start_ind:end_ind]
     return all_value
@@ -71,8 +71,9 @@ def find_bottom_left_corner(vertices):  # Return top left corner from vertices
     except:
         return None
 
+
 def get_filed_value(field_key_index, response):  # Gets a field key index and returns its value
-    words = response['responses'][0]['textAnnotations']
+    words = response['textAnnotations']
     key_verteces = words[field_key_index]['boundingPoly']['vertices']
     start_key_top_left_corner = find_top_left_corner(key_verteces)  # Search for top left corner from vertices
     closest_value = search_for_closest_value(start_key_top_left_corner, words)  # Search for closest word of field value

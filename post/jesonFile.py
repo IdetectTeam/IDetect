@@ -14,7 +14,7 @@ def Similarity(var, fields=['Passpord Card no', 'Nationality', 'Surname', 'Given
     min = len(var) / 3
     fieldMin = ' '
     for field in fields:
-        if nltk.edit_distance(field, var) <= min:
+        if nltk.edit_distance(field, var) <= min or field.__contains__(var):
             min = nltk.edit_distance(field, var)
             fieldMin = field
     return fieldMin
@@ -38,11 +38,12 @@ def getSentenseplace(id_image_path):
     f = open(FILENAME, 'w')
     f.write(res)
     f.close()
-    #print(res['responses'][0]['textAnnotations'][0]['description'])
-    print(res['textAnnotations'][0]['description'])
-    print()
-    statment = json.dumps(res['responses'][0]['textAnnotations'][0]['description'])
-    print()
+    res = json.loads(res)
+    # print(res['responses'][0]['textAnnotations'][0]['description'])
+    # print(res['textAnnotations'][0]['description'])
+    # print()
+    statment = json.dumps(res['textAnnotations'][0]['description'])
+    print(statment)
     # array that contains the fields from the picture
     statment = statment.split("\\n")
     print()
@@ -52,7 +53,7 @@ def getSentenseplace(id_image_path):
     statment[0] = statment[0][1:]
     # !!!!!!!!!check spelling for the data that comes from ocr-esti
     # and organize the word
-    sfield = res['responses'][0]['textAnnotations']
+    sfield = res['textAnnotations']
     sfield = sfield[1:]
 
     indexOfWord = 1
@@ -64,7 +65,13 @@ def getSentenseplace(id_image_path):
         cnt = s.count(' ') + 1
         #     if s in fields
         currentNameField = Similarity(s)
+
         if (currentNameField != ' '):
+            if cnt > 1:
+                currentNameF = s.find(currentNameField)
+                if currentNameF > 0:
+                    indexOfWord += currentNameF-1
+                    cnt -= currentNameF-1
             idfields[currentNameField] = extrac_field_content.get_filed_value(indexOfWord, res)
             idfieldsplaces[currentNameField] = indexOfWord
         indexOfWord += cnt
@@ -149,4 +156,9 @@ def getSentense(id_image_path):
 """
 
 if __name__ == "__main__":
+<<<<<<< HEAD
     getSentenseplace('C:\\Users\\User\\Downloads\\id\\img.jpg')
+=======
+    # getSentenseplace('C:\\Users\\מחשב\\Pictures\\Camera Roll\\sheyna.jpg')
+    getSentenseplace('C:\\Users\\tichnut\\passport.jpg')
+>>>>>>> 175ab2a538ca63874a318de6378f93cfddded306

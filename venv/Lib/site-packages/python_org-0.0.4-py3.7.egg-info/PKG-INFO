@@ -1,0 +1,31 @@
+Metadata-Version: 1.1
+Name: python-org
+Version: 0.0.4
+Summary: Fast most-functional organizer for org-mode.
+Home-page: https://github.com/chao787/python_org
+Author: Richard Wong
+Author-email: chao787@gmail.com
+License: Two-clause BSD license
+Description: PYTHONORG
+        =========
+        
+        *Python_org* is a great tool for organize org mode using python.
+        Destination is to provide both read and write method to org mode
+        and to make it all interactive perfectly.
+        
+Keywords: query database api model models orm key/value orgtoolment-oriented org-mode non-relational emacs
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Environment :: Plugins
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Education
+Classifier: Intended Audience :: Information Technology
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Topic :: Database
+Classifier: Topic :: Database :: Database Engines/Servers
+Classifier: Topic :: Database :: Front-Ends
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires: python (>= 2.6)
+Provides: python_org

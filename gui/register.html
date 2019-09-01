@@ -5,13 +5,17 @@
 <!-- <link rel="stylesheet/scss" type="text/css" href="register.scss"> -->
 <!DOCTYPE html>
 <html>
+
 <head>
-    <link rel="stylesheet" type="text/css" href="register.css"> 
-    <!-- <link rel="stylesheet/scss" type="text/css" href="register.scss" /> -->
-  </head>
-  <body>
-  
- <div class="form_wrapper">
+  <script src="embeddable.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="register.css">
+  <!-- <link rel="stylesheet/scss" type="text/css" href="register.scss" /> -->
+</head>
+
+<body>
+
+  <div class="form_wrapper">
     <div class="form_container">
       <div class="title_container">
         <h2>Responsive Registration Form</h2>
@@ -19,77 +23,77 @@
       </div>
       <div class="row clearfix">
         <button id="camera_btn" class="btn fourth" onclick="opencamera()"> open camera</button>
-          <form>
-            
-              <div class="input_field"> <span><i aria-hidden="true" class="fa fa-envelope"></i></span>
-                <input type="text" class="id" name="ID" placeholder="ID" required />
-              </div>
-            <div class="input_field"> <span><i aria-hidden="true" class="fa fa-envelope"></i></span>
-              <input type="email" name="email" placeholder="Email" required />
-            </div>
-            <div class="input_field"> <span><i aria-hidden="true" class="fa fa-lock"></i></span>
-              <input type="password" name="password" placeholder="Password" required />
-            </div>
-            <div class="input_field"> <span><i aria-hidden="true" class="fa fa-lock"></i></span>
-              <input type="password" name="password" placeholder="Re-type Password" required />
-            </div>
-            <div class="row clearfix">
-              <div class="col_half">
-                <div class="input_field"> <span><i aria-hidden="true" class="fa fa-user"></i></span>
-                  <input type="text" class="first_name" name="name" placeholder="First Name" />
-                </div>
-              </div>
-              <div class="col_half">
-                <div class="input_field"> <span><i aria-hidden="true" class="fa fa-user"></i></span>
-                  <input type="text" class="last_name" name="name" placeholder="Last Name" required />
-                </div>
-              </div>
-              <div class="col_half">
-                  <div class="input_field"> <span><i aria-hidden="true" class="fa fa-user"></i></span>
-                    <input type="text" name="name" class="birth_place" placeholder="address" required />
-                  </div>
-                </div>
-                <div class="col_half">
-                    <div class="input_field"> <span><i aria-hidden="true" class="fa fa-user"></i></span>
-                      <input type="text" name="name" placeholder="city" required />
-                    </div>
-                  </div>
+        <form>
 
+          <div class="input_field"> <span><i aria-hidden="true" class="fa fa-envelope"></i></span>
+            <input type="text" class="id" name="ID" placeholder="ID" required />
+          </div>
+          <div class="input_field"> <span><i aria-hidden="true" class="fa fa-envelope"></i></span>
+            <input type="email" name="email" placeholder="Email" required />
+          </div>
+          <div class="input_field"> <span><i aria-hidden="true" class="fa fa-lock"></i></span>
+            <input type="password" name="password" placeholder="Password" required />
+          </div>
+          <div class="input_field"> <span><i aria-hidden="true" class="fa fa-lock"></i></span>
+            <input type="password" name="password" placeholder="Re-type Password" required />
+          </div>
+          <div class="row clearfix">
+            <div class="col_half">
+              <div class="input_field"> <span><i aria-hidden="true" class="fa fa-user"></i></span>
+                <input type="text" class="first_name" name="name" placeholder="First Name" />
+              </div>
+            </div>
+            <div class="col_half">
+              <div class="input_field"> <span><i aria-hidden="true" class="fa fa-user"></i></span>
+                <input type="text" class="last_name" name="name" placeholder="Last Name" required />
+              </div>
+            </div>
+            <div class="col_half">
+              <div class="input_field"> <span><i aria-hidden="true" class="fa fa-user"></i></span>
+                <input type="text" name="name" class="birth_place" placeholder="address" required />
+              </div>
+            </div>
+            <div class="col_half">
+              <div class="input_field"> <span><i aria-hidden="true" class="fa fa-user"></i></span>
+                <input type="text" name="name" placeholder="city" required />
+              </div>
             </div>
 
-            <div class="input_field select_option">
-                <select>
-                  <option>Select a country</option>
-                  <option>Option 1</option>
-                  <option>Option 2</option>
-                </select>
-                <div class="select_arrow"></div>
-              </div>
-              <div class="input_field"> <span><i aria-hidden="true" class="fa fa-envelope"></i></span>
-                <input type="date" name="dateOfBirth" placeholder="date of birth" required />
-              </div>
-                  <div class="input_field radio_option">
-                <input type="radio" name="radiogroup1" id="rd1">
-                <label for="rd1">Male</label>
-                <input type="radio" name="radiogroup1" id="rd2">
-                <label for="rd2">Female</label>
-                </div>
-              
-              
-            <input class="button" type="submit" value="Register" />
-          </form>
-        </div>
+          </div>
+
+          <div class="input_field select_option">
+            <select>
+              <option>Select a country</option>
+              <option>Option 1</option>
+              <option>Option 2</option>
+            </select>
+            <div class="select_arrow"></div>
+          </div>
+          <div class="input_field"> <span><i aria-hidden="true" class="fa fa-envelope"></i></span>
+            <input type="date" name="dateOfBirth" placeholder="date of birth" required />
+          </div>
+          <div class="input_field radio_option">
+            <input type="radio" name="radiogroup1" id="rd1">
+            <label for="rd1">Male</label>
+            <input type="radio" name="radiogroup1" id="rd2">
+            <label for="rd2">Female</label>
+          </div>
+
+
+          <input class="button" type="submit" value="Register" />
+        </form>
       </div>
     </div>
   </div>
-  <p class="credit">Developed by <a href="http://www.designtheway.com" target="_blank">Design the way</a></p> 
-  <script src="register.js"></script>
+  </div>
+  <p class="credit">Developed by <a href="http://www.designtheway.com" target="_blank">Design the way</a></p>
 </body>
-  </html>
+
+</html>
 
 
 
-  <!-- <!DOCTYPE html>
+<!-- <!DOCTYPE html>
   <html lang="en">
     <head>
       <meta charset="UTF-8">
@@ -143,5 +147,3 @@
       </div>
     </body>
   </html> -->
-
-<script src="D:\google\embeddable.js"></script>

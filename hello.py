@@ -3,9 +3,9 @@ from sqlalchemy import text
 
 app = Flask('helloworld')
 
-@app.route('/')
-def hello():
-    return 'Hello, World!'
+#@app.route('/')
+#def hello():
+#    return 'Hello, World!'
 
 @app.route('/api/args')#example request: /api/args?user=111&image=http:/adslfkjalakjd
 def algo():
@@ -22,16 +22,11 @@ def algo():
 def addConfig():
     request_json= request.get_json()
     print (request_json)
-    return 'request_json'
     #put config in spl
-
-@app.route('/addConfigf')
-def addConfigf():
-    none
+    return true
 
 
 if __name__ == '__main__':
     app.run(threaded=True)
-    res = requests.post('http://http://127.0.0.1:5000/api/addConfig', json={"mytext": "lalala"})
 
 

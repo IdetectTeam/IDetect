@@ -1,17 +1,24 @@
 // JavaScript source code
 
-window.onload = function () {
-    debugger;
-    var button = document.createElement("button");
-    button.innerHTML = "idetect";
-    button.onclick = openForm;
-    button.style = "position:fixed;right:50px;bottom:50px;";
-    button.style.zIndex = "6"
+var button = document.createElement("button");
+button.innerHTML = "idetect";
+button.onclick = openForm;
+button.style = "position:fixed;right:50px;bottom:50px;";
+button.style.zIndex = "6"
 
-    document.body.appendChild(button);
+document.body.appendChild(button);
 
-   
+document.write(`<div class="form-popup" id="myForm">
+    <form class="form-container">
+      <h1>Login</h1>
 
+      <button type="submit" class="btn" onclick="submitForm()">Login</button>
+      <button type="submit" class="btn cancel" onclick="closeForm()">Close</button>
+    </form>
+  </div>`);
+  document.onload = function () {
+    alert("Window Loaded...!!");
+}
 /*
  var all = document.getElementsByClassName('open-button');
  for (var i = 0; i < all.length; i++) {
@@ -23,21 +30,11 @@ for (var i = 0; i < all.length; i++) {
 }
 var all = document.getElementsByClassName('form-container');
 for (var i = 0; i < all.length; i++) {
-    all[i].style = "max-width: 300px; padding: 10px;   background-color: white;";
+    all[i].style.style = "max-width: 300px; padding: 10px;   background-color: white;";
 }
 
-  
-}
-async function closeForm() {
-     document.write(`<div class="form-popup" id="myForm">
-    <form class="form-container">
-      <h1>Login</h1>
-
-      <button type="submit" class="btn" onclick="submitForm()">Login</button>
-      <button type="submit" class="btn cancel" onclick="closeForm()">Close</button>
-    </form>
-  </div>`);
-   await document.getElementById("myForm").style.display = "none";
+function closeForm() {
+    document.getElementById("myForm").style.display = "none";
 }
 
 function openForm() {
@@ -46,17 +43,18 @@ function openForm() {
 }
 function submitForm() {
     debugger;
-    putDataIntoFields({ "PasspordCardno": "id", "Nationality": "nationality", "Surname": "last_name", "GivenNames": "first_name", "Sex": "sex", "DateofBirth": "birth_date", "PlaceofBirth": "birth_place" }, { "PasspordCardno": "90", "Nationality": "09", "Surname": "Doe", "GivenNames": "Doe", "Sex": "male", "DateofBirth": "09/09/09", "PlaceofBirth": "jer" });
+    putDataIntoFields({"PasspordCardno":"id","Nationality":"nationality", "Surname":"last_name", "GivenNames":"first_name","Sex":"sex", "DateofBirth":"birth_date", "PlaceofBirth":"birth_place"},{"PasspordCardno":"90","Nationality":"09", "Surname":"Doe", "GivenNames":"Doe","Sex":"male", "DateofBirth":"09/09/09", "PlaceofBirth":"jer"});
 }
 
-function putDataIntoFields(idFields, textFields) {
-    debugger;
+function putDataIntoFields(idFields,textFields) {
+    document.getElementById("myForm").style.display = "none";
+
     document.getElementsByClassName(idFields["PasspordCardno"])[0].value = textFields["PasspordCardno"];
     // document.getElementsByClassName(idFields["Nationality"])[0].value = textFields["Nationality"];
     document.getElementsByClassName(idFields["Surname"])[0].value = textFields["Surname"];
     document.getElementsByClassName(idFields["GivenNames"])[0].value = textFields["GivenNames"];
-    //    document.getElementsByClassName(idFields["Sex"])[0].value = textFields["Sex"];
+//    document.getElementsByClassName(idFields["Sex"])[0].value = textFields["Sex"];
     // document.getElementsByClassName(idFields["DateofBirth"])[0].value = textFields["DateofBirth"];
     document.getElementsByClassName(idFields["PlaceofBirth"])[0].value = textFields["PlaceofBirth"];
-    debugger;
+debugger;
 }

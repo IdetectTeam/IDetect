@@ -1,3 +1,4 @@
+
 const getGeneratedPageURL = ({ html, css, js }) => {
   const getBlobURL = (code, type) => {
     const blob = new Blob([code], { type })
@@ -22,11 +23,28 @@ const getGeneratedPageURL = ({ html, css, js }) => {
   return getBlobURL(source, 'https://storage.googleapis.com/idetect/install.html')
 }
 
-const url = getGeneratedPageURL({
-  html: '<p>Hello, world!</p>',
-  css: 'p { color: blue; }',
-  js: 'console.log("hi")'
-})
+// const url = getGeneratedPageURL({
+//   html: '<p>Hello, world!</p>',
+//   css: 'p { color: blue; }',
+//   js: 'console.log("hi")'
+// })
 
-const iframe = document.querySelector('#iframe')
-iframe.src = url
+document.addEventListener('DOMContentLoaded', function() {
+  debugger;
+  idiframe=document.getElementById("idetectiframe");
+ idiframe.src="https://storage.googleapis.com/idetect/install.html";
+ document.getElementById("idetectiframe").style.height =document.getElementById("idetectiframe").contentWindow.document.body.scrollHeight + 'px';
+}, false);
+
+
+
+
+
+// document.getElementById("idetectiframe").addEventListener('onload',function(){
+//   debugger;
+ 
+ 
+// })
+
+// const iframe = document.querySelector(".iframe");
+// iframe.src = 'https://www.w3schools.com';

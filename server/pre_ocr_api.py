@@ -4,6 +4,9 @@ import json
 import numpy as np
 import math
 import conecte_to_ocr
+import base64
+from io import BytesIO
+
 
 # def call_google_ocr_api(id_image_path):  # function to call to api - only for demoת Someone else Will write it
 #     file = open("try7.json")
@@ -52,21 +55,25 @@ def find_word_to_check(words):
     return []
 
 
-def pre_ocr(id_image_path):
-    response = conecte_to_ocr.call_google_ocr_api(id_image_path)  # try to detect text before rotate img
+def pre_ocr(base64_image_id):  # pre ocr processing
+    response = conecte_to_ocr.call_google_ocr_api(base64_image_id)  # try to detect text before rotate img
     res = json.loads(response)
     some_word_vertices = find_word_to_check(res['textAnnotations'])  # search for word to get the
     # vertexes use them in degree calculate.
     print(some_word_vertices)
-    id_img = Image.open(id_image_path)  # Create an Image object from an id_image_path
+    id_img = Image.open(BytesIO(base64.b64decode(base64_image_id)))  # Create an Image object from an id_image_path
     degrees = find_rotation_degree(some_word_vertices)
     final_image = id_img.rotate(degrees)  # rotate the image
+    final_base64_img = base64.b64encode(final_image.tobytes())
     final_image.show()
     if degrees != 0:
-        return conecte_to_ocr.call_google_ocr_api(final_image)  # Now, call ocr api with aligned image.
+        return conecte_to_ocr.call_google_ocr_api(final_base64_img)  # Now, call ocr api with aligned image.
     return response
 
 
 if __name__ == "__main__":
-    res = pre_ocr("C:\\Users\\This_User\\Downloads\\try7.png")
-    print (res)
+    with open("C:\\Users\\This_User\\Downloads\\passport.jpg", "rb") as image_file:
+        base64_bytes = base64.b64encode(image_file.read())
+    base64_image_id = base64_bytes.decode('UTF-8')
+    # base64_image_id = 'data:image/webp;base64,'+base64_image_id
+    res = pre_ocr(base64_bytes)

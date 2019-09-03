@@ -12,10 +12,13 @@ document.write(`<div class="form-popup" id="myForm">
     <form class="form-container">
       <h1>Login</h1>
 
-      <button type="submit" class="btn">Login</button>
+      <button type="submit" class="btn" onclick="submitForm()">Login</button>
       <button type="submit" class="btn cancel" onclick="closeForm()">Close</button>
     </form>
   </div>`);
+  document.onload = function () {
+    alert("Window Loaded...!!");
+}
 /*
  var all = document.getElementsByClassName('open-button');
  for (var i = 0; i < all.length; i++) {
@@ -30,22 +33,28 @@ for (var i = 0; i < all.length; i++) {
     all[i].style.style = "max-width: 300px; padding: 10px;   background-color: white;";
 }
 
+function closeForm() {
+    document.getElementById("myForm").style.display = "none";
+}
+
 function openForm() {
     document.getElementById("myForm").style.display = "block";
 
 }
-function closeForm() {
-    document.getElementById("myForm").style.display = "none";
-    putDataIntoFields({"Passpord Card no":"90","Nationality":"09", "Surname":"Doe", "Given Names":"Doe","Sex":"male", "Date of Birth":"09/09/09", "Place of Birth":"jer"},null);
+function submitForm() {
+    debugger;
+    putDataIntoFields({"PasspordCardno":"id","Nationality":"nationality", "Surname":"last_name", "GivenNames":"first_name","Sex":"sex", "DateofBirth":"birth_date", "PlaceofBirth":"birth_place"},{"PasspordCardno":"90","Nationality":"09", "Surname":"Doe", "GivenNames":"Doe","Sex":"male", "DateofBirth":"09/09/09", "PlaceofBirth":"jer"});
 }
 
-function putDataIntoFields(textFields, idFields) {
-    document.getElementsByClassName("id")[0].value = textFields["Passpord Card no"];
-    // document.getElementsByClassName("nationality")[0].value = textFields["Nationality"];
-    document.getElementsByClassName("first_name")[0].value = textFields["Surname"];
-    document.getElementsByClassName("last_name")[0].value = textFields["Given Names"];
-//    document.getElementsByClassName("ex")[0].value = textFields["Sex"];
-    // document.getElementsByClassName("birth_date")[0].value = textFields["Date of Birth"];
-    document.getElementsByClassName("birth_place")[0].value = textFields["Place of Birth"];
+function putDataIntoFields(idFields,textFields) {
+    document.getElementById("myForm").style.display = "none";
+
+    document.getElementsByClassName(idFields["PasspordCardno"])[0].value = textFields["PasspordCardno"];
+    // document.getElementsByClassName(idFields["Nationality"])[0].value = textFields["Nationality"];
+    document.getElementsByClassName(idFields["Surname"])[0].value = textFields["Surname"];
+    document.getElementsByClassName(idFields["GivenNames"])[0].value = textFields["GivenNames"];
+//    document.getElementsByClassName(idFields["Sex"])[0].value = textFields["Sex"];
+    // document.getElementsByClassName(idFields["DateofBirth"])[0].value = textFields["DateofBirth"];
+    document.getElementsByClassName(idFields["PlaceofBirth"])[0].value = textFields["PlaceofBirth"];
 debugger;
 }

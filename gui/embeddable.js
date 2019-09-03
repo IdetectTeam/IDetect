@@ -1,9 +1,10 @@
 // JavaScript source code
-
-var button = document.createElement("button");
-button.innerHTML = "idetect";
+//<input type="image" src=".\logo.png" id="aaa" ></input>
+var button = document.createElement("input");
+button.type="image"
+button.src = ".\\logo2.png";
 button.onclick = openForm;
-button.style = "position:fixed;right:50px;bottom:50px;";
+button.style = "position:fixed;right:50px;bottom:50px;height:100px";
 button.style.zIndex = "6"
 
 document.body.appendChild(button);

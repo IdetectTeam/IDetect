@@ -29,13 +29,34 @@ const getGeneratedPageURL = ({ html, css, js }) => {
 // })
 
 document.addEventListener('DOMContentLoaded', function() {
-  debugger;
   idiframe=document.getElementById("idetectiframe");
  idiframe.src="https://storage.googleapis.com/idetect/install.html";
- document.getElementById("idetectiframe").style.height =document.getElementById("idetectiframe").contentWindow.document.body.scrollHeight + 'px';
+//  document.getElementById("idetectiframe").style.height =document.getElementById("idetectiframe").contentWindow.document.body.scrollHeight + 'px';
 }, false);
+document.addEventListener('click',function(){
+  var wn = document.getElementById('idetectiframe').contentWindow;
+  // postMessage arguments: data to send, target origin
+  // wn.postMessage('hello! i send message from register for example! (:', 'https://storage.googleapis.com');
+  wn.postMessage(event.target.id, 'https://storage.googleapis.com');
+})
 
 
+
+//document.addEventListener("message", receiveMessage, false);
+//window.addEventListener("message", receiveMessage, false);
+// if ( window.addEventListener ) {
+//   window.addEventListener("message", receiveMessage, false);
+// } else if ( window.attachEvent ) { // ie8
+//   window.attachEvent('onmessage', receiveMessage);
+// }
+// function receiveMessage(event) {
+//   alert("massage");
+//   if ($event&& event.origin !== "https://storage.googleapis.com")
+//     return;
+//     else
+//     alert($event.data);
+//   // ...
+// }
 
 
 

@@ -5,7 +5,27 @@ var passport_usa=new Array("Passpord Card no","Nationality","Surname","Given Nam
 var length=passport_usa.length;
 var elm=new Object();
 // $('#my-modal').modal('show')
-//               .draggable();
+//               .draggable();ss
+//window.addEventListener("message", receiveMessage, false);
+
+
+window.addEventListener('message', receiveMessage, false);
+
+
+function receiveMessage($event) {
+       if ($event&& event.origin !== "http://127.0.0.1:5000")
+        return;
+     else
+     elm=$event.data;
+    //  var x = document.createElement("P");
+    //         x.id="manual";
+    //         var t = document.createTextNode($event.data);
+    //         t.id="manualp";
+    //         x.appendChild(t);
+    //         document.body.appendChild(x);
+     
+    //    // ...
+     }
 
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById("manual").innerHTML="please follow the instructions!";
@@ -14,19 +34,26 @@ document.addEventListener('DOMContentLoaded', function() {
         handle: ".modal-header"
     });
     document.getElementById("nextbtn").addEventListener('click',function(){
-        debugger;
-        if(index<passport_usa.length-1){
-            index++;
-            document.getElementById("manual").innerHTML=`click on field ${passport_usa[index]}`;
-           var p=parent.document;
-           console.log(p);
+     // get reference to window inside the iframe
+// var wn = document.getElementById('idetectiframe').contentWindow;
+// // postMessage arguments: data to send, target origin
+// wn.postMessage('hello! i send message from iframe (:', 'http://www.example.com');
+      
+// window.opener.postMessage('hello! i send message from iframe (:', 'http://www.example.com');
+// targetWindow.postMessage.postMessage('hello! i send message from iframe (:', 'http://www.example.com');
+//window.postMessage('hello! i send message from iframe (:', 'https://storage.googleapis.com');
+      
+if(index<passport_usa.length-1){
+    if(index>-1)
+    config_fields[passport_usa[index]]=elm;
+    index++;
+    document.getElementById("manual").innerHTML=`click on field ${passport_usa[index]}`;
         }
         else{
             // document.getElementById("nextbtn").style.display=this.hidden;
         }
     })
     document.getElementById("prevbtn").addEventListener('click',function(){
-        debugger;
         if(index>0){
             index--;
             document.getElementById("manual").innerHTML=`click on field ${passport_usa[index]}`;
@@ -42,9 +69,9 @@ document.addEventListener('DOMContentLoaded', function() {
     //     console.log(event.target.id) ;
     //   elm=event.target;
     // }
-    parent.$('body').trigger('onclick',function(){
-        alert("ellow")
-    });
+    // parent.$('body').trigger('onclick',function(){
+    //     alert("ellow")
+    // });
 
     const Confirm = {
         open (options) {
@@ -126,5 +153,5 @@ document.addEventListener('DOMContentLoaded', function() {
     
 }, false);
 
-   
+
 

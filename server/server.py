@@ -1,8 +1,9 @@
 from flask import Flask, escape, request
 from sqlalchemy import text
 import detect_id
+from flask_cors import CORS
 app = Flask('helloworld')
-
+CORS(app)
 #@app.route('/')
 #def hello():
 #    return 'Hello, World!'

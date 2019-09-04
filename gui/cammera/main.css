@@ -5,11 +5,6 @@
 
 
 
-@import url( '_normalize.css' );
-@import url( '_defaults.css' );
-
-
-
 body,
 .ad,
 .sm
@@ -241,7 +236,7 @@ body
 	   {
 		   font-size: 42px;
 		   font-weight: 300;
-		   color: #0f3c4b;
+		   color: #493f3f;
 		   margin-bottom: 40px;
 	   }
 	   .container h1 a:hover,
@@ -297,7 +292,7 @@ body
 	   }
 	   .box.has-advanced-upload
 	   {
-		   outline: 2px dashed #92b0b3;
+		   outline: 2px dashed #1f2020a6;
 		   outline-offset: -10px;
 
 		   -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
@@ -434,7 +429,7 @@ body
 			   font-weight: 700;
 			   color: #e5edf1;
 			   background-color: #39bfd3;
-			   display: none;
+			   
 			   padding: 8px 16px;
 			   margin: 40px auto 0;
 		   }
@@ -444,25 +439,17 @@ body
 				   background-color: #0f3c4b;
 			   }
 			   #camera, #camera--view, #camera--sensor, #camera--output {
-position: fixed;
-height: 100%;
-width: 100%; object-fit: cover;
-border-radius: 30px;
-border: none;
-padding: 15px 20px;
-text-align: center;
-position: fixed;
-bottom:50px;
-left: calc(50% - 100px);
+
+
+
 }
 #camera--view, #camera--sensor, #camera--output {
-transform: scaleX(-1);
-filter: FlipH;
-box-shadow: 0 5px 10px 0 rgba(0,0,0,0.2);
 position: fixed;
-border-radius: 5%;width: 500px;height:500px;
-bottom:50px;
-left: calc(50% - 100px);
+border-radius: 5%;
+display: block;
+margin-left: auto;
+margin-right: auto;
+width: 50%;
 }
 #camera--trigger {
 width: 200px;
@@ -473,7 +460,6 @@ border-radius: 30px;
 border: none;
 padding: 15px 20px;
 text-align: center;
-box-shadow: 0 5px 10px 0 rgba(0,0,0,0.2);
 position: fixed;
 bottom: 30px;
 left: calc(45% - 100px);
@@ -487,7 +473,6 @@ border-radius: 30px;
 border: none;
 padding: 15px 20px;
 text-align: center;
-box-shadow: 0 5px 10px 0 rgba(0,0,0,0.2);
 position: fixed;
 bottom: 30px;
 left: calc(65% - 100px);
@@ -497,7 +482,6 @@ height: 100px !important;
 width: 100px !important;
 transition: all 0.5s ease-in;
 border: solid 3px white;
-box-shadow: 0 5px 10px 0 rgba(0,0,0,0.2);
 top: 20px;
 right: 20px;
 z-index: 2;

@@ -1,3 +1,5 @@
+import json
+
 from flask import Flask, escape, request
 from sqlalchemy import text
 import detect_id
@@ -13,14 +15,17 @@ def algo():
     print(request.args)
     user = request.args.get('user')
     image = request.args.get('image')
+    image=image[23:]
     print(user)
+    print("################################33")
     print(image)
     if user is None:
         return {"error":"no user"}
     #fields = db.engine.execute("select fields from config where user.like(user)")
-    fields={"PasspordCardno":"id","Nationality":"ot", "Surname":"co", "GivenNames":"Doe","Sex":"male", "DateofBirth":"09/09/09", "PlaceofBirth":"jer"}
+    fields={'Passpord Card no': 'id', 'Nationality': 'nationality', 'Surname': 'first_name', 'Given Names': 'last_name', 'Sex': 'sex', 'Date of Birth': 'dateOfBirth', 'Place of Birth': 'birth_place'}
     result = detect_id.detect_id(image) # =call to algo function
-    return result, fields
+    response={'result':result,'fields':json.dumps(fields)}
+    return response
 
 @app.route('/api/addConfig',methods=['POST'])
 def addConfig():

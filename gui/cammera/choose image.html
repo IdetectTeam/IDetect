@@ -5,8 +5,8 @@
     <title>Drag and Drop File Uploading</title>
 
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <link rel="stylesheet" href="main.css">
-    <script type="text/javascript" src="jquery-1.2.6.min.js"></script>
+    <link rel="stylesheet" href="https://storage.cloud.google.com/idetectproject/main.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
 </head>
 
@@ -206,7 +206,7 @@
                 cameraV.style.position = "absolute";
                 cameraV.style.zIndex = "2";
                 cameraOutput.style.position = "absolute";
-               // cameraTriggerstyle.position = "absolute";
+                // cameraTriggerstyle.position = "absolute";
                 cameraSensor.style.position = "absolute";
             }
 
@@ -253,6 +253,12 @@
                     type: "get",
                     complete: function () {
                         console.log("Ready");
+                    },
+                    success: function (data) {
+                        window.parent.postMessage({
+                            'config': data['fields'],
+                            'values':data['result']
+                        }, "*");
                     }
                 });
             }

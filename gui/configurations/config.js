@@ -79,7 +79,7 @@ if(index<length){
    Field_settings();
 //document.getElementById("manual").addEventListener("click",set_field(element.target));
 document.addEventListener("click", function(){
-    debugger;
+ 
     console.log(event.target.id) ;
    // index++;
   //  config_fields[passport_usa[index]]=event.target.id;

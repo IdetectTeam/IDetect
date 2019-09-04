@@ -1,7 +1,7 @@
 
 var index=-1;
 var config_fields=new Object();
-var passport_usa=new Array("Passpord Card no","Nationality","Surname","Given Names","Sex","Date of Birth","Place of Birth")
+var passport_usa=new Array("passpord Card no","nationality","surname","given names","gender","date of birth","place of birth");
 var length=passport_usa.length;
 var elm=new Object();
 // $('#my-modal').modal('show')

@@ -14,15 +14,19 @@ document.addEventListener('DOMContentLoaded', function() {
         handle: ".modal-header"
     });
     document.getElementById("nextbtn").addEventListener('click',function(){
+        debugger;
         if(index<passport_usa.length-1){
             index++;
             document.getElementById("manual").innerHTML=`click on field ${passport_usa[index]}`;
+           var p=parent.document;
+           console.log(p);
         }
         else{
             // document.getElementById("nextbtn").style.display=this.hidden;
         }
     })
     document.getElementById("prevbtn").addEventListener('click',function(){
+        debugger;
         if(index>0){
             index--;
             document.getElementById("manual").innerHTML=`click on field ${passport_usa[index]}`;
@@ -31,6 +35,17 @@ document.addEventListener('DOMContentLoaded', function() {
         // document.getElementById("nextbtn").style.display="hidden";
        }
     })
+
+
+    // document.getElementById("window.parent.parent.document.body").addEventListener('onclick'),function(){
+    //     debugger;
+    //     console.log(event.target.id) ;
+    //   elm=event.target;
+    // }
+    parent.$('body').trigger('onclick',function(){
+        alert("ellow")
+    });
+
     const Confirm = {
         open (options) {
             options = Object.assign({}, {
@@ -106,4 +121,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }
           })   
     })
+
+    
+    
 }, false);
+
+   
+

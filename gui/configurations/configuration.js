@@ -3,8 +3,13 @@ var passport_usa=new Array("Passpord Card no","Nationality","Surname","Given Nam
 var index=0;
 var length=passport_usa.length;
 console.log(length);
-var elm=new Object();
-
+var element=new Object();
+document.addEventListener("click", function(){
+    console.log(event.target.id) ;
+   // index++;
+  //  config_fields[passport_usa[index]]=event.target.id;
+  element=event.target;
+    }); 
 
 
 //   $(document).ready(function() {
@@ -24,7 +29,7 @@ async function Field_settings(){
             checkbox.type = "checkbox"; 
             checkbox.name = "name"; 
             checkbox.value = "value"; 
-            checkbox.id = "checkbox"; 
+            checkbox.id = "id"; 
             checkbox.checked=false;  
             checkbox.click=false;
             // creating label for checkbox 
@@ -61,30 +66,18 @@ async function Field_settings(){
 
 // });    
 }
-async function set_field(checkbox){
-    debugger;
-    //if(index==-1)
-   // return
-   // debugger
-   console.log(checkbox);
-   checkbox=false;
-if(index<length){
-    config_fields[passport_usa[index]]=element.id;
+async function set_field(){
+    debugger
+if(index<length&&this.target.checked==true){
+    config_fields[passport_usa[index]]=this.id;
     flag=true;
     index++;
     document.getElementById("manual").innerHTML="click of the field "+ passport_usa[index];
+
 }
 
    }
-   Field_settings();
-//document.getElementById("manual").addEventListener("click",set_field(element.target));
-document.addEventListener("click", function(){
- 
-    console.log(event.target.id) ;
-   // index++;
-  //  config_fields[passport_usa[index]]=event.target.id;
-  if(event.target.id=="checkbox"&&event.target.checked==true)
-  set_field(event.target.checked)
-else if(event.target.id!="checkbox")
-  elm=event.target;
-    });     
+Field_settings();
+
+document.getElementById("manual").addEventListener("click",set_field(element.target));
+    

@@ -1,0 +1,235 @@
+<html lang="en" class="js">
+
+<head>
+    <meta charset="utf-8">
+    <title>Drag and Drop File Uploading</title>
+
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="https://storage.cloud.google.com/idetectproject/main.css">
+    <script
+        type="text/javascript">(function (e, t, n) { var r = e.querySelectorAll("html")[0]; r.className = r.className.replace(/(^|\s)no-js(\s|$)/, "$1js$2") })(document, window, 0);</script>
+</head>
+
+<body>
+    <div id="camera"  class="modal fade" style="visibility:hidden">
+        <div class="modal-dialog">
+            <div  class="modal-content">
+
+                <!-- Camera sensor -->
+                <canvas id="camera--sensor"></canvas>
+                <!-- Camera view -->
+                <video id="camera--view" autoplay playsinline></video>
+                <!-- Camera output -->
+                <img src="//:0" alt="" id="camera--output" style="visibility:hidden;">
+                <!-- Camera trigger -->
+                <button id="camera--trigger">Take a picture</button>
+                <button id="camera--cencel">Close</button>
+            </div>
+        </div>
+    </div>
+    <div class="container" role="main" id="drop_zone">
+
+        <form id="formDrop" enctype="multipart/form-data" novalidate="" class="box has-advanced-upload">
+            <div class="box__input">
+                <svg class="box__icon" xmlns="http://www.w3.org/2000/svg" width="50" height="43" viewBox="0 0 50 43">
+                    <path
+                        d="M48.4 26.5c-.9 0-1.7.7-1.7 1.7v11.6h-43.3v-11.6c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v13.2c0 .9.7 1.7 1.7 1.7h46.7c.9 0 1.7-.7 1.7-1.7v-13.2c0-1-.7-1.7-1.7-1.7zm-24.5 6.1c.3.3.8.5 1.2.5.4 0 .9-.2 1.2-.5l10-11.6c.7-.7.7-1.7 0-2.4s-1.7-.7-2.4 0l-7.1 8.3v-25.3c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v25.3l-7.1-8.3c-.7-.7-1.7-.7-2.4 0s-.7 1.7 0 2.4l10 11.6z">
+                    </path>
+                </svg>
+                <input accept="image/jpg,image/JPG,image/jpeg" type="file" name="files[]" id="file" class="box__file"
+                    data-multiple-caption="{count} files selected" multiple="">
+                <label for="file"><strong>Choose a file</strong><span class="box__dragndrop"> or drag it
+                        here</span>.</label>
+                <button type="submit" class="box__button">Upload</button>
+            </div>
+            <div class="box__uploading">Uploading…</div>
+            <div class="box__success">Done! <a class="box__restart" role="button">Upload more?</a></div>
+            <div class="box__error">Error! <span></span>. <a class="box__restart" role="button">Try again!</a></div>
+            <input type="hidden" name="ajax" value="1">
+        </form>
+        <label id="ToTakePicture">Take a picture</label>
+    </div>
+
+    <!-- Reference to your JavaScript file -->
+
+
+    <script>
+        var droppedFiles = false;
+        function handleFileSelect(evt) {
+            var files = evt.target.files; // FileList object
+
+            // Loop through the FileList and render image files as thumbnails.
+            for (var i = 0, f; f = files[i]; i++) {
+
+                // Only process image files.
+                if (!f.type.match('image.*')) {
+                    continue;
+                }
+
+                var reader = new FileReader();
+
+                // Closure to capture the file information.
+                reader.onload = (function (theFile) {
+                    return function (e) {
+                        // Render thumbnail.
+                        alert(e.target.result);
+                        var span = document.createElement('span');
+                        span.innerHTML = ['<img class="thumb" src="', e.target.result,
+                            '" title="', escape(theFile.name), '"/>'].join('');
+                        ;
+                    };
+                })(f);
+
+                // Read in the image file as a data URL.
+                if (files[0].type.match('image.*'))
+                    reader.readAsDataURL(f);
+            }
+        }
+
+        document.getElementById('file').addEventListener('change', handleFileSelect, false);
+
+
+        function handleFileSelectD(evt) {
+
+            evt.stopPropagation();
+            evt.preventDefault();
+
+            var files = evt.dataTransfer.files; // FileList object.
+            for (var i = 0, f; f = files[i]; i++) {
+
+                // Only process image files.
+                if (!f.type.match('image.*')) {
+                    continue;
+                }
+
+                var reader = new FileReader();
+
+                // Closure to capture the file information.
+                reader.onload = (function (theFile) {
+                    return function (e) {
+                        // Render thumbnail.
+                        alert(e.target.result);
+                        var span = document.createElement('span');
+                        span.innerHTML = ['<img class="thumb" src="', e.target.result,
+                            '" title="', escape(theFile.name), '"/>'].join('');
+                        ;
+                    };
+                })(f);
+                var formDrop = document.getElementById("formDrop");
+                var count = (formDrop.className.match(/box is-dragover/g) || []).length;
+                while (count > 0) {
+
+                    formDrop.className = formDrop.className.replace("box is-dragover", " ");
+                    count = (formDrop.className.match(/box is-dragover/g) || []).length;
+                }
+                // Read in the image file as a data URL.
+                reader.readAsDataURL(f);
+            }
+        }
+
+
+
+        function handleDragOver(evt) {
+            evt.stopPropagation();
+            evt.preventDefault();
+            var formDrop = document.getElementById("formDrop");
+            //dropZone.classList.add('is-dragover');
+            formDrop.className += " " + "box is-dragover";
+
+            evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+
+        }
+        function handleDragLeave(evt) {
+            var formDrop = document.getElementById("formDrop");
+            //dropZone.classList.add('is-dragover');
+
+            formDrop.className = formDrop.className.replace("/\box is-dragover/g", " ");
+            var count = (formDrop.className.match(/box is-dragover/g) || []).length;
+            while (count > 0) {
+
+                formDrop.className = formDrop.className.replace("box is-dragover", " ");
+                count = (formDrop.className.match(/box is-dragover/g) || []).length;
+            }
+        }
+        // Setup the dnd listeners.
+
+        function handleDragEnter(evt) {
+            evt.stopPropagation();
+            evt.preventDefault();
+            var formDrop = document.getElementById("formDrop");
+            //dropZone.classList.add('is-dragover');
+            formDrop.className += " " + "box is-dragover";
+
+            evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+        }
+
+        var dropZone = document.getElementById('drop_zone');
+        dropZone.addEventListener('dragover', handleDragOver, false);
+        dropZone.addEventListener('dragleave', handleDragLeave, false);
+        dropZone.addEventListener("dragenter", handleDragEnter, false);
+        dropZone.addEventListener('drop', handleFileSelectD, false);
+
+
+
+
+
+        var constraints = { video: { facingMode: "user" }, audio: false };
+        // Define constants
+        const cameraView = document.querySelector("#camera--view"),
+            cameraOutput = document.querySelector("#camera--output"),
+            cameraSensor = document.querySelector("#camera--sensor"),
+            cameraTrigger = document.querySelector("#camera--trigger");
+        var cameraCencel = document.getElementById('camera--cencel');
+        var ToTakePicture = document.getElementById('ToTakePicture');
+       cameraCencel.addEventListener('click', cameraCencel, false);
+        ToTakePicture.addEventListener('click', cameraStart, false);
+        var localStream;
+        cameraCencel.onclick = function () {
+           
+            var cameraV = document.getElementById("camera");
+            localStream.stop(); 
+
+            cameraV.style.visibility = "hidden";
+            var cameraOutput = document.getElementById("camera--output");
+            cameraOutput.style.visibility = "hidden";
+
+        }
+
+        function visibleC() {
+            var cameraV = document.getElementById("camera");
+            cameraV.style.visibility = "visible"
+            cameraV.style.position = "absolute";
+            cameraV.style.zIndex = "2";
+                  }
+        
+        // Access the device camera and stream to cameraView
+        function cameraStart() {
+            var flagCamera = true;
+            navigator.mediaDevices
+                .getUserMedia(constraints)
+                .then(function (stream) {
+                    track = stream.getTracks()[0];
+                    cameraView.srcObject = stream;
+                    localStream=track;
+                })
+                .catch(function (error) {
+                    flagCamera = false;
+                    console.error("Oops. Something is broken.", error);
+                }).then(function () {
+                    if (flagCamera)
+                        visibleC();
+                });
+        }
+        // Take a picture when cameraTrigger is tapped
+        cameraTrigger.onclick = function () {
+            cameraSensor.width = cameraView.videoWidth;
+            cameraSensor.height = cameraView.videoHeight;
+            cameraSensor.getContext("2d").drawImage(cameraView, 0, 0);
+            cameraOutput.src = cameraSensor.toDataURL("image/webp");
+            cameraOutput.style.visibility = "visible";
+            cameraOutput.classList.add("taken");
+        };
+    </script>
+</body>
+
+</html>

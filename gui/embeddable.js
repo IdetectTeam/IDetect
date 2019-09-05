@@ -3,9 +3,12 @@
 //sconst Swal = require('sweetalert2')
 //import 'sweetalert2/src/sweetalert2.scss'
 
-var button = document.createElement("button");
-button.innerHTML = "idetect";
+//create idetect button
+var button = document.createElement("input");
+button.type = "image"
+button.src = ".\\logo2.png";
 button.onclick = openForm;
+<<<<<<< HEAD
 button.classList += 'open-button';
 
 document.body.appendChild(button);
@@ -53,9 +56,26 @@ if (style.styleSheet) {
     style.styleSheet.cssText = css;
 } else {
     style.appendChild(document.createTextNode(css));
+=======
+button.style = "position:fixed;right:50px;bottom:50px;height:100px";
+button.style.zIndex = "6"
+document.body.appendChild(button);
+
+//create iframe to add image
+var iframe = document.createElement("iframe");
+iframe.style = "position:fixed;right:50px;bottom:200px;height:500px;width:400px";
+iframe.allow = "microphone; camera";
+iframe.style.zIndex = "6"
+
+//open add image form in iframe
+function openForm() {
+    document.body.appendChild(iframe);
+    iframe.src = "https://storage.cloud.google.com/idetectproject/choose%20image.html";
+>>>>>>> ba47e2382e00b89a99f7a9d117633a5812b6e27d
 }
 document.getElementsByTagName('head')[0].appendChild(style);
 
+<<<<<<< HEAD
 async function sendGent (){
     const url = 'http://127.0.0.1:5000//api/args?user=111&image=http:/adslfkjalakjd'; // the URL to send the HTTP request to
     const body = ''; // whatever you want to send in the body of the HTTP request
@@ -81,10 +101,15 @@ function sendGet(){
         //doSomething with body;
       });
 }
+=======
+//close add image form from iframe
+>>>>>>> ba47e2382e00b89a99f7a9d117633a5812b6e27d
 function closeForm() {
     document.getElementById("myForm").style.display = "none";
+    document.body.removeChild(iframe);
 }
 
+<<<<<<< HEAD
 function openForm() {
 
     /*
@@ -127,5 +152,76 @@ function putDataIntoFields(idFields, textFields) {
     // document.getElementsByClassName(idFields["DateofBirth"])[0].value = textFields["DateofBirth"];
     document.getElementsByClassName(idFields["PlaceofBirth"])[0].value = textFields["PlaceofBirth"];
     debugger;
+=======
+//listening to messege from iframe- choosen an image
+if (window.addEventListener) {
+    window.addEventListener("message", onMessage, false);
+}
+else if (window.attachEvent) {
+    window.attachEvent("onmessage", onMessage, false);
+}
+function onMessage(event) {
+    debugger;
+    // Check sender origin to be trusted
+    // if (event.origin !== "https://00e9e64bacfbae46da76bae8f75f324e40f94f374d51027527-apidata.googleusercontent.com")alert("nononno"); return;
+    var data = event.data;
+    putDataIntoFields(JSON.parse(data['config']), JSON.parse(data['values']));
+}
+
+// Function to be called from iframe
+//
+function parentFunc(message) {
+    alert(message);
+}
+
+function tryConvertToDate(value)
+{
+    // tmp = value;
+    // date=null;
+    // ind=0;
+    // while(tmp){
+    //     try{
+    //         date = Date(tmp);
+    //         return date;
+    //     }
+    //     finally{
+    //         tmp=tmp.substring(ind++);
+    //     }
+    // }
+    // tmp=value;
+    // return date;
+}
+
+//get 2 json objects, idFields contains keys-fields in passpord card, values- ids of the fields spesific for this user,
+//and textFields contains keys-fields in passpord card, values-the value of the fields, the id's fields.
+function putDataIntoFields(idFields, textFields) {
+    for (k in idFields) {
+        //if there is match field 
+        if (document.getElementById(idFields[k]) != undefined && textFields[k] != undefined && document.getElementById(idFields[k]) != null && textFields[k] != null)
+            //if the field on type date
+            if(document.getElementById(idFields[k]).type=="date")
+            {
+                dateVal=tryConvertToDate(textFields[k]);
+                if(dateVal)
+                document.getElementById(idFields[k]).value = dateVal;
+            }
+        //if the field on type radio- for sex
+            else if(idFields[k]instanceof'dictionary'&&k=='gender')
+            {
+                if(textFields[k]=="m"||textFields[k]=="male")
+                    document.getElementById(idFields[k]["male"]).checked = true;
+                else
+                    document.getElementById(idFields[k]["female"]).checked = true;
+            }
+        //if the field on type number
+            else if(document.getElementById(idFields[k]).type=="number")
+            {
+                document.getElementById(idFields[k]).value=parseInt(textFields[k]);
+            }
+            else
+                document.getElementById(idFields[k]).value = textFields[k];
+
+    }
+>>>>>>> ba47e2382e00b89a99f7a9d117633a5812b6e27d
 }
 

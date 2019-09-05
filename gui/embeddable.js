@@ -68,26 +68,28 @@ function tryConvertToDate(value)
 
 //get 2 json objects, idFields contains keys-fields in passpord card, values- ids of the fields spesific for this user,
 //and textFields contains keys-fields in passpord card, values-the value of the fields, the id's fields.
-
 function putDataIntoFields(idFields, textFields) {
     for (k in idFields) {
+        //if there is match field 
         if (document.getElementById(idFields[k]) != undefined && textFields[k] != undefined && document.getElementById(idFields[k]) != null && textFields[k] != null)
+            //if the field on type date
             if(document.getElementById(idFields[k]).type=="date")
             {
                 dateVal=tryConvertToDate(textFields[k]);
                 if(dateVal)
                 document.getElementById(idFields[k]).value = dateVal;
             }
-            else if(idFields[k]instanceof'dictionary'&&k=='gender')//radio for sex
+        //if the field on type radio- for sex
+            else if(idFields[k]instanceof'dictionary'&&k=='gender')
             {
                 if(textFields[k]=="m"||textFields[k]=="male")
                     document.getElementById(idFields[k]["male"]).checked = true;
                 else
                     document.getElementById(idFields[k]["female"]).checked = true;
             }
-            else if(document.getElementById(idFields[k]).type=="number")//radio for sex
+        //if the field on type number
+            else if(document.getElementById(idFields[k]).type=="number")
             {
-                idFields[k]["female"].checked = true;
                 document.getElementById(idFields[k]).value=parseInt(textFields[k]);
             }
             else

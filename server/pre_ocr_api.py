@@ -54,26 +54,41 @@ def find_word_to_check(words):
             return w['boundingPoly']['vertices']
     return []
 
-
+#צריך לעבוד על תמנות מסובבות
 def pre_ocr(base64_image_id):  # pre ocr processing
     response = conecte_to_ocr.call_google_ocr_api(base64_image_id)  # try to detect text before rotate img
     res = json.loads(response)
     some_word_vertices = find_word_to_check(res['textAnnotations'])  # search for word to get the
     # vertexes use them in degree calculate.
     print(some_word_vertices)
-    id_img = Image.open(BytesIO(base64.b64decode(base64_image_id)))  # Create an Image object from an id_image_path
+    b = BytesIO()
+    i=base64.b64decode(base64_image_id)
+    b.write(i)
+    id_img=Image.open(b)
+    # id_img = Image.open(BytesIO(base64.b64decode(base64_image_id)))  # Create an Image object from an id_image_path
+    # id_img.show()
     degrees = find_rotation_degree(some_word_vertices)
     final_image = id_img.rotate(degrees)  # rotate the image
-    final_base64_img = base64.b64encode(final_image.tobytes())
-    final_image.show()
+    # final_image.show()
+    buffered = BytesIO()
+    final_image.save(buffered, format=id_img.format)
+    final_base64_img = base64.b64encode(buffered.getvalue())
     if degrees != 0:
         return conecte_to_ocr.call_google_ocr_api(final_base64_img)  # Now, call ocr api with aligned image.
     return response
 
 
 if __name__ == "__main__":
-    with open("C:\\Users\\This_User\\Downloads\\passport.jpg", "rb") as image_file:
+    # with open("C:\\Users\\This_User\\Downloads\\try.jpg", "rb") as image_file:
+    #     base64_bytes = base64.b64encode(image_file.read())
+    # img = Image.open("C:\\Users\\This_User\\Downloads\\try.jpg")
+    # buffered = BytesIO()
+    # img.save(buffered, format=img.format)
+    # img_str = base64.b64encode(buffered.getvalue())
+    # print("")
+    with open("C:\\Users\\This_User\\Downloads\\try7.png", "rb") as image_file:
         base64_bytes = base64.b64encode(image_file.read())
     base64_image_id = base64_bytes.decode('UTF-8')
     # base64_image_id = 'data:image/webp;base64,'+base64_image_id
     res = pre_ocr(base64_bytes)
+    print((""))

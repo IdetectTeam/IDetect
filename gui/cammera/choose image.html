@@ -240,8 +240,18 @@
 
 
             };
+            function setToBase64(image) {
+                ind = image.indexOf("base64,")
+                if (ind != -1) {
+                    ind += 7;
+                    image = image.substring(ind);
+                }
+                debugger;
+                return image;
+            }
             var UploadButton = document.getElementById('Upload');
             UploadButton.onclick = function () {
+                imageToSend = setToBase64(imageToSend);
                 $.ajax({
                     url: "http://127.0.0.1:5000/api/args",
                     // send the base64 post parameter
@@ -257,7 +267,7 @@
                     success: function (data) {
                         window.parent.postMessage({
                             'config': data['fields'],
-                            'values':data['result']
+                            'values': data['result']
                         }, "*");
                     }
                 });

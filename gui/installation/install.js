@@ -44,15 +44,39 @@ document.addEventListener('DOMContentLoaded', function() {
 //window.postMessage('hello! i send message from iframe (:', 'https://storage.googleapis.com');
       
 if(index<passport_usa.length-1){
-    if(index>-1)
-    config_fields[passport_usa[index]]=elm;
-    index++;
-    document.getElementById("manual").innerHTML=`click on field ${passport_usa[index]}`;
+   index++;
+    if(index>-1){
+    if("gender"==passport_usa[index])
+    {config_fields[passport_usa[index-1]]=elm;
+        Confirm.open({
+            title: 'gender',
+            message: 'Are you have radio button for gender field?',
+            onok: () => {
+                passport_usa.splice( index, 1, "male", "female");
+            document.getElementById("manual").innerHTML=`click on field ${passport_usa[index]}`;
+// var array=passport_usa.slice(0,index-1);
+// array.push("male");
+// array.push("female");
+// var array
+            },
+            oncancel: () =>{
+                document.getElementById("manual").innerHTML=`click on field ${passport_usa[index]}`;
+            }
+            
+          })   
+    }
+    else
+    {
+        if(index>0)
+            config_fields[passport_usa[index-1]]=elm;
+            document.getElementById("manual").innerHTML=`click on field ${passport_usa[index]}`;
+    }
+    
         }
         else{
             // document.getElementById("nextbtn").style.display=this.hidden;
         }
-    })
+    }});
     document.getElementById("prevbtn").addEventListener('click',function(){
         if(index>0){
             index--;

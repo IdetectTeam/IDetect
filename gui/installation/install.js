@@ -5,6 +5,8 @@ var passport_usa=new Array("passpord Card no","nationality","surname","given nam
 var length=passport_usa.length;
 var elm=new Object();
 var dict={};
+var sex={};
+var json_response;
 // $('#my-modal').modal('show')
 //               .draggable();ss
 //window.addEventListener("message", receiveMessage, false);
@@ -20,7 +22,7 @@ function receiveMessage($event) {
      else{
         elm=$event.data;
         if(index==0)
-         config_fields['site location']=event.origin;
+        json_response=`site{${event.origin}` ;
         
         // config_fields['site location']=event.origin;
      }
@@ -50,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // window.opener.postMessage('hello! i send message from iframe (:', 'http://www.example.com');
 // targetWindow.postMessage.postMessage('hello! i send message from iframe (:', 'http://www.example.com');
 //window.postMessage('hello! i send message from iframe (:', 'https://storage.googleapis.com');
-      
+     
 if(index<passport_usa.length-1){
    index++;
     if(index>-1){
@@ -74,7 +76,14 @@ if(index<passport_usa.length-1){
           })   
     }
     else
+    {if(passport_usa[index-1]=='male'||passport_usa[index-1]=='female')
     {
+        sex[passport_usa[index-1]]=elm;
+        if(passport_usa[index-1]=='female'){
+            config_fields['gender']=sex;
+            // index++;
+        }
+            }else
         if(index>0)
             config_fields[passport_usa[index-1]]=elm;
            document.getElementById("manual").innerHTML=`click on field ${passport_usa[index]}`;
@@ -183,26 +192,11 @@ if(index<passport_usa.length-1){
             title: 'Background Change',
             message: 'Are you sure you have done ?',
             onok: () => {
-            //     var c={};
-            //     for (var key in config_fields) {
-            //       if(key!='male'&&key!='female'&&key!='site')
-            //         c[key]=config_fields[]
-            // }
-                // config_fields=JSON.parse(config_fields);
-                // for(var key in config_fields){
-                //     if(key!='male'&&key!='female'&&key!='site')
-                //     dict.push({
-                //        key:key,
-                //        value:config_fields[key] 
-                //     })
-                //     else
-                //     if(key=='male')
-                //     dict.push({
-                //         key:"jender",  
-                //   value:[config_fields['male'],config_fields['female']]
-                //      })
+                config_fields=JSON.stringify(config_fields);
+                json_response+=`${config_fields}}`;
+                alert(json_response);
                 }
-             //   console.log(dict); 
+             
             }
   )   
     })

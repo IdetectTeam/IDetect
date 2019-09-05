@@ -1,10 +1,16 @@
-1. get function, recive picture and send to id_to_text function.
-2. id_to_text func, return json with the data.
+1. connect to camera from Ifrae
+2. if work with other domain
+3. design add picture form,
+   design register
+   design installion
+4. eneable all typs of images in add image
+5. connect installion to idetect button
+6. connect installion to flask
+7. save configuration to sql
+8. rotate all typs of images in server
+9. match configuration to fields function
+10.fill all fields
+11. Documentation and try 
 
 
-
-
-to ApiOcr:
-1. send to ocr
-2. calculate if the angle of picture is good
-if not revolve this by "united state"'s angle 
+server register addImage installion embeddable 

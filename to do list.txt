@@ -1,4 +1,4 @@
-1. connect to camera from Ifrae
+1. connect to camera from Ifrae - Ester Katz
 2. if work with other domain
 3. design add picture form,
    design register
@@ -7,9 +7,9 @@
 5. connect installion to idetect button
 6. connect installion to flask -sari huminer 08/09
 7. save configuration to sql- sari huminer 08/09
-8. rotate all typs of images in server
-9. match configuration to fields function
-10.fill all fields
+8. rotate all typs of images in server - Elisheva Portnoy
+9. match configuration to fields function j.s python
+10.fill all fields - Ruth Zonenshine
 11. Documentation and try 
 
 

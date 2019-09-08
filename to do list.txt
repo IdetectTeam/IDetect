@@ -11,6 +11,6 @@
 9. match configuration to fields function j.s python
 10.fill all fields - Ruth Zonenshine
 11. Documentation and try 
-
-
+חויית משמש- חיווי
+לדמות התקנה ו2-3 משתמשים.
 server register addImage installion embeddable 

@@ -1,4 +1,7 @@
 // JavaScript source code
+//https:/cdn.jsdelivr.net/npm/sweetalert2@8.17.1/dist/sweetalert2.all.min.js
+//sconst Swal = require('sweetalert2')
+//import 'sweetalert2/src/sweetalert2.scss'
 
 //create idetect button
 var button = document.createElement("input");
@@ -35,7 +38,6 @@ else if (window.attachEvent) {
     window.attachEvent("onmessage", onMessage, false);
 }
 function onMessage(event) {
-    debugger;
     // Check sender origin to be trusted
     // if (event.origin !== "https://00e9e64bacfbae46da76bae8f75f324e40f94f374d51027527-apidata.googleusercontent.com")alert("nononno"); return;
     var data = event.data;
@@ -47,81 +49,66 @@ function onMessage(event) {
 function parentFunc(message) {
     alert(message);
 }
-
-function tryConvertToDate(value)
+function convertToDate(value)
 {
-    // tmp = value;
-    // date=null;
-    // ind=0;
-    // while(tmp){
-    //     try{
-    //         date = Date(tmp);
-    //         return date;
-    //     }
-    //     finally{
-    //         tmp=tmp.substring(ind++);
-    //     }
-    // }
-    // tmp=value;
-    // return date;
+    date = Date(value);
+    return date;
 }
 
-//get 2 json objects, idFields contains keys-fields in passpord card, values- ids of the fields spesific for this user,
-//and textFields contains keys-fields in passpord card, values-the value of the fields, the id's fields.
-function putDataIntoFields(idFields, textFields) {
-    for (k in idFields) {
-        //if there is match field 
-        if (document.getElementById(idFields[k]) != undefined && textFields[k] != undefined && document.getElementById(idFields[k]) != null && textFields[k] != null)
-            //if the field on type date
-            if(document.getElementById(idFields[k]).type=="date")
-            {
-                dateVal=tryConvertToDate(textFields[k]);
-                if(dateVal)
-                document.getElementById(idFields[k]).value = dateVal;
-            }
-        //if the field on type radio- for sex
-            else if(idFields[k]instanceof'dictionary'&&k=='gender')
-            {
-                if(textFields[k]=="m"||textFields[k]=="male")
-                    document.getElementById(idFields[k]["male"]).checked = true;
-                else
-                    document.getElementById(idFields[k]["female"]).checked = true;
-            }
-        //if the field on type number
-            else if(document.getElementById(idFields[k]).type=="number")
-            {
-                document.getElementById(idFields[k]).value=parseInt(textFields[k]);
-            }
-            else
-                document.getElementById(idFields[k]).value = textFields[k];
+function convertToNumber(value)
+{
+    date = Date(value);
+    return date;
+}
 
+function tryConvert(value, type) {
+    tmp = value;
+    length=value.length;
+    res;
+    ind = 0;
+    for (i = 0; i < 3; i++) {
+        for (j = 0; j < 3; j++) {
+            try {
+                switch (type) {
+                    case 'date': 
+                        res=convertToDate(tmp); break;
+                    case 'number': 
+                        res=convertToNumber(tmp); break;
+                }
+                return res;
+            }
+            catch{
+                tmp = value.substring(i,length-i-j);
+            }
+        }}
+        return value;
     }
-}
 
+    //get 2 json objects, idFields contains keys-fields in passpord card, values- ids of the fields spesific for this user,
+    //and textFields contains keys-fields in passpord card, values-the value of the fields, the id's fields.
+    function putDataIntoFields(idFields, textFields) {
+        for (k in idFields) {
+            //if there is match field 
+            if (document.getElementById(idFields[k]) != undefined && textFields[k] != undefined && document.getElementById(idFields[k]) != null && textFields[k] != null)
+                //if the field on type date
+                if (document.getElementById(idFields[k]).type == "date") {
+                    dateVal = tryConvert(textFields[k],'date');
+                    if (dateVal instanceof Date)
+                        document.getElementById(idFields[k]).value = dateVal;
+                }
+                //if the field on type radio- for sex
+                else if ((idFields[k]).type == "dict" && k == 'gender') {
+                    if (textFields[k] == "m" || textFields[k] == "male")
+                        document.getElementById(idFields[k]["male"]).checked = true;
+                    else
+                        document.getElementById(idFields[k]["female"]).checked = true;
+                }
+                //if the field on type number
+                else if (document.getElementById(idFields[k]).type == "number") {
+                    numberVal = tryConvert(textFields[k],'number');
+                    if (typeof num1 == 'number')
+                        document.getElementById(idFields[k]).value = numberVal;
+                }
+        }
+    }
 
-// function putDataIntoFields(idFields, textFields) {
-//     for (k in idFields) {
-//         if (document.getElementById(idFields[k]) != undefined && textFields[k] != undefined && document.getElementById(idFields[k]) != null && textFields[k] != null)
-//             if(document.getElementById(idFields[k]).type=="date")
-//             {
-//                 dateVal=tryConvertToDate(textFields[k]);
-//                 if(dateVal)
-//                 document.getElementById(idFields[k]).value = dateVal;
-//             }
-//             else if(idFields[k]instanceof'dictionary'&&k=='gender')//radio for sex
-//             {
-//                 if(textFields[k]=="m"||textFields[k]=="male")
-//                     document.getElementById(idFields[k]["male"]).checked = true;
-//                 else
-//                     document.getElementById(idFields[k]["female"]).checked = true;
-//             }
-//             else if(document.getElementById(idFields[k]).type=="number")
-//             {
-//                 idFields[k]["female"].checked = true;
-//                 document.getElementById(idFields[k]).value=parseInt(textFields[k]);
-//             }
-//             else
-//                 document.getElementById(idFields[k]).value = textFields[k];
-
-//     }
-// }

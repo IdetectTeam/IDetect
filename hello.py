@@ -14,7 +14,7 @@ def algo():
     user= request.args.get('user')
     image= request.args.get('image')
     #fields = db.engine.execute("select fields from config where user.like(user)")
-    fields={"PasspordCardno":"90","Nationality":"09", "Surname":"Doe", "GivenNames":"Doe","Sex":"male", "DateofBirth":"09/09/09", "PlaceofBirth":"jer"}
+    fields={"PasspordCardno":"id","Nationality":"nationality", "Surname":"last_name", "GivenNames":"first_name","Sex":"sex", "DateofBirth":"birth_date", "PlaceofBirth":"birth_place"}
     result # =call to algo function
     return result, fields
 

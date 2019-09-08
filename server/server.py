@@ -1,7 +1,7 @@
 import json
 
 from flask import Flask, escape, request
-from sqlalchemy import text
+#from sqlalchemy import text
 import detect_id
 from flask_cors import CORS
 

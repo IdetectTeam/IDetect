@@ -1,6 +1,7 @@
 // JavaScript source code
 
 //create idetect button
+console.log("I'm here");
 var button = document.createElement("input");
 button.type = "image"
 button.src = ".\\logo2.png";
@@ -124,4 +125,4 @@ function putDataIntoFields(idFields, textFields) {
 //                 document.getElementById(idFields[k]).value = textFields[k];
 
 //     }
-// }
+//

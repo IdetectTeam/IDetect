@@ -44,7 +44,9 @@ def find_rotation_degree(some_word_vertices):  # Calculate the degrees to rotate
     a = abs(point1['y'] - point2['y'])
     b = abs(point1['x'] - point2['x'])
     degrees = math.degrees(math.atan(a / b))
-    return degrees
+    if point1['y'] < point2['y']:
+        return degrees
+    return 360-degrees;
 
 
 def find_word_to_check(words):
@@ -86,7 +88,7 @@ if __name__ == "__main__":
     # img.save(buffered, format=img.format)
     # img_str = base64.b64encode(buffered.getvalue())
     # print("")
-    with open("C:\\Users\\This_User\\Downloads\\try.jpg", "rb") as image_file:
+    with open("C:\\Users\\This_User\\Downloads\\try7.png", "rb") as image_file:
         base64_bytes = base64.b64encode(image_file.read())
     base64_image_id = base64_bytes.decode('UTF-8')
     # base64_image_id = 'data:image/webp;base64,'+base64_image_id

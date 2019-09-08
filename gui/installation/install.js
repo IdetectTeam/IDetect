@@ -7,6 +7,7 @@ var elm=new Object();
 var dict={};
 var sex={};
 var json_response;
+var originsite;
 // $('#my-modal').modal('show')
 //               .draggable();ss
 //window.addEventListener("message", receiveMessage, false);
@@ -21,11 +22,12 @@ function receiveMessage($event) {
         return;
      else{
         elm=$event.data;
-        if(index==0)
+        if(index==0){
         json_response=`site{${event.origin}` ;
-        
+        originsite=`${event.origin}`;
         // config_fields['site location']=event.origin;
      }
+    }
     
     //  var x = document.createElement("P");
     //         x.id="manual";
@@ -195,6 +197,36 @@ if(index<passport_usa.length-1){
                 config_fields=JSON.stringify(config_fields);
                 json_response+=`${config_fields}}`;
                 alert(json_response);
+                // $.ajax({
+                //     url: "http://127.0.0.1:5000/api/addConfig",
+                //     // send the configuration of the website to flask
+                //     data: {
+                //         cust: originsite,
+                //         configuration:json_response 
+                //     },
+                //     // important POST method !
+                //     type: "post",
+                //     complete: function () {
+                //         console.log("push succsesfull");
+                //     },
+                //     success: function (data) {
+                //         window.parent.postMessage({
+                //             'config': data['fields'],
+                //             'values': data['result']
+                //         }, "*");
+                //     }
+                // });
+    $.ajax({
+                    url:"http://127.0.0.1:5000/api/addConfig", //the page containing python script
+                    type: "POST", //request type,
+                    dataType: 'json',
+                    data: {cust: originsite,configuration:json_response},
+                    success:function(result){
+                    console.log(result);
+                    alert(result);
+                          }
+                        });
+                
                 }
              
             }

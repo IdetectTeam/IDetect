@@ -15,7 +15,6 @@ def algo():
     print(request.args)
     user = request.args.get('user')
     image = request.args.get('image')
-    # image=image[23:]
     print(user)
     print("################################33")
     print(image)

@@ -75,3 +75,31 @@ function putDataIntoFields(idFields, textFields) {
                 document.getElementById(idFields[k]).value = textFields[k];
     }
 }
+
+
+// function putDataIntoFields(idFields, textFields) {
+//     for (k in idFields) {
+//         if (document.getElementById(idFields[k]) != undefined && textFields[k] != undefined && document.getElementById(idFields[k]) != null && textFields[k] != null)
+//             if(document.getElementById(idFields[k]).type=="date")
+//             {
+//                 dateVal=tryConvertToDate(textFields[k]);
+//                 if(dateVal)
+//                 document.getElementById(idFields[k]).value = dateVal;
+//             }
+//             else if(idFields[k]instanceof'dictionary'&&k=='gender')//radio for sex
+//             {
+//                 if(textFields[k]=="m"||textFields[k]=="male")
+//                     document.getElementById(idFields[k]["male"]).checked = true;
+//                 else
+//                     document.getElementById(idFields[k]["female"]).checked = true;
+//             }
+//             else if(document.getElementById(idFields[k]).type=="number")
+//             {
+//                 idFields[k]["female"].checked = true;
+//                 document.getElementById(idFields[k]).value=parseInt(textFields[k]);
+//             }
+//             else
+//                 document.getElementById(idFields[k]).value = textFields[k];
+
+//     }
+// }

@@ -66,10 +66,10 @@ def pre_ocr(base64_image_id):  # pre ocr processing
     b.write(i)
     id_img=Image.open(b)
     # id_img = Image.open(BytesIO(base64.b64decode(base64_image_id)))  # Create an Image object from an id_image_path
-    # id_img.show()
+    id_img.show()
     degrees = find_rotation_degree(some_word_vertices)
     final_image = id_img.rotate(degrees)  # rotate the image
-    # final_image.show()
+    final_image.show()
     buffered = BytesIO()
     final_image.save(buffered, format=id_img.format)
     final_base64_img = base64.b64encode(buffered.getvalue())
@@ -86,7 +86,7 @@ if __name__ == "__main__":
     # img.save(buffered, format=img.format)
     # img_str = base64.b64encode(buffered.getvalue())
     # print("")
-    with open("C:\\Users\\This_User\\Downloads\\try7.png", "rb") as image_file:
+    with open("C:\\Users\\This_User\\Downloads\\try.jpg", "rb") as image_file:
         base64_bytes = base64.b64encode(image_file.read())
     base64_image_id = base64_bytes.decode('UTF-8')
     # base64_image_id = 'data:image/webp;base64,'+base64_image_id

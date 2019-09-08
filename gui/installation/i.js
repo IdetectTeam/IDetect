@@ -1,12 +1,10 @@
 
 var index=-1;
-var config_fields={};
+var config_fields=[];
 var passport_usa=new Array("passpord Card no","nationality","surname","given names","gender","date of birth","place of birth");
 var length=passport_usa.length;
 var elm=new Object();
 var dict={};
-var sex={};
-var json_response;
 // $('#my-modal').modal('show')
 //               .draggable();ss
 //window.addEventListener("message", receiveMessage, false);
@@ -22,8 +20,10 @@ function receiveMessage($event) {
      else{
         elm=$event.data;
         if(index==0)
-        json_response=`site{${event.origin}` ;
-        
+         config_fields.push({
+            key:   "site location",
+            value: event.origin
+        });
         // config_fields['site location']=event.origin;
      }
     
@@ -52,13 +52,16 @@ document.addEventListener('DOMContentLoaded', function() {
 // window.opener.postMessage('hello! i send message from iframe (:', 'http://www.example.com');
 // targetWindow.postMessage.postMessage('hello! i send message from iframe (:', 'http://www.example.com');
 //window.postMessage('hello! i send message from iframe (:', 'https://storage.googleapis.com');
-     
+      
 if(index<passport_usa.length-1){
    index++;
     if(index>-1){
     if("gender"==passport_usa[index])
-    {     config_fields[passport_usa[index-1]]=elm;
-            Confirm.open({
+    {      config_fields.push({
+        key:   passport_usa[index-1],
+        value: elm
+    });
+        Confirm.open({
             title: 'gender',
             message: 'Are you have radio button for gender field?',
             onok: () => {
@@ -76,17 +79,14 @@ if(index<passport_usa.length-1){
           })   
     }
     else
-    {if(passport_usa[index-1]=='male'||passport_usa[index-1]=='female')
     {
-        sex[passport_usa[index-1]]=elm;
-        if(passport_usa[index-1]=='female'){
-            config_fields['gender']=sex;
-            // index++;
-        }
-            }else
         if(index>0)
-            config_fields[passport_usa[index-1]]=elm;
-           document.getElementById("manual").innerHTML=`click on field ${passport_usa[index]}`;
+            // config_fields[passport_usa[index-1]]=elm;
+             config_fields.push({
+                key:   passport_usa[index-1],
+                value: elm
+            });
+            document.getElementById("manual").innerHTML=`click on field ${passport_usa[index]}`;
     }
     
         }
@@ -192,11 +192,21 @@ if(index<passport_usa.length-1){
             title: 'Background Change',
             message: 'Are you sure you have done ?',
             onok: () => {
-                config_fields=JSON.stringify(config_fields);
-                json_response+=`${config_fields}}`;
-                alert(json_response);
+                // config_fields=JSON.parse(config_fields);
+                // for(var key in config_fields){
+                //     if(key!='male'&&key!='female'&&key!='site')
+                //     dict.push({
+                //        key:key,
+                //        value:config_fields[key] 
+                //     })
+                //     else
+                //     if(key=='male')
+                //     dict.push({
+                //         key:"jender",  
+                //   value:[config_fields['male'],config_fields['female']]
+                //      })
                 }
-             
+             //   console.log(dict); 
             }
   )   
     })

@@ -31,13 +31,16 @@ def algo():
     return response
 
 
-@app.route('/api/addConfig', methods=['POST'])
+@app.route('/api/addConfig', methods=["GET", "POST"])
 def addConfig():
-    print("website: {} configure: {}".format(request.args.get('user'), request.args.get('configuration')))
-    # request_json = request.get_json()
-    # print(request_json)
-    # put config in spl
-    return 'true'
+    if request.method == "POST":
+        print(request.form)
+        site = request.form.get('adress')
+        con = request.form.get('configurationsite')
+        print("site {} his config {}".format(site, con))
+        return 'true'
+
+    return 'false'
 
 
 if __name__ == '__main__':

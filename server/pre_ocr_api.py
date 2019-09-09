@@ -77,6 +77,12 @@ def pre_ocr(base64_image_id):  # pre ocr processing
         return conecte_to_ocr.call_google_ocr_api(final_base64_img)  # Now, call ocr api with aligned image.
     return response
 
+#def getconfig(site_address):
+    #adress= db search where the locallost==site
+    #if adress
+    #   return adress
+    #return 'false'
+
 
 if __name__ == "__main__":
     # with open("C:\\Users\\This_User\\Downloads\\try.jpg", "rb") as image_file:

@@ -15,7 +15,7 @@ document.body.appendChild(button);
 
 //create iframe to add image
 var iframe = document.createElement("iframe");
-iframe.style = "position:fixed;right:50px;bottom:200px;height:500px;width:400px";
+iframe.style = "position:fixed;right:50px;bottom:200px;height:500px;width:400px;border:0;border-radius:50px;width:300px;";
 iframe.allow = "microphone; camera";
 iframe.style.zIndex = "6"
 

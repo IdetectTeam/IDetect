@@ -13,6 +13,7 @@ from google.api_core.grpc_helpers import create_channel
 
 def call_google_ocr_api(base64_image_id):
     json_file_path = os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')
+    print(json_file_path)
     if json_file_path is None:
         raise Exception("please set GOOGLE_APPLICATION_CREDENTIALS variable to your google key path")
     service_account_info = json.load(open(json_file_path))

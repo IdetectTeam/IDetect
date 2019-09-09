@@ -8,6 +8,7 @@ var dict={};
 var sex={};
 var json_response;
 var originsite;
+
 // $('#my-modal').modal('show')
 //               .draggable();ss
 //window.addEventListener("message", receiveMessage, false);
@@ -40,6 +41,7 @@ function receiveMessage($event) {
      }
 
 document.addEventListener('DOMContentLoaded', function() {
+    $("#myModal").modal('show');
     document.getElementById("manual").innerHTML="please follow the instructions!";
     index=-1;
     $(".modal-dialog").draggable({

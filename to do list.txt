@@ -11,6 +11,7 @@
 9. match configuration to fields function j.s python -sari huminer
 10.fill all fields - Ruth Zonenshine- done
 11. Documentation and try 
+12. fix the embeddable
 חויית משמש- חיווי
 לדמות התקנה ו2-3 משתמשים.
 server register addImage installion embeddable 

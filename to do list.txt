@@ -5,12 +5,13 @@
    design installion
 4. eneable all typs of images in add image
 5. connect installion to idetect button
-6. connect installion to flask -sari huminer 08/09
-7. save configuration to sql- sari huminer 08/09
+6. connect installion to flask -sari huminer 08/09 -finish!
+7. save configuration to sql- sari huminer 08/09 
 8. (((((((((((((((rotate all typs of images in server - Elisheva Portnoy))))))))))))))
-9. match configuration to fields function j.s python
+9. match configuration to fields function j.s python -sari huminer
 10.fill all fields - Ruth Zonenshine- done
 11. Documentation and try 
+12. fix the embeddable
 חויית משמש- חיווי
 לדמות התקנה ו2-3 משתמשים.
 server register addImage installion embeddable 

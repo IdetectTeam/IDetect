@@ -65,7 +65,6 @@ function convertToNumber(value)
 function tryConvert(value, type) {
     tmp = value;
     length=value.length;
-    res;
     ind = 0;
     for (i = 0; i < 3; i++) {
         for (j = 0; j < 3; j++) {

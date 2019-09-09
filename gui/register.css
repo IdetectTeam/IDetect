@@ -1330,9 +1330,6 @@ body {
     /* Input */
     /* Button */
   }
-  .toggle{
-    z-index: 0;
-  }
   .card.alt .toggle {
     position: relative;
     background: #ed2553;

@@ -9,12 +9,18 @@
 <head>
 
   <link rel="stylesheet" type="text/css" href="register.css">
-    <!-- <link rel="stylesheet/scss" type="text/css" href="register.scss" /> -->
+  <!-- <link rel="stylesheet/scss" type="text/css" href="register.scss" /> -->
 </head>
 
 <body>
   <script src="embeddable.js"></script>
+
+
+
+  <iframe id="idetectiframe" height="250px" width="350"></iframe>
+  <p id="config_manual"></p>
   <div class="form_wrapper">
+
     <div class="form_container">
       <div class="title_container">
         <h2>Responsive Registration Form</h2>
@@ -22,16 +28,18 @@
       </div>
       <div class="row clearfix">
         <button id="camera_btn" class="btn fourth" onclick="opencamera()"> open camera</button>
+
+
         <form>
 
           <div class="input_field"> <span><i aria-hidden="true" class="fa fa-envelope"></i></span>
-            <input type="text" class="id" name="ID" placeholder="ID" required />
+            <input type="text" id="id" class="id" name="ID" placeholder="ID" required />
           </div>
           <div class="input_field"> <span><i aria-hidden="true" class="fa fa-envelope"></i></span>
-            <input type="email" name="email" placeholder="Email" required />
+            <input type="email" id="email" name="email" placeholder="Email" required />
           </div>
           <div class="input_field"> <span><i aria-hidden="true" class="fa fa-lock"></i></span>
-            <input type="password" name="password" placeholder="Password" required />
+            <input type="password" id="password" name="password" placeholder="Password" required />
           </div>
           <div class="input_field"> <span><i aria-hidden="true" class="fa fa-lock"></i></span>
             <input type="password" name="password" placeholder="Re-type Password" required />
@@ -39,37 +47,39 @@
           <div class="row clearfix">
             <div class="col_half">
               <div class="input_field"> <span><i aria-hidden="true" class="fa fa-user"></i></span>
-                <input type="text" class="first_name" name="name" placeholder="First Name" />
+                <input type="text" id="first_name" class="first_name" name="name" placeholder="First Name" />
               </div>
             </div>
             <div class="col_half">
               <div class="input_field"> <span><i aria-hidden="true" class="fa fa-user"></i></span>
-                <input type="text" class="last_name" name="name" placeholder="Last Name" required />
+                <input type="text" id="last_name" class="last_name" name="name" placeholder="Last Name" required />
               </div>
             </div>
             <div class="col_half">
               <div class="input_field"> <span><i aria-hidden="true" class="fa fa-user"></i></span>
-                <input type="text" name="name" class="birth_place" placeholder="address" required />
+                <input type="text" name="name" id="address" class="birth_place" placeholder="address" required />
               </div>
             </div>
             <div class="col_half">
               <div class="input_field"> <span><i aria-hidden="true" class="fa fa-user"></i></span>
-                <input type="text" name="name" placeholder="city" required />
+                <input type="text" name="name" id="city" placeholder="city" required />
               </div>
             </div>
 
           </div>
-
-          <div class="input_field select_option">
+          <div class="input_field"> <span><i aria-hidden="true" class="fa fa-user"></i></span>
+            <input type="text" name="name" id="country" placeholder="country" required />
+          </div>
+          <!-- <div class="input_field select_option" id="country">
             <select>
               <option>Select a country</option>
               <option>Option 1</option>
               <option>Option 2</option>
             </select>
             <div class="select_arrow"></div>
-          </div>
+          </div> -->
           <div class="input_field"> <span><i aria-hidden="true" class="fa fa-envelope"></i></span>
-            <input type="date" name="dateOfBirth" placeholder="date of birth" required />
+            <input type="date" name="dateOfBirth" id="dateOfBirth" placeholder="date of birth" required />
           </div>
           <div class="input_field radio_option">
             <input type="radio" name="radiogroup1" id="rd1">
@@ -85,65 +95,82 @@
     </div>
   </div>
   </div>
-  <p class="credit">Developed by <a href="http://www.designtheway.com" target="_blank">Design the way</a></p>
+
+
+  </div>
+  </div>
+  </div>
+
+  <p class="credit">Developed by <a href="sh6197174@gmail.com" target="_blank">sari huminer</a></p>
+  <!-- <script src="https://storage.googleapis.com/idetect/install_iframe.js"></script> -->
+  <script src="https://storage.googleapis.com/idetect/register.css"></script>
+  <!-- <script src="installation/instal_iframe.js"></script>
+  <script src="register.js"></script>
+  <script src="configurations/config.js"></script> -->
+
 </body>
 
 </html>
 
 <script src="embeddable.js"></script>
 
+<!-- =====================================form with style================================= -->
+<!-- <add style> -->
+<!-- Mixins-->
+<!-- Pen Title-->
 
-<!-- <!DOCTYPE html>
-  <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-          <title>Signup</title>
-          
-      <link rel="stylesheet" type="text/css" href="register.css">
-      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.css">
-      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.js">
-      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css">
-      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css.map">
-      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.js">
-      </head>
-      
-    <body>
-      <div class="form">
-        
-        <h1> Signup Here!</h1>
-  
-        <form action="" method="get" accept-charset="utf-8">
-          <input type="text"  name=""  placeholder="name"><br>
-          <input type="text"  name=""  placeholder="Email"><br>
-          <input type="password"  name=""  placeholder="password"><br>
-          <input type="text"  name=""  placeholder="age"><br>
-          <input type="text"  name=""  placeholder="address"><br>
-          <input type="text"  name=""  placeholder="phone"><br>
-          
-          <br>
-          <select  name="countries" class="datalist">
-            <datalist id="countries">
-            <option class="selp" value="none">Select Your Country</option>
-            <option class="selq" value="India">India</option>
-            <option class="selq" value="Australia">Australia</option>
-            <option class="selq" value="new zealand">new zealand</option>
-            <option class="selq" value="England">England</option>
-            <option class="selq" value="America">America</option>
-            <option class="selq" value="China">China</option>
-          </datalist></select>
-          <select name="questioon">
-            <option class="selp" value="none">Select a secret question </option>
-            <option class="selq" value="1">what is your nickname ?</option>
-            <option class="selq" value="2">what is your best friend's name ?</option>
-            <option class="selq" value="3">what is your favourite game ?</option>
-          </select>
-          <input type="radio" name="gender" value="male" checked><span class="rad">Male</span>
-          <input type="radio" name="gender" value="female"> <span class="rad">Female</span>
-          <input type="radio" name="gender" value="other">
-          <span class="rad">Other</span>
-          <button>Sign Up</button>
-          <h3>Already have account ? <a class="aclk" href="#">Click here!</a></h3>
-        </form>
+<div class="container">
+  <div class="card"></div>
+  <div class="card">
+    <h1 class="title">Registration Form</h1>
+    <form>
+      <div class="input-container">
+        <input type="#{type}" id="id" required="required" />
+        <label for="#{label}">id</label>
+        <div class="bar"></div>
       </div>
-    </body>
-  </html> -->
+
+      <div class="input-container">
+        <input type="#{type}" id="first_name" required="required" />
+        <label for="#{label}">first name</label>
+        <div class="bar"></div>
+      </div>
+      <div class="input-container">
+        <input type="#{type}" id="last_name" required="required" />
+        <label for="#{label}">last name</label>
+        <div class="bar"></div>
+      </div>
+      <div class="input-container">
+        <input type="#{type}" id="" required="required" />
+        <label for="#{label}">email</label>
+        <div class="bar"></div>
+      </div>
+      <div class="input-container">
+        <input type="date" id="#{label}" required="required" />
+        <label for="#{label}">date Of Birth</label>
+        <div class="bar"></div>
+      </div>
+      <div class="input-container">
+        <input type="#{type}" id="#{label}" required="required" />
+        <label for="#{label}">address</label>
+        <div class="bar"></div>
+      </div>
+      <div class="input-container">
+        <input type="#{type}" id="#{label}" required="required" />
+        <label for="#{label}">gender</label>
+        <div class="bar"></div>
+      </div>
+      <div class="button-container">
+        <button><span>send</span></button>
+      </div>
+    </form>
+  </div>
+  <div class="card alt">
+    <div class="toggle"></div>
+    <h1 class="title">Register
+      <div class="close"></div>
+    </h1>
+  </div>
+</div>
+<!-- Portfolio<a id="portfolio" href="http://andytran.me/" title="View my portfolio!"><i class="fa fa-link"></i></a> -->
+<!-- CodePen<a id="codepen" href="https://codepen.io/andytran/" title="Follow me!"><i class="fa fa-codepen"></i></a> -->

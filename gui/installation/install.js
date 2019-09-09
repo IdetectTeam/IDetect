@@ -18,7 +18,7 @@ window.addEventListener('message', receiveMessage, false);
 
 function receiveMessage($event) {
     // alert(event.origin);
-       if ($event&& event.origin !== "http://127.0.0.1:5000")
+       if ($event&& event.origin !== "http://127.0.0.1:5300")
         return;
      else{
         elm=$event.data;
@@ -216,11 +216,14 @@ if(index<passport_usa.length-1){
                 //         }, "*");
                 //     }
                 // });
-    $.ajax({
+          
+            $.ajax({
                     url:"http://127.0.0.1:5000/api/addConfig", //the page containing python script
+                    data: {
+                        adress: originsite,
+                        configurationsite: json_response
+                        },
                     type: "POST", //request type,
-                    dataType: 'json',
-                    data: {cust: originsite,configuration:json_response},
                     success:function(result){
                     console.log(result);
                     alert(result);

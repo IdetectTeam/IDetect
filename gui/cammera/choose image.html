@@ -5,8 +5,8 @@
     <title>Drag and Drop File Uploading</title>
 
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <!-- <link rel="stylesheet" href="main.css"> -->
-    <link rel="stylesheet" href="https://storage.cloud.google.com/idetectproject/main.css">
+    <link rel="stylesheet" href="main.css">
+    <!-- <link rel="stylesheet" href="https://storage.cloud.google.com/idetectproject/main.css"> -->
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </head>
 
@@ -48,11 +48,23 @@
             <div class="box__error">Error! <span></span>. <a class="box__restart" role="button">Try again!</a></div>
             <input type="hidden" name="ajax" value="1">
         </form>
-        <button id="ToTakePicture"></button>
-        <button id="Upload" type="submit">Upload</button>
+        <div class="buttons">
+            <button>
+                <p>cammera</p>
+            </button>
+
+        </div>
+        <div class="buttons">
+            <button type="submit">
+                <p>Upload</p>
+            </button>
+        </div>
+
+        <!-- <button  id="ToTakePicture" ></button>
+        <button id="Upload" >Upload</button> -->
+
+
         <!-- Reference to your JavaScript file -->
-
-
         <script>
             var formDragDrop = document.getElementById("formDrop");
             var imageToSend = "";

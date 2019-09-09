@@ -4,6 +4,7 @@
 //import 'sweetalert2/src/sweetalert2.scss'
 
 //create idetect button
+console.log("I'm here");
 var button = document.createElement("input");
 button.type = "image"
 button.src = ".\\logo2.png";
@@ -14,7 +15,7 @@ document.body.appendChild(button);
 
 //create iframe to add image
 var iframe = document.createElement("iframe");
-iframe.style = "position:fixed;right:50px;bottom:200px;height:500px;width:400px";
+iframe.style = "position:fixed;right:50px;bottom:200px;height:500px;width:400px;border:0;border-radius:50px;width:300px;";
 iframe.allow = "microphone; camera";
 iframe.style.zIndex = "6"
 
@@ -64,7 +65,6 @@ function convertToNumber(value)
 function tryConvert(value, type) {
     tmp = value;
     length=value.length;
-    res;
     ind = 0;
     for (i = 0; i < 3; i++) {
         for (j = 0; j < 3; j++) {
@@ -111,4 +111,3 @@ function tryConvert(value, type) {
                 }
         }
     }
-

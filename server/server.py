@@ -15,12 +15,8 @@ print (cnt)
 
 @app.route('/api/args')  # example request: /api/args?user=111&image=http:/adslfkjalakjd
 def algo():
-    # print(request.args)
     user = request.args.get('user')
     image = request.args.get('image')
-    print(user)
-    print("#################################33")
-    # print(image)
     if user is None:
         return {"error": "no user"}
     # fields = db.engine.execute("select fields from config where user.like(user)")

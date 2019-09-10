@@ -5,13 +5,13 @@
     <title>Drag and Drop File Uploading</title>
     <script src="https://kit.fontawesome.com/021a8707ba.js"></script>
         <meta name="viewport" content="width=device-width,initial-scale=1">
-    <link rel="stylesheet" href="main.css">
-    <!-- <link rel="stylesheet" href="https://storage.cloud.google.com/idetectproject/main.css"> -->
+    <!-- <link rel="stylesheet" href="main.css"> -->
+    <link rel="stylesheet" href="https://storage.cloud.google.com/idetectproject/main.css">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </head>
 
 <body>
-    <div class="container" role="main">
+    <div role="main">
         <div id="camera" class="modal fade" style="visibility:hidden">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -255,7 +255,6 @@
                     ind += 7;
                     image = image.substring(ind);
                 }
-                debugger;
                 return image;
             }
             var UploadButton = document.getElementById('Upload');

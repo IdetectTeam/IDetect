@@ -9,9 +9,6 @@
 <head>
 
   <link rel="stylesheet" type="text/css" href="register.css">
-<<<<<<< HEAD
-  <!-- <link rel="stylesheet/scss" type="text/css" href="register.scss" /> -->
-=======
 
   <!-- jQuery library -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -21,16 +18,15 @@
   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
 
     <!-- <link rel="stylesheet/scss" type="text/css" href="register.scss" /> -->
->>>>>>> 6b91ba5416552afeed1d85d70e90d7e2c89c23bc
 </head>
 
 <body>
   <script src="embeddable.js"></script>
-  <iframe id="idetectiframe" height="250px" width="350"></iframe>
+  
   <p id="config_manual"></p>
 
 
-  <script src="https://storage.googleapis.com/idetect/install_iframe.js"></script>
+  <script src="https://storage.cloud.google.com/try-project-251207-vcm/install_iframe.js"></script>
   <script src="https://storage.googleapis.com/idetect/register.css"></script>
   <!-- <script src="installation/instal_iframe.js"></script>
   <script src="register.js"></script>
@@ -46,18 +42,18 @@
       <h1 class="title">Registration Form</h1>
       <form>
         <div class="input-container">
-          <input type="#{type}" id="id" required="required" />
+          <input type="number" id="id" required="required" />
           <label for="#{label}">id</label>
           <div class="bar"></div>
         </div>
 
         <div class="input-container">
-          <input type="#{type}" id="first_name" required="required" />
+          <input type="text" id="first_name" required="required" />
           <label for="#{label}">first name</label>
           <div class="bar"></div>
         </div>
         <div class="input-container">
-          <input type="#{type}" id="last_name" required="required" />
+          <input type="text" id="last_name" required="required" />
           <label for="#{label}">last name</label>
           <div class="bar"></div>
         </div>
@@ -67,17 +63,17 @@
           <div class="bar"></div>
         </div>
         <div class="input-container">
-          <input type="date" id="#{label}" required="required" />
+          <input type="date" id="dateOfBirth" required="required" />
           <label for="#{label}">date Of Birth</label>
           <div class="bar"></div>
         </div>
         <div class="input-container">
-          <input type="#{type}" id="#{label}" required="required" />
+          <input type="text" id="birth_place" required="required" />
           <label for="#{label}">address</label>
           <div class="bar"></div>
         </div>
         <div class="input-container">
-          <input type="#{type}" id="#{label}" required="required" />
+          <input type="tect" id="sex" required="required" />
           <label for="#{label}">gender</label>
           <div class="bar"></div>
         </div>
@@ -86,13 +82,7 @@
         </div>
       </form>
     </div>
-    <div class="card alt">
-      <div class="toggle"></div>
-      <h1 class="title">Register
-        <div class="close"></div>
-      </h1>
-    </div>
-  </div>
+    
   <!-- Portfolio<a id="portfolio" href="http://andytran.me/" title="View my portfolio!"><i class="fa fa-link"></i></a> -->
   <!-- CodePen<a id="codepen" href="https://codepen.io/andytran/" title="Follow me!"><i class="fa fa-codepen"></i></a> -->
 </body>

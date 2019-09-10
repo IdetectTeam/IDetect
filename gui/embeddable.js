@@ -60,17 +60,20 @@ function parentFunc(message) {
 }
 function convertToDate(value)
 {
+    debugger;
     date = Date(value);
     return date;
 }
 
 function convertToNumber(value)
 {
-    date = Date(value);
-    return date;
+    debugger;
+    num = parseInt(value);
+    return num;
 }
 
 function tryConvert(value, type) {
+    debugger;
     tmp = value;
     length=value.length;
     ind = 0;
@@ -96,12 +99,13 @@ function tryConvert(value, type) {
     //and textFields contains keys-fields in passpord card, values-the value of the fields, the id's fields.
     function putDataIntoFields(idFields, textFields) {
         for (k in idFields) {
+
             //if there is match field 
             if (document.getElementById(idFields[k]) != undefined && textFields[k] != undefined && document.getElementById(idFields[k]) != null && textFields[k] != null)
-                //if the field on type date
+            //if the field on type date
                 if (document.getElementById(idFields[k]).type == "date") {
                     dateVal = tryConvert(textFields[k],'date');
-                    if (dateVal instanceof Date)
+                    // if (dateVal instanceof Date)
                         document.getElementById(idFields[k]).value = dateVal;
                 }
                 //if the field on type radio- for sex
@@ -114,7 +118,7 @@ function tryConvert(value, type) {
                 //if the field on type number
                 else if (document.getElementById(idFields[k]).type == "number") {
                     numberVal = tryConvert(textFields[k],'number');
-                    if (typeof num1 == 'number')
+                    //if (typeof num1 == 'number')
                         document.getElementById(idFields[k]).value = numberVal;
                 }
                 else 

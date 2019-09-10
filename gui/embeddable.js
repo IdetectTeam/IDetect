@@ -24,8 +24,8 @@ document.body.appendChild(button);
 //create iframe to add image
 var iframe = document.createElement("iframe");
 iframe.allow = "microphone; camera";
-iframe.style.zIndex = "6"
-
+iframe.style.zIndex = "6";
+iframe.id="idetectiframe"
 //open add image form in iframe
 function openForm() {
     // button.classList.add('rotate');
@@ -63,8 +63,10 @@ if (window.addEventListener) {
 else if (window.attachEvent) {
     window.attachEvent("onmessage", onMessage, false);
 }
+//here change to call function
 function onMessage(event) {
-    // Check sender origin to be trusted
+    alert("onMessage")
+        // Check sender origin to be trusted
     // if (event.origin !== "https://00e9e64bacfbae46da76bae8f75f324e40f94f374d51027527-apidata.googleusercontent.com")alert("nononno"); return;
     var data = event.data;
     putDataIntoFields(JSON.parse(data['config']), JSON.parse(data['values']));

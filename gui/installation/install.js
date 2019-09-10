@@ -193,7 +193,7 @@ if(index<passport_usa.length-1){
     };
     document.getElementById("loadpage").addEventListener('click',function(){
         Confirm.open({
-            title: 'Background Change',
+            title: 'configuration end',
             message: 'Are you sure you have done ?',
             onok: () => {
                 config_fields=JSON.stringify(config_fields);

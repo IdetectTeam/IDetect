@@ -4,23 +4,31 @@
 //import 'sweetalert2/src/sweetalert2.scss'
 
 //create idetect button
-console.log("I'm here");
+// var style = document.createElement('style');
+// style.innerHTML = `
+// .rotate{-webkit-animation:spin 4s linear 0.5s;}
+// @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+// @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+// @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } 
+// `;
+// document.head.appendChild(style);
 var button = document.createElement("input");
 button.type = "image"
 button.src = ".\\logo2.png";
+button.innerHTML="IDetect"
 button.onclick = openForm;
-button.style = "position:fixed;right:50px;bottom:50px;height:100px";
+button.style ="position:fixed;right:50px;bottom:50px;height:100px;";
 button.style.zIndex = "6"
 document.body.appendChild(button);
-
 //create iframe to add image
 var iframe = document.createElement("iframe");
-iframe.style = "position:fixed;right:50px;bottom:200px;height:500px;width:400px";
+iframe.style = "position:fixed;right:50px;bottom:200px;height:500px;width:400px;border-radius:50px;width:300px;border: 4px solid #ed2553;";
 iframe.allow = "microphone; camera";
 iframe.style.zIndex = "6"
 
 //open add image form in iframe
 function openForm() {
+    // button.classList.add('rotate');
     document.body.appendChild(iframe);
     iframe.src = "https://storage.cloud.google.com/idetectproject/choose%20image.html";
 }
@@ -65,7 +73,6 @@ function convertToNumber(value)
 function tryConvert(value, type) {
     tmp = value;
     length=value.length;
-    res;
     ind = 0;
     for (i = 0; i < 3; i++) {
         for (j = 0; j < 3; j++) {

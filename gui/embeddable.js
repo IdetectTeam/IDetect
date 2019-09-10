@@ -95,7 +95,6 @@ function tryConvert(value, type) {
     return value;
 }
 
-<<<<<<< HEAD
 function markField(currentElement) {
    currentElement.style="font-weight: bold;    font-style: italic;   "
 }
@@ -131,36 +130,5 @@ function putDataIntoFields(idFields, textFields) {
                 currentElement.value = textFields[k];
                 markField(currentElement);
             }
-=======
-    //get 2 json objects, idFields contains keys-fields in passpord card, values- ids of the fields spesific for this user,
-    //and textFields contains keys-fields in passpord card, values-the value of the fields, the id's fields.
-    function putDataIntoFields(idFields, textFields) {
-        for (k in idFields) {
 
-            //if there is match field 
-            if (document.getElementById(idFields[k]) != undefined && textFields[k] != undefined && document.getElementById(idFields[k]) != null && textFields[k] != null)
-            //if the field on type date
-                if (document.getElementById(idFields[k]).type == "date") {
-                    dateVal = tryConvert(textFields[k],'date');
-                    // if (dateVal instanceof Date)
-                        document.getElementById(idFields[k]).value = dateVal;
-                }
-                //if the field on type radio- for sex
-                else if ((idFields[k]).type == "dict" && k == 'gender') {
-                    if (textFields[k] == "m" || textFields[k] == "male")
-                        document.getElementById(idFields[k]["male"]).checked = true;
-                    else
-                        document.getElementById(idFields[k]["female"]).checked = true;
-                }
-                //if the field on type number
-                else if (document.getElementById(idFields[k]).type == "number") {
-                    numberVal = tryConvert(textFields[k],'number');
-                    //if (typeof num1 == 'number')
-                        document.getElementById(idFields[k]).value = numberVal;
-                }
-                else 
-                     document.getElementById(idFields[k]).value = textFields[k];
->>>>>>> 9c1235c62faea7652b476429c07a6f48e8e53bd0
-
-    }
 }

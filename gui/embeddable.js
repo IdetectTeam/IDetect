@@ -109,5 +109,8 @@ function tryConvert(value, type) {
                     if (typeof num1 == 'number')
                         document.getElementById(idFields[k]).value = numberVal;
                 }
+                else 
+                     document.getElementById(idFields[k]).value = textFields[k];
+
         }
     }

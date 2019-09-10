@@ -23,7 +23,6 @@ button.style.zIndex = "6"
 document.body.appendChild(button);
 //create iframe to add image
 var iframe = document.createElement("iframe");
-iframe.style = "position:fixed;right:50px;bottom:200px;height:500px;width:400px;border-radius:50px;width:300px;border: 4px solid #ed2553;";
 iframe.allow = "microphone; camera";
 iframe.style.zIndex = "6"
 
@@ -39,6 +38,7 @@ function openForm() {
         // important POST method !
         type: "get",
         success: function (data) {
+            iframe.style = "position:fixed;right:50px;bottom:200px;height:500px;width:400px;border-radius:50px;width:300px;border: 4px solid #ed2553;";
             document.body.appendChild(iframe);
             if (data == "true")
                 iframe.src = "https://storage.cloud.google.com/idetectproject/choose%20image.html";

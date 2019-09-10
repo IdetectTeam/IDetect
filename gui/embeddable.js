@@ -15,9 +15,9 @@
 var button = document.createElement("input");
 button.type = "image"
 button.src = ".\\logo2.png";
-button.innerHTML="IDetect"
+button.innerHTML = "IDetect"
 button.onclick = openForm;
-button.style ="position:fixed;right:50px;bottom:50px;height:100px;";
+button.style = "position:fixed;right:50px;bottom:50px;height:100px;";
 button.style.zIndex = "6"
 document.body.appendChild(button);
 //create iframe to add image
@@ -66,59 +66,68 @@ function convertToDate(value)
 
 function convertToNumber(value)
 {
-    date = Date(value);
-    return date;
+    num = parseInt(value);
+    return num;
 }
 
 function tryConvert(value, type) {
     tmp = value;
-    length=value.length;
+    length = value.length;
     ind = 0;
     for (i = 0; i < 3; i++) {
         for (j = 0; j < 3; j++) {
             try {
                 switch (type) {
-                    case 'date': 
-                        res=convertToDate(tmp); break;
-                    case 'number': 
-                        res=convertToNumber(tmp); break;
+                    case 'date':
+                        res = convertToDate(tmp); break;
+                    case 'number':
+                        res = convertToNumber(tmp); break;
                 }
                 return res;
             }
             catch{
-                tmp = value.substring(i,length-i-j);
+                tmp = value.substring(i, length - i - j);
             }
-        }}
-        return value;
-    }
-
-    //get 2 json objects, idFields contains keys-fields in passpord card, values- ids of the fields spesific for this user,
-    //and textFields contains keys-fields in passpord card, values-the value of the fields, the id's fields.
-    function putDataIntoFields(idFields, textFields) {
-        for (k in idFields) {
-            //if there is match field 
-            if (document.getElementById(idFields[k]) != undefined && textFields[k] != undefined && document.getElementById(idFields[k]) != null && textFields[k] != null)
-                //if the field on type date
-                if (document.getElementById(idFields[k]).type == "date") {
-                    dateVal = tryConvert(textFields[k],'date');
-                    if (dateVal instanceof Date)
-                        document.getElementById(idFields[k]).value = dateVal;
-                }
-                //if the field on type radio- for sex
-                else if ((idFields[k]).type == "dict" && k == 'gender') {
-                    if (textFields[k] == "m" || textFields[k] == "male")
-                        document.getElementById(idFields[k]["male"]).checked = true;
-                    else
-                        document.getElementById(idFields[k]["female"]).checked = true;
-                }
-                //if the field on type number
-                else if (document.getElementById(idFields[k]).type == "number") {
-                    numberVal = tryConvert(textFields[k],'number');
-                    if (typeof num1 == 'number')
-                        document.getElementById(idFields[k]).value = numberVal;
-                }
-                else 
-                     document.getElementById(idFields[k]).value = textFields[k];
-
         }
     }
+    return value;
+}
+
+function markField(currentElement) {
+   currentElement.style="font-weight: bold;    font-style: italic;   "
+}
+
+//get 2 json objects, idFields contains keys-fields in passpord card, values- ids of the fields spesific for this user,
+//and textFields contains keys-fields in passpord card, values-the value of the fields, the id's fields.
+function putDataIntoFields(idFields, textFields) {
+    for (k in idFields) {
+        var currentElement=document.getElementById(idFields[k]);
+        //if there is match field 
+        if (currentElement != undefined && textFields[k] != undefined && currentElement != null && textFields[k] != null)
+            //if the field on type date
+            if (currentElement.type == "date") {
+                dateVal = tryConvert(textFields[k], 'date');
+                    currentElement.value = dateVal;
+                    markField(currentElement);
+            }
+            //if the field on type radio- for sex
+            else if ((idFields[k]).type == "dict" && k == 'gender') {
+                if (textFields[k] == "m" || textFields[k] == "male")
+                    document.getElementById(idFields[k]["male"]).checked = true;
+                else
+                    document.getElementById(idFields[k]["female"]).checked = true;
+                markField(currentElement);
+            }
+            //if the field on type number
+            else if (currentElement.type == "number") {
+                numberVal = tryConvert(textFields[k], 'number');
+                    currentElement.value = numberVal;
+                    markField(currentElement);
+            }
+            else {
+                currentElement.value = textFields[k];
+                markField(currentElement);
+            }
+
+    }
+}

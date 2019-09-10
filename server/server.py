@@ -1,10 +1,5 @@
 import json
 from flask import Flask, escape, request
-<<<<<<< HEAD
-=======
-
-# from sqlalchemy import text
->>>>>>> 6b91ba5416552afeed1d85d70e90d7e2c89c23bc
 import detect_id
 from flask_cors import CORS
 import pre_ocr_api
@@ -45,6 +40,18 @@ def addConfig():
         print("site {} his config {}".format(site, con))
         return 'true'
     return 'false'
+
+
+cnt = 0
+
+
+@app.route('/api/hasConfig', methods=["GET", "POST"])
+def addConfig():
+    if request.method == "GET":
+        cnt = cnt + 1
+        if cnt == 1:
+            return false
+    return true
 
 
 if __name__ == '__main__':

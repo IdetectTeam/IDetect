@@ -28,7 +28,8 @@ def get_fields_value(response):
     statement = statement.split("\\n")
     id_fields_places = {}
     id_fields = {}
-    fields = ['Passpord Card no', 'Nationality', 'Surname', 'Given Names', 'Sex', 'Date of Birth', 'Place of Birth']  #some IDs contain the fields in this form
+    fields = ['Passpord Card no', 'Nationality', 'Surname', 'Given Names', 'Sex', 'Date of Birth',
+              'Place of Birth']  # some IDs contain the fields in this form
     # fields = ['Passpord no', 'Nationality', 'Surname', 'Given Names', 'Sex', 'Date of Birth', 'Place of Birth']
     statement[0] = statement[0][1:]
     # and organize the word

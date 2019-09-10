@@ -36,7 +36,7 @@ def find_in_full_text(closest_value, all_words):  # Gets any word of field value
     mid_ind = all_words.find(closest_value)
     start_ind = all_words.rfind('\n', 0, mid_ind)
     end_ind = all_words.find('\n', mid_ind)
-    all_value = all_words[start_ind+1:end_ind]
+    all_value = all_words[start_ind + 1:end_ind]
     return all_value
 
 

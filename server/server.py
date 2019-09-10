@@ -1,7 +1,7 @@
 import json
 from flask import Flask, escape, request
-# from sqlalchemy import text
 
+# from sqlalchemy import text
 import detect_id
 from flask_cors import CORS
 import pre_ocr_api
@@ -40,9 +40,7 @@ def addConfig():
         site = request.form.get('adress')
         con = request.form.get('configurationsite')
         print("site {} his config {}".format(site, con))
-
         return 'true'
-
     return 'false'
 
 

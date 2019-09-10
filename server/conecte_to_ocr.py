@@ -21,7 +21,7 @@ def call_google_ocr_api(base64_image_id):
         service_account_info)
     client = vision.ImageAnnotatorClient(credentials=credentials)
     content = base64_image_id
-    content = base64.b64decode(content)# send base64 of image in content
+    content = base64.b64decode(content)  # send base64 of image in content
     image = types.Image(content=content)
 
     # Performs label detection on the image file

@@ -130,5 +130,5 @@ function putDataIntoFields(idFields, textFields) {
                 currentElement.value = textFields[k];
                 markField(currentElement);
             }
-
+        }
 }

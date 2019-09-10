@@ -46,7 +46,7 @@ cnt = 0
 
 
 @app.route('/api/hasConfig', methods=["GET", "POST"])
-def addConfig():
+def hasConfig():
     if request.method == "GET":
         cnt = cnt + 1
         if cnt == 1:

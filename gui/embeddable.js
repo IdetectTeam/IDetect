@@ -12,6 +12,7 @@
 // @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } 
 // `;
 // document.head.appendChild(style);
+document.write(`<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>`);
 var button = document.createElement("input");
 button.type = "image"
 button.src = ".\\logo2.png";
@@ -29,8 +30,24 @@ iframe.style.zIndex = "6"
 //open add image form in iframe
 function openForm() {
     // button.classList.add('rotate');
-    document.body.appendChild(iframe);
-    iframe.src = "https://storage.cloud.google.com/idetectproject/choose%20image.html";
+    $.ajax({
+        url: "http://127.0.0.1:5000/api/hasConfig",
+        // send the base64 post parameter
+        data: {
+            user: document.location.origin
+             },
+        // important POST method !
+        type: "get",
+        success: function (data) {
+            document.body.appendChild(iframe);
+            if (data=="true")
+            iframe.src = "https://storage.cloud.google.com/idetectproject/choose%20image.html";
+            else
+            iframe.src = "https://storage.cloud.google.com/try-project-251207-vcm/install.html";
+        }
+    });
+    // document.body.appendChild(iframe);
+    // iframe.src = "https://storage.cloud.google.com/idetectproject/choose%20image.html";
 }
 
 //close add image form from iframe

@@ -29,6 +29,7 @@ def algo():
     response = {'result': result, 'fields': json.dumps(fields)}
     return response
 
+
 #
 # @app.route('/api/addConfig', methods=["GET", "POST"])
 # # @app.route('/api/addConfig/args')
@@ -40,22 +41,23 @@ def algo():
 #     # con = request.args.get('configurationsite')
 
 
-@app.route('/api/addConfig/args')
+@app.route('/api/addConfig', methods=["GET", "POST"])
 def addConfig():
-    print(request.form)
-    # site = request.form.get('adress')
-    # con = request.form.get('configurationsite')
-    site = request.args.get('adress')
-    con = request.args.get('configurationsite')
-    print("site {} his config {}".format(site, con))
-    connect_to_datastoresql.connect_to_sql(site, con)
-    return "true post"
+    if request.method == "POST":
+        print(request.form)
+        site = request.form.get('adress')
+        con = request.form.get('configurationsite')
+        # site = request.args.get('adress')
+        # con = request.args.get('configurationsite')
+        print("site {} his config {}".format(site, con))
+        connect_to_datastoresql.connect_to_sql(site, con)
+        return "true post"
 
 
 @app.route('/api/hasConfig', methods=["GET", "POST"])
 def hasConfig():
     if request.method == "GET":
-        site = request.form.get('adress')
+        site = request.args['user']
         return connect_to_datastoresql.check_sql(site)
     return "false"
 

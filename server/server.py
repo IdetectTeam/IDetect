@@ -38,6 +38,13 @@ def addConfig():
     con = request.form.get('configurationsite')
     # site = request.args.get('adress')
     # con = request.args.get('configurationsite')
+@app.route('/api/addConfig/args')
+def addConfig():
+    print(request.form)
+    #site = request.form.get('adress')
+    #con = request.form.get('configurationsite')
+    site = request.args.get('adress')
+    con = request.args.get('configurationsite')
     print("site {} his config {}".format(site, con))
     connect_to_datastoresql.connect_to_sql(site, con)
     return "true post"
@@ -46,11 +53,9 @@ def addConfig():
 @app.route('/api/hasConfig', methods=["GET", "POST"])
 def hasConfig():
     if request.method == "GET":
-        global cnt
-        cnt = cnt + 1
-        if cnt == 1:
-            return "false"
-    return "true"
+        site = request.form.get('adress')
+        return connect_to_datastoresql.check_sql(site)
+    return "false"
 
 
 if __name__ == '__main__':

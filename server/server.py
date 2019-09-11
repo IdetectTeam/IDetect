@@ -29,20 +29,22 @@ def algo():
     response = {'result': result, 'fields': json.dumps(fields)}
     return response
 
+#
+# @app.route('/api/addConfig', methods=["GET", "POST"])
+# # @app.route('/api/addConfig/args')
+# def addConfig():
+#     print(request.form)
+#     site = request.form.get('adress')
+#     con = request.form.get('configurationsite')
+#     # site = request.args.get('adress')
+#     # con = request.args.get('configurationsite')
 
-@app.route('/api/addConfig', methods=["GET", "POST"])
-# @app.route('/api/addConfig/args')
-def addConfig():
-    print(request.form)
-    site = request.form.get('adress')
-    con = request.form.get('configurationsite')
-    # site = request.args.get('adress')
-    # con = request.args.get('configurationsite')
+
 @app.route('/api/addConfig/args')
 def addConfig():
     print(request.form)
-    #site = request.form.get('adress')
-    #con = request.form.get('configurationsite')
+    # site = request.form.get('adress')
+    # con = request.form.get('configurationsite')
     site = request.args.get('adress')
     con = request.args.get('configurationsite')
     print("site {} his config {}".format(site, con))

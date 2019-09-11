@@ -7,7 +7,8 @@ import pre_ocr_api
 app = Flask('helloworld')
 CORS(app)
 cnt = 0
-print (cnt)
+print(cnt)
+
 
 # @app.route('/')
 # def hello():
@@ -15,12 +16,8 @@ print (cnt)
 
 @app.route('/api/args')  # example request: /api/args?user=111&image=http:/adslfkjalakjd
 def algo():
-    # print(request.args)
     user = request.args.get('user')
     image = request.args.get('image')
-    print(user)
-    print("#################################33")
-    # print(image)
     if user is None:
         return {"error": "no user"}
     # fields = db.engine.execute("select fields from config where user.like(user)")
@@ -41,8 +38,6 @@ def addConfig():
         print("site {} his config {}".format(site, con))
         return 'true'
     return 'false'
-
-
 
 
 @app.route('/api/hasConfig', methods=["GET", "POST"])

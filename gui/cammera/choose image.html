@@ -29,6 +29,40 @@
         </div>
     </div>
     <div class="container" role="main" id="drop_zone">
+        <div id='loading' hidden=true>
+            <div class="load">
+                <div class="gear one">
+                    <svg id="blue" viewBox="0 0 100 100" fill="#94DDFF">
+                        <path
+                            d="M97.6,55.7V44.3l-13.6-2.9c-0.8-3.3-2.1-6.4-3.9-9.3l7.6-11.7l-8-8L67.9,20c-2.9-1.7-6-3.1-9.3-3.9L55.7,2.4H44.3l-2.9,13.6      c-3.3,0.8-6.4,2.1-9.3,3.9l-11.7-7.6l-8,8L20,32.1c-1.7,2.9-3.1,6-3.9,9.3L2.4,44.3v11.4l13.6,2.9c0.8,3.3,2.1,6.4,3.9,9.3      l-7.6,11.7l8,8L32.1,80c2.9,1.7,6,3.1,9.3,3.9l2.9,13.6h11.4l2.9-13.6c3.3-0.8,6.4-2.1,9.3-3.9l11.7,7.6l8-8L80,67.9      c1.7-2.9,3.1-6,3.9-9.3L97.6,55.7z M50,65.6c-8.7,0-15.6-7-15.6-15.6s7-15.6,15.6-15.6s15.6,7,15.6,15.6S58.7,65.6,50,65.6z">
+                        </path>
+                    </svg>
+                </div>
+                <div class="gear two">
+                    <svg id="pink" viewBox="0 0 100 100" fill="#FB8BB9">
+                        <path
+                            d="M97.6,55.7V44.3l-13.6-2.9c-0.8-3.3-2.1-6.4-3.9-9.3l7.6-11.7l-8-8L67.9,20c-2.9-1.7-6-3.1-9.3-3.9L55.7,2.4H44.3l-2.9,13.6      c-3.3,0.8-6.4,2.1-9.3,3.9l-11.7-7.6l-8,8L20,32.1c-1.7,2.9-3.1,6-3.9,9.3L2.4,44.3v11.4l13.6,2.9c0.8,3.3,2.1,6.4,3.9,9.3      l-7.6,11.7l8,8L32.1,80c2.9,1.7,6,3.1,9.3,3.9l2.9,13.6h11.4l2.9-13.6c3.3-0.8,6.4-2.1,9.3-3.9l11.7,7.6l8-8L80,67.9      c1.7-2.9,3.1-6,3.9-9.3L97.6,55.7z M50,65.6c-8.7,0-15.6-7-15.6-15.6s7-15.6,15.6-15.6s15.6,7,15.6,15.6S58.7,65.6,50,65.6z">
+                        </path>
+                    </svg>
+                </div>
+                <div class="gear three">
+                    <svg id="yellow" viewBox="0 0 100 100" fill="#FFCD5C">
+                        <path
+                            d="M97.6,55.7V44.3l-13.6-2.9c-0.8-3.3-2.1-6.4-3.9-9.3l7.6-11.7l-8-8L67.9,20c-2.9-1.7-6-3.1-9.3-3.9L55.7,2.4H44.3l-2.9,13.6      c-3.3,0.8-6.4,2.1-9.3,3.9l-11.7-7.6l-8,8L20,32.1c-1.7,2.9-3.1,6-3.9,9.3L2.4,44.3v11.4l13.6,2.9c0.8,3.3,2.1,6.4,3.9,9.3      l-7.6,11.7l8,8L32.1,80c2.9,1.7,6,3.1,9.3,3.9l2.9,13.6h11.4l2.9-13.6c3.3-0.8,6.4-2.1,9.3-3.9l11.7,7.6l8-8L80,67.9      c1.7-2.9,3.1-6,3.9-9.3L97.6,55.7z M50,65.6c-8.7,0-15.6-7-15.6-15.6s7-15.6,15.6-15.6s15.6,7,15.6,15.6S58.7,65.6,50,65.6z">
+                        </path>
+                    </svg>
+                </div>
+                <div class="lil-circle"></div>
+                <svg class="blur-circle">
+                    <filter id="blur">
+                        <feGaussianBlur in="SourceGraphic" stdDeviation="13"></feGaussianBlur>
+                    </filter>
+                    <circle cx="70" cy="70" r="66" fill="transparent" stroke="white" stroke-width="40"
+                        filter="url(#blur)"></circle>
+                </svg>
+            </div>
+            <div class='text'>loading</div>
+        </div>
 
         <form id="formDrop" enctype="multipart/form-data" novalidate="" class="box has-advanced-upload">
             <div id="box__input" class="box__input">
@@ -52,20 +86,19 @@
             <input type="hidden" name="ajax" value="1">
         </form>
         <div class="buttons">
-            <button id="ToTakePicture">
+            <button title="open camera" id="ToTakePicture">
                 <p><i class="fas fa-camera"></i></p>
             </button>
 
         </div>
         <div class="buttons">
-            <button type="submit" id="Upload">
+            <button title="upload" type="submit" id="Upload">
                 <p><i class="fas fa-file-upload"></i></p>
             </button>
         </div>
 
         <!-- <button  id="ToTakePicture" ></button>
         <button id="Upload" >Upload</button> -->
-
 
         <!-- Reference to your JavaScript file -->
         <script>
@@ -93,11 +126,12 @@
                         return function (e) {
                             // Render thumbnail.
                             imageToSend = e.target.result;
+                            debugger;
                             formDragDrop.style = "background-image:url(" + imageToSend + ")";
-                            try{
+                            try {
                                 box__input.removeChild(upload_icon);
                             }
-                            catch{}
+                            catch{ }
                             box__input.style = "text-align:center";
                             choose_file.style = "position: absolute;bottom:10px;margin:auto;left: 11%;"
                             var span = document.createElement('span');
@@ -135,11 +169,12 @@
                         return function (e) {
                             // Render thumbnail.
                             imageToSend = e.target.result;
+                            debugger;
                             formDragDrop.style = "background-image:url(" + imageToSend + ")";
-                            try{
+                            try {
                                 box__input.removeChild(upload_icon);
                             }
-                            catch{}
+                            catch{ }
                             box__input.style = "text-align:center";
                             choose_file.style = "position: absolute;bottom:10px;margin:autoleft: 11%;"
                             var span = document.createElement('span');
@@ -201,10 +236,6 @@
             dropZone.addEventListener('dragleave', handleDragLeave, false);
             dropZone.addEventListener("dragenter", handleDragEnter, false);
             dropZone.addEventListener('drop', handleFileSelectD, false);
-
-
-
-
 
             var constraints = { video: { facingMode: "user" }, audio: false };
             // Define constants
@@ -277,7 +308,14 @@
             }
             var UploadButton = document.getElementById('Upload');
             UploadButton.onclick = function () {
+                if (imageToSend == "") {
+                    alert("please choose image");
+                    return;
+                }
+                window.parent.postMessage({}, "*");
                 imageToSend = setToBase64(imageToSend);
+                document.getElementById('loading').hidden = false;
+                document.getElementById('formDrop').hidden = true;
                 $.ajax({
                     url: "http://127.0.0.1:5000/api/args",
                     // send the base64 post parameter
@@ -288,7 +326,9 @@
                     // important POST method !
                     type: "get",
                     complete: function () {
-                        console.log("Ready");
+                        document.getElementById('loading').hidden = true;
+                        document.getElementById('formDrop').hidden = false;
+                        imageToSend="";
                     },
                     success: function (data) {
                         window.parent.postMessage({

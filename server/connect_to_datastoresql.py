@@ -1,6 +1,7 @@
 # Imports the Google Cloud client library
 from google.cloud import datastore
-def connect_to_sql(site_name, con):
+
+def connect_to_sql(site, con):
     # Instantiates a client
     datastore_client = datastore.Client()
     # The kind for the new entity
@@ -29,3 +30,5 @@ def check_sql(site_name):
     if conf==None:
         return "false"
     return "true"
+
+

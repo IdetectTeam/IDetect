@@ -10,8 +10,6 @@ var json_response;
 var originsite;
 
 
-
-
 window.addEventListener('message', receiveMessage, false);
 
 
@@ -202,6 +200,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     success: function (result) {
                         console.log(result);
                         alert(result);
+                        config_fields={};
+                        json_response=``;
                     }
                 });
 

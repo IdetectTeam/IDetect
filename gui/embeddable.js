@@ -24,13 +24,12 @@ document.body.appendChild(button);
 //create iframe to add image
 var iframe = document.createElement("iframe");
 iframe.allow = "microphone; camera";
-iframe.style.zIndex = "6";
-iframe.id="idetectiframe"
+iframe.style.zIndex = "6"
+
 //open add image form in iframe
 function openForm() {
     // button.classList.add('rotate');
     $.ajax({
-
         url: "http://127.0.0.1:5000/api/hasConfig",
         // send the base64 post parameter
         data: {
@@ -44,7 +43,7 @@ function openForm() {
             if (data == "true")
                 iframe.src = "https://storage.cloud.google.com/idetectproject/choose%20image.html";
             else
-                iframe.src = "https://storage.googleapis.com/idetect/install.html";
+                iframe.src = "https://storage.cloud.google.com/try-project-251207-vcm/install.html";
         }
     });
     // document.body.appendChild(iframe);
@@ -64,10 +63,8 @@ if (window.addEventListener) {
 else if (window.attachEvent) {
     window.attachEvent("onmessage", onMessage, false);
 }
-//here change to call function
 function onMessage(event) {
-    alert("onMessage")
-        // Check sender origin to be trusted
+    // Check sender origin to be trusted
     // if (event.origin !== "https://00e9e64bacfbae46da76bae8f75f324e40f94f374d51027527-apidata.googleusercontent.com")alert("nononno"); return;
     var data = event.data;
     putDataIntoFields(JSON.parse(data['config']), JSON.parse(data['values']));
@@ -78,22 +75,14 @@ function onMessage(event) {
 function parentFunc(message) {
     alert(message);
 }
-function convert(str) {
-    var date = new Date(str),
-      mnth = ("0" + (date.getMonth() + 1)).slice(-2),
-      day = ("0" + date.getDate()).slice(-2);
-    return [date.getFullYear(), mnth, day].join("-");
-  }
 function convertToDate(value) {
-    var date = new Date(value);
-     date=convert(date);
+    debugger;
+    date = Date(value);
     return date;
 }
 
 function convertToNumber(value) {
     num = parseInt(value);
-    if (isNaN(num))
-        throw "can not convert it"
     return num;
 }
 
@@ -102,13 +91,12 @@ function tryConvert(value, type) {
     tmp = value;
     length = value.length;
     ind = 0;
-    for (i = 1; i <= 3; i++) {
-        for (j = 1; j <= 3; j++) {
+    for (i = 0; i < 3; i++) {
+        for (j = 0; j < 3; j++) {
             try {
                 switch (type) {
                     case 'date':
                         res = convertToDate(tmp); break;
-                        
                     case 'number':
                         res = convertToNumber(tmp); break;
                 }

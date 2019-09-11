@@ -18,10 +18,6 @@ def similarity(var, fields=['Passpord Card no', 'Nationality', 'Surname', 'Given
 
 def get_fields_value(response):
     res = response
-    FILENAME = r'ocrresponse.json'
-    f = open(FILENAME, 'w')
-    f.write(res)
-    f.close()
     res = json.loads(res)
     statement = json.dumps(res['textAnnotations'][0]['description'])
     # array that contains the fields from the image

@@ -3,8 +3,7 @@ document.addEventListener('click', sendMessage, false);
 function sendMessage($event) {
     try{
   var wn = document.getElementById('idetectiframe').contentWindow;
-  // wn.postMessage(event.target.id,'https://storage.googleapis.com');
- wn.postMessage(event.target.id,'*');
+  wn.postMessage(event.target.id,'https://storage.googleapis.com');
   }
   catch{}
 }

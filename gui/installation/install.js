@@ -14,17 +14,18 @@ window.addEventListener('message', receiveMessage, false);
 
 
 function receiveMessage($event) {
-    //check if the response is from a site that he has account with us
-    if ($event&& event.origin !== "http://127.0.0.1:5300")
-    return;
-    else{
+    debugger;
+        //check if the response is from a site that he has account with us
+    //if ($event&& event.origin !== "http://127.0.0.1:5300")
+    //return;
+    //else{
 
     elm = $event.data;
     if (index == 0) {
         json_response = `site{${$event.origin}`;
         originsite = `${$event.origin}`;
         // config_fields['site location']=event.origin;
-    }
+    //}
 }
 
 }

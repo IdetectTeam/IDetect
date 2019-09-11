@@ -26,7 +26,6 @@ def get_fields_value(response):
     id_fields = {}
     fields = ['Passpord Card no', 'Nationality', 'Surname', 'Given Names', 'Sex', 'Date of Birth',
               'Place of Birth']  # some IDs contain the fields in this form
-    # fields = ['Passpord no', 'Nationality', 'Surname', 'Given Names', 'Sex', 'Date of Birth', 'Place of Birth']
     statement[0] = statement[0][1:]
     # and organize the word
     sfield = res['textAnnotations']
@@ -36,7 +35,9 @@ def get_fields_value(response):
     # find the positions in the json filed for every field
     for s in statement:
         cnt = s.count(' ') + 1
-        currentNameField = similarity(s.split('/')[0], fields)
+        currentNameField = similarity(s.split('/')[0], fields) #take first field description
+        if currentNameField == ' ' and s.split('/')[0] == 'Passpord Card no':
+            currentNameField = similarity('Passpord no', fields)
         if currentNameField != ' ':  # current 's' is field key
             if cnt > 1:
                 currentNameF = s.find(currentNameField)
@@ -49,7 +50,7 @@ def get_fields_value(response):
         index += 1
     print("the fields .........................................................")
     for key, val in id_fields_places.items():
-        print("{} :{}".format(key, val), end="\n")
+        print("{} :{}".format(key, val), end = "\n")
     print("the positions........................................................")
     for key, val in id_fields.items():
         print("{} :{}".format(key, val), end="\n")

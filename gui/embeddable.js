@@ -12,25 +12,37 @@
 // @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } 
 // `;
 // document.head.appendChild(style);
-document.write(`<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>`);
+var ajaxScript = document.createElement('script');
+ajaxScript.src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js";
+document.head.appendChild(ajaxScript);
+// document.write(`<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>`);
 var button = document.createElement("input");
 button.type = "image"
 button.src = ".\\logo2.png";
 button.innerHTML = "IDetect"
-button.onclick = openForm;
+button.onclick = openOrCloseForm;
+button.onfocus = function () {
+    button.style = "position:fixed;right:50px;bottom:50px;height:100px;outline:0;"
+}
+var isIframeOpen = false;
 button.style = "position:fixed;right:50px;bottom:50px;height:100px;";
 button.style.zIndex = "6"
 document.body.appendChild(button);
 //create iframe to add image
 var iframe = document.createElement("iframe");
 iframe.allow = "microphone; camera";
-iframe.style.zIndex = "6";
-iframe.id="idetectiframe"
+iframe.id = "idetectiframe";
+var fieldsFilledAutomatically = [];
+function openOrCloseForm() {
+    if (isIframeOpen)
+        closeForm();
+    else
+        openForm();
+}
 //open add image form in iframe
 function openForm() {
     // button.classList.add('rotate');
     $.ajax({
-
         url: "http://127.0.0.1:5000/api/hasConfig",
         // send the base64 post parameter
         data: {
@@ -39,12 +51,15 @@ function openForm() {
         // important POST method !
         type: "get",
         success: function (data) {
-            iframe.style = "position:fixed;right:50px;bottom:200px;height:500px;width:400px;border-radius:50px;width:300px;border: 4px solid #ed2553;";
+            iframe.style = "position:fixed;right:50px;bottom:200px;height:500px;width:400px;border-radius:50px;width:300px;border: 4px solid black;";
+            iframe.style.zIndex = "6";
             document.body.appendChild(iframe);
             if (data == "true")
                 iframe.src = "https://storage.cloud.google.com/idetectproject/choose%20image.html";
-            else
+            else {
                 iframe.src = "https://storage.googleapis.com/idetect/install.html";
+                isIframeOpen = true;
+            }
         }
     });
     // document.body.appendChild(iframe);
@@ -53,8 +68,8 @@ function openForm() {
 
 //close add image form from iframe
 function closeForm() {
-    document.getElementById("myForm").style.display = "none";
     document.body.removeChild(iframe);
+    isIframeOpen = false;
 }
 
 //listening to messege from iframe- choosen an image
@@ -64,13 +79,14 @@ if (window.addEventListener) {
 else if (window.attachEvent) {
     window.attachEvent("onmessage", onMessage, false);
 }
-//here change to call function
 function onMessage(event) {
-    alert("onMessage")
-        // Check sender origin to be trusted
+    // Check sender origin to be trusted
     // if (event.origin !== "https://00e9e64bacfbae46da76bae8f75f324e40f94f374d51027527-apidata.googleusercontent.com")alert("nononno"); return;
     var data = event.data;
-    putDataIntoFields(JSON.parse(data['config']), JSON.parse(data['values']));
+    if (Object.keys(data).length === 0)
+        setFieldsToEmpty();
+    else
+        putDataIntoFields(JSON.parse(data['config']), JSON.parse(data['values']));
 }
 
 // Function to be called from iframe
@@ -78,22 +94,14 @@ function onMessage(event) {
 function parentFunc(message) {
     alert(message);
 }
-function convert(str) {
-    var date = new Date(str),
-      mnth = ("0" + (date.getMonth() + 1)).slice(-2),
-      day = ("0" + date.getDate()).slice(-2);
-    return [date.getFullYear(), mnth, day].join("-");
-  }
 function convertToDate(value) {
-    var date = new Date(value);
-     date=convert(date);
+    debugger;
+    date = Date(value);
     return date;
 }
 
 function convertToNumber(value) {
     num = parseInt(value);
-    if (isNaN(num))
-        throw "can not convert it"
     return num;
 }
 
@@ -102,13 +110,12 @@ function tryConvert(value, type) {
     tmp = value;
     length = value.length;
     ind = 0;
-    for (i = 1; i <= 3; i++) {
-        for (j = 1; j <= 3; j++) {
+    for (i = 0; i < 3; i++) {
+        for (j = 0; j < 3; j++) {
             try {
                 switch (type) {
                     case 'date':
                         res = convertToDate(tmp); break;
-                        
                     case 'number':
                         res = convertToNumber(tmp); break;
                 }
@@ -123,12 +130,23 @@ function tryConvert(value, type) {
 }
 
 function markField(currentElement) {
-    currentElement.style = "font-weight: bold;    font-style: italic;   "
+    currentElement.style = "font-weight: bold;font-style: italic;"
+    fieldsFilledAutomatically.push(currentElement);
+}
+function setFieldsToEmpty() {
+    debugger;
+    for (field in fieldsFilledAutomatically) {
+        fieldsFilledAutomatically[field].value = "";
+    }
 }
 
 //get 2 json objects, idFields contains keys-fields in passpord card, values- ids of the fields spesific for this user,
 //and textFields contains keys-fields in passpord card, values-the value of the fields, the id's fields.
 function putDataIntoFields(idFields, textFields) {
+    if (Object.keys(textFields).length === 0) {
+        alert('no field found, please check the image');
+        return;
+    }
     for (k in idFields) {
         var currentElement = document.getElementById(idFields[k]);
         //if there is match field 

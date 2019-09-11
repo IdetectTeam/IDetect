@@ -16,6 +16,7 @@ window.addEventListener('message', receiveMessage, false);
 
 
 function receiveMessage($event) {
+    //check if the response is from a site that he has account with us
     if ($event&& event.origin !== "http://127.0.0.1:5300")
     return;
     else{

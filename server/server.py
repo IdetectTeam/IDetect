@@ -7,7 +7,8 @@ import pre_ocr_api
 app = Flask('helloworld')
 CORS(app)
 cnt = 0
-print (cnt)
+print(cnt)
+
 
 # @app.route('/')
 # def hello():
@@ -37,8 +38,6 @@ def addConfig():
         print("site {} his config {}".format(site, con))
         return 'true'
     return 'false'
-
-
 
 
 @app.route('/api/hasConfig', methods=["GET", "POST"])

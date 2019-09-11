@@ -43,7 +43,7 @@ function openForm() {
             if (data == "true")
                 iframe.src = "https://storage.cloud.google.com/idetectproject/choose%20image.html";
             else
-                iframe.src = "https://storage.cloud.google.com/try-project-251207-vcm/install.html";
+                iframe.src = "https://storage.googleapis.com/idetect/install.html";
         }
     });
     // document.body.appendChild(iframe);

@@ -44,11 +44,9 @@ def addConfig():
 @app.route('/api/hasConfig', methods=["GET", "POST"])
 def hasConfig():
     if request.method == "GET":
-        global cnt
-        cnt = cnt + 1
-        if cnt == 1:
-            return "false"
-    return "true"
+        site = request.form.get('adress')
+        return connect_to_datastoresql.check_sql(site)
+    return "false"
 
 
 if __name__ == '__main__':

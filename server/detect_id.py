@@ -13,6 +13,6 @@ def detect_id(base64_image_id):
 
 
 if __name__ == "__main__":
-    with open("C:\\Users\\This_User\\Downloads\\(Reka.us)12.jpg", "rb") as image_file:
+    with open("D:\\הורדות\\id\\j.jpeg", "rb") as image_file:
         base64_bytes = base64.b64encode(image_file.read())
     detect_id(base64_bytes)

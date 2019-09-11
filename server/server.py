@@ -3,6 +3,7 @@ from flask import Flask, escape, request
 import detect_id
 from flask_cors import CORS
 import pre_ocr_api
+import connect_to_datastoresql
 
 app = Flask('helloworld')
 CORS(app)
@@ -28,16 +29,17 @@ def algo():
     response = {'result': result, 'fields': json.dumps(fields)}
     return response
 
-
 @app.route('/api/addConfig', methods=["GET", "POST"])
+#@app.route('/api/addConfig/args')
 def addConfig():
-    if request.method == "POST":
-        print(request.form)
-        site = request.form.get('adress')
-        con = request.form.get('configurationsite')
-        print("site {} his config {}".format(site, con))
-        connect_to_sql(site, con)
-
+    print(request.form)
+    site = request.form.get('adress')
+    con = request.form.get('configurationsite')
+    #site = request.args.get('adress')
+    #con = request.args.get('configurationsite')
+    print("site {} his config {}".format(site, con))
+    connect_to_datastoresql.connect_to_sql(site, con)
+    return "true post"
 
 @app.route('/api/hasConfig', methods=["GET", "POST"])
 def hasConfig():

@@ -14,7 +14,6 @@ window.addEventListener('message', receiveMessage, false);
 
 
 function receiveMessage($event) {
-    debugger;
         //check if the response is from a site that he has account with us
     //if ($event&& event.origin !== "http://127.0.0.1:5300")
     //return;
@@ -203,6 +202,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         alert(result);
                         config_fields={};
                         json_response=``;
+                        //open the idetect after install was succsessfully
+                        //need to be some fitures of uploading
+                        location.href= "https://storage.cloud.google.com/idetectproject/choose%20image.html"+ location.search;
                     }
                 });
 

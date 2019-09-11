@@ -57,13 +57,13 @@ function openOrCloseForm() {
 }
 //open add image form in iframe
 function openForm() {
-    // button.classList.add('rotate');
+        // button.classList.add('rotate');
     $.ajax({
         url: "http://127.0.0.1:5000/api/hasConfig",
         // send the base64 post parameter
         data: {
             user: document.location.origin
-        },
+            },
         // important POST method !
         type: "get",
         success: function (data) {

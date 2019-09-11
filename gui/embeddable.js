@@ -30,6 +30,7 @@ iframe.style.zIndex = "6"
 function openForm() {
     // button.classList.add('rotate');
     $.ajax({
+
         url: "http://127.0.0.1:5000/api/hasConfig",
         // send the base64 post parameter
         data: {
@@ -75,14 +76,22 @@ function onMessage(event) {
 function parentFunc(message) {
     alert(message);
 }
+function convert(str) {
+    var date = new Date(str),
+      mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+      day = ("0" + date.getDate()).slice(-2);
+    return [date.getFullYear(), mnth, day].join("-");
+  }
 function convertToDate(value) {
-    debugger;
-    date = Date(value);
+    var date = new Date(value);
+     date=convert(date);
     return date;
 }
 
 function convertToNumber(value) {
     num = parseInt(value);
+    if (isNaN(num))
+        throw "can not convert it"
     return num;
 }
 
@@ -91,12 +100,13 @@ function tryConvert(value, type) {
     tmp = value;
     length = value.length;
     ind = 0;
-    for (i = 0; i < 3; i++) {
-        for (j = 0; j < 3; j++) {
+    for (i = 1; i <= 3; i++) {
+        for (j = 1; j <= 3; j++) {
             try {
                 switch (type) {
                     case 'date':
                         res = convertToDate(tmp); break;
+                        
                     case 'number':
                         res = convertToNumber(tmp); break;
                 }

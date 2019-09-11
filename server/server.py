@@ -36,8 +36,7 @@ def addConfig():
         site = request.form.get('adress')
         con = request.form.get('configurationsite')
         print("site {} his config {}".format(site, con))
-        return 'true'
-    return 'false'
+        connect_to_sql(site, con)
 
 
 @app.route('/api/hasConfig', methods=["GET", "POST"])

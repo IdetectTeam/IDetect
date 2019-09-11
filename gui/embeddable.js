@@ -38,13 +38,11 @@ function openOrCloseForm() {
         closeForm();
     else
         openForm();
-    isIframeOpen = !isIframeOpen;
 }
 //open add image form in iframe
 function openForm() {
     // button.classList.add('rotate');
     $.ajax({
-
         url: "http://127.0.0.1:5000/api/hasConfig",
         // send the base64 post parameter
         data: {
@@ -60,6 +58,7 @@ function openForm() {
                 iframe.src = "https://storage.cloud.google.com/idetectproject/choose%20image.html";
             else
                 iframe.src = "https://storage.googleapis.com/idetect/install.html";
+                isIframeOpen=true;
         }
     });
     // document.body.appendChild(iframe);
@@ -69,6 +68,7 @@ function openForm() {
 //close add image form from iframe
 function closeForm() {
     document.body.removeChild(iframe);
+    isIframeOpen = false;
 }
 
 //listening to messege from iframe- choosen an image

@@ -1,7 +1,8 @@
 
 var index = -1;
 var config_fields = {};
-var passport_usa = new Array("passpord Card no", "nationality", "surname", "given names", "gender", "date of birth", "place of birth");
+var passport_usa = new Array('Passpord Card no', 'Nationality', 'Surname', 'Given Names', 'Sex', 'Date of Birth',
+'Place of Birth');
 var length = passport_usa.length;
 var elm = new Object();
 var dict = {};

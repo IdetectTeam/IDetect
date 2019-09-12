@@ -27,7 +27,7 @@ def algo():
     # 'Given Names': 'last_name', 'Sex': 'sex', 'Date of Birth': 'dateOfBirth', 'Place of Birth': 'birth_place'}
     fields = connect_to_datastoresql.get_config(user)
     result = detect_id.detect_id(image)  # =call to algo function
-    response = {'result': result, 'fields': json.dumps(fields)}
+    response = {'result': result, 'fields': fields}
     return response
 
 

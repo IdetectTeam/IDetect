@@ -18,6 +18,7 @@ print(cnt)
 @app.route('/api/args')  # example request: /api/args?user=111&image=http:/adslfkjalakjd
 def algo():
     user = request.args.get('user')
+    print("user:"+user+"\n")
     image = request.args.get('image')
     if user is None:
         return {"error": "no user"}
@@ -63,4 +64,5 @@ def hasConfig():
 
 
 if __name__ == '__main__':
-    app.run(threaded=True,ssl_context='adhoc')
+    # app.run(threaded=True,ssl_context='adhoc')
+    app.run(threaded=True)

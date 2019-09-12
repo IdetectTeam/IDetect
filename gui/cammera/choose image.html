@@ -310,31 +310,24 @@
                     alert("please choose image");
                     return;
                 }
-                window.parent.postMessage({}, "*");
                 imageToSend = setToBase64(imageToSend);
                 document.getElementById('loading').hidden = false;
                 document.getElementById('formDrop').hidden = true;
-                $.ajax({
-                    url: "http://127.0.0.1:5000/api/args",
-                    // send the base64 post parameter
-                    data: {
-                        user: window.location.origin,
-                        image: imageToSend
-                    },
-                    // important POST method !
-                    type: "get",
-                    complete: function () {
-                        document.getElementById('loading').hidden = true;
-                        document.getElementById('formDrop').hidden = false;
-                        imageToSend = "";
-                    },
-                    success: function (data) {
-                        window.parent.postMessage({
-                            'config': data['fields'],
-                            'values': data['result']
-                        }, "*");
-                    }
-                });
+                window.parent.postMessage({
+                    'image': imageToSend
+                }, "*");
+            }
+
+            //listening to messege from embeddable when success to send image to server
+            if (window.addEventListener) {
+                window.addEventListener("message", onMessage, false);
+            }
+            else if (window.attachEvent) {
+                window.attachEvent("onmessage", onMessage, false);
+            }
+            function onMessage(event) {
+                document.getElementById('loading').hidden = true;
+                document.getElementById('formDrop').hidden = false;
             }
         </script>
 </body>

@@ -59,7 +59,7 @@ function openOrCloseForm() {
 function openForm() {
     // button.classList.add('rotate');
     $.ajax({
-        url: "https://127.0.0.1:5000/api/hasConfig",
+        url: "http://127.0.0.1:5000/api/hasConfig",
         // send the base64 post parameter
         data: {
             user: document.location.origin
@@ -73,7 +73,7 @@ function openForm() {
             if (data == "true")
                 iframe.src = "https://storage.cloud.google.com/idetect-252605.appspot.com/choose%20image.html";
             else {
-                iframe.src = "https://storage.googleapis.com/idetect/install.html";
+                iframe.src = "https://storage.cloud.google.com/idetect-252605.appspot.com/install.html";
                 isIframeOpen = true;
             }
         }
@@ -99,12 +99,35 @@ function onMessage(event) {
     // Check sender origin to be trusted
     // if (event.origin !== "https://00e9e64bacfbae46da76bae8f75f324e40f94f374d51027527-apidata.googleusercontent.com")alert("nononno"); return;
     var data = event.data;
-    if (Object.keys(data).length === 0)
-        setFieldsToEmpty();
-    else
-        putDataIntoFields(JSON.parse(data['config']), JSON.parse(data['values']));
+    debugger;
+    if (data['image'] != null)
+        sendImage(data['image']);
 }
 
+function sendImage(imageToSend) {
+    $.ajax({
+        url: "http://127.0.0.1:5000/api/args",
+        // send the base64 post parameter
+        data: {
+            user: window.location.origin,
+            image: imageToSend
+        },
+        // important POST method !
+        type: "get",
+        complete: function () {
+            try {
+                var wn = document.getElementById('idetectiframe').contentWindow;
+                wn.postMessage('', 'https://storage.cloud.google.com');
+            }
+            catch{ }
+            imageToSend = "";
+        },
+        success: function (data) {
+            debugger;
+            putDataIntoFields(JSON.parse(data['fields']), JSON.parse(data['result']));
+        }
+    });
+}
 // Function to be called from iframe
 //
 function parentFunc(message) {

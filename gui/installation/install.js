@@ -20,12 +20,10 @@ function receiveMessage($event) {
     //else{
 
     elm = $event.data;
-    if (index == 0) {
-        json_response = `site{${$event.origin}`;
+   // if (index == 0) {
+       // json_response = `site{${$event.origin}`;
         originsite = `${$event.origin}`;
-        // config_fields['site location']=event.origin;
-    //}
-}
+   // }
 
 }
 
@@ -168,7 +166,7 @@ document.addEventListener('DOMContentLoaded', function () {
             message: 'Are you sure you have done ?',
             onok: () => {
                 config_fields = JSON.stringify(config_fields);
-                json_response += `${config_fields}}`;
+                json_response = `${config_fields}`;
                 alert(json_response);
                 // $.ajax({
                 //     url: "http://127.0.0.1:5000/api/addConfig",

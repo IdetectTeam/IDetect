@@ -46,7 +46,7 @@ def algo():
 def addConfig():
     if request.method == "POST":
         print(request.form)
-        site = request.form.get('user')
+        site = request.form.get('adress')
         con = request.form.get('configurationsite')
         # site = request.args.get('adress')
         # con = request.args.get('configurationsite')

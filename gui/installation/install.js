@@ -10,23 +10,21 @@ var json_response;
 var originsite;
 
 
-
-
 window.addEventListener('message', receiveMessage, false);
 
 
 function receiveMessage($event) {
-    //check if the response is from a site that he has account with us
-    if ($event&& event.origin !== "http://127.0.0.1:5300")
-    return;
-    else{
+        //check if the response is from a site that he has account with us
+    //if ($event&& event.origin !== "http://127.0.0.1:5300")
+    //return;
+    //else{
 
     elm = $event.data;
     if (index == 0) {
         json_response = `site{${$event.origin}`;
         originsite = `${$event.origin}`;
         // config_fields['site location']=event.origin;
-    }
+    //}
 }
 
 }
@@ -202,6 +200,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     success: function (result) {
                         console.log(result);
                         alert(result);
+                        config_fields={};
+                        json_response=``;
+                        //open the idetect after install was succsessfully
+                        //need to be some fitures of uploading
+                        location.href= "https://storage.cloud.google.com/idetectproject/choose%20image.html"+ location.search;
                     }
                 });
 

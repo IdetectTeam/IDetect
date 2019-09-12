@@ -12,6 +12,22 @@
 // @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } 
 // `;
 // document.head.appendChild(style);
+document.addEventListener('click', sendMessage, false);
+
+function sendMessage($event) {
+    try {
+        var wn = document.getElementById('idetectiframe').contentWindow;
+        wn.postMessage(event.target.id, 'https://storage.googleapis.com');
+    }
+    catch{ }
+}
+
+var script = document.createElement('script');
+script.src = 'https://code.jquery.com/jquery-1.11.0.min.js';
+script.type = 'text/javascript';
+document.getElementsByTagName('head')[0].appendChild(script);
+
+
 var ajaxScript = document.createElement('script');
 ajaxScript.src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js";
 document.head.appendChild(ajaxScript);
@@ -30,7 +46,7 @@ button.style.zIndex = "6"
 document.body.appendChild(button);
 //create iframe to add image
 var iframe = document.createElement("iframe");
-iframe.allow = "microphone; camera";
+iframe.allow = "camera *";
 iframe.id = "idetectiframe";
 var fieldsFilledAutomatically = [];
 function openOrCloseForm() {
@@ -43,7 +59,7 @@ function openOrCloseForm() {
 function openForm() {
     // button.classList.add('rotate');
     $.ajax({
-        url: "http://127.0.0.1:5000/api/hasConfig",
+        url: "https://127.0.0.1:5000/api/hasConfig",
         // send the base64 post parameter
         data: {
             user: document.location.origin
@@ -55,7 +71,7 @@ function openForm() {
             iframe.style.zIndex = "6";
             document.body.appendChild(iframe);
             if (data == "true")
-                iframe.src = "https://storage.cloud.google.com/idetectproject/choose%20image.html";
+                iframe.src = "https://storage.cloud.google.com/idetect-252605.appspot.com/choose%20image.html";
             else {
                 iframe.src = "https://storage.googleapis.com/idetect/install.html";
                 isIframeOpen = true;
@@ -96,8 +112,17 @@ function parentFunc(message) {
 }
 function convertToDate(value) {
     debugger;
-    date = Date(value);
-    return date;
+    date = new Date(value);
+    month = '' + (date.getMonth() + 1);
+    day = '' + date.getDate();
+    year = date.getFullYear();
+
+    if (month.length < 2)
+        month = '0' + month;
+    if (day.length < 2)
+        day = '0' + day;
+
+    return [year, month, day].join('-');
 }
 
 function convertToNumber(value) {

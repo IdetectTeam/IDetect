@@ -509,11 +509,12 @@ z-index: 2;
   .buttons {
 	display: flex;
 	justify-content: space-around;
+	width:250px ;
 	top: 20px;
 	left: 20px;
   }
   .buttons button {
-	width: 100px;
+	width: 100%;
 	height: 50px;
 	background-color: transparent;
 	margin: 20px;

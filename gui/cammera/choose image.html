@@ -5,8 +5,7 @@
     <title>Drag and Drop File Uploading</title>
     <script src="https://kit.fontawesome.com/021a8707ba.js"></script>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <!-- <link rel="stylesheet" href="main.css"> -->
-    <link rel="stylesheet" href="https://storage.cloud.google.com/idetectproject/main.css">
+    <link rel="stylesheet" href="https://storage.cloud.google.com/idetect-252605.appspot.com/main.css">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </head>
 
@@ -91,11 +90,11 @@
             </button>
 
         </div>
-        <div class="buttons">
+        <!-- <div class="buttons">
             <button title="upload" type="submit" id="Upload">
                 <p><i class="fas fa-file-upload"></i></p>
             </button>
-        </div>
+        </div> -->
 
         <!-- <button  id="ToTakePicture" ></button>
         <button id="Upload" >Upload</button> -->
@@ -126,7 +125,6 @@
                         return function (e) {
                             // Render thumbnail.
                             imageToSend = e.target.result;
-                            debugger;
                             formDragDrop.style = "background-image:url(" + imageToSend + ")";
                             try {
                                 box__input.removeChild(upload_icon);
@@ -137,7 +135,7 @@
                             var span = document.createElement('span');
                             span.innerHTML = ['<img class="thumb" src="', e.target.result,
                                 '" title="', escape(theFile.name), '"/>'].join('');
-                            ;
+                            uploadImage(imageToSend);
                         };
                     })(f);
 
@@ -169,7 +167,6 @@
                         return function (e) {
                             // Render thumbnail.
                             imageToSend = e.target.result;
-                            debugger;
                             formDragDrop.style = "background-image:url(" + imageToSend + ")";
                             try {
                                 box__input.removeChild(upload_icon);
@@ -180,7 +177,7 @@
                             var span = document.createElement('span');
                             span.innerHTML = ['<img class="thumb" src="', e.target.result,
                                 '" title="', escape(theFile.name), '"/>'].join('');
-                            ;
+                            uploadImage(imageToSend);
                         };
                     })(f);
                     var formDrop = document.getElementById("formDrop");
@@ -297,6 +294,7 @@
                 cameraOutput.style.visibility = "visible";
                 cameraOutput.classList.add("taken");
                 formDragDrop.style = "background-image:url(" + imageToSend + ")";
+                uploadImage(imageToSend);
             };
             function setToBase64(image) {
                 ind = image.indexOf("base64,")
@@ -306,8 +304,8 @@
                 }
                 return image;
             }
-            var UploadButton = document.getElementById('Upload');
-            UploadButton.onclick = function () {
+            // var UploadButton = document.getElementById('Upload');
+            function uploadImage(imageToSend) {
                 if (imageToSend == "") {
                     alert("please choose image");
                     return;
@@ -320,7 +318,7 @@
                     url: "http://127.0.0.1:5000/api/args",
                     // send the base64 post parameter
                     data: {
-                        user: "userName",
+                        user: window.location.origin,
                         image: imageToSend
                     },
                     // important POST method !
@@ -328,7 +326,7 @@
                     complete: function () {
                         document.getElementById('loading').hidden = true;
                         document.getElementById('formDrop').hidden = false;
-                        imageToSend="";
+                        imageToSend = "";
                     },
                     success: function (data) {
                         window.parent.postMessage({

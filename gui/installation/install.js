@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         json_response=``;
                         //open the idetect after install was succsessfully
                         //need to be some fitures of uploading
-                        location.href= "https://storage.cloud.google.com/idetectproject/choose%20image.html"+ location.search;
+                        location.href= "https://storage.googleapis.com/idetect-252605.appspot.com/choose%20image.html"+ location.search;
                     }
                 });
 

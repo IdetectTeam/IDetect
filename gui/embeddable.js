@@ -71,7 +71,8 @@ function openForm() {
             iframe.style.zIndex = "6";
             document.body.appendChild(iframe);
             if (data == "true")
-                iframe.src = "https://storage.cloud.google.com/idetectproject/choose%20image.html";
+                 iframe.src = "https://storage.cloud.google.com/idetectproject/choose%20image.html";
+                //iframe.src ="https://storage.googleapis.com/idetect/choose%20image.html";
             else {
                 iframe.src = "https://storage.googleapis.com/idetect/install.html";
                 isIframeOpen = true;

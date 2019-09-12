@@ -316,27 +316,29 @@
                 imageToSend = setToBase64(imageToSend);
                 document.getElementById('loading').hidden = false;
                 document.getElementById('formDrop').hidden = true;
-                $.ajax({
-                    url: "http://127.0.0.1:5000/api/args",
-                    // send the base64 post parameter
-                    data: {
-                        user: "userName",
-                        image: imageToSend
-                    },
-                    // important POST method !
-                    type: "get",
-                    complete: function () {
-                        document.getElementById('loading').hidden = true;
-                        document.getElementById('formDrop').hidden = false;
-                        imageToSend="";
-                    },
-                    success: function (data) {
-                        window.parent.postMessage({
-                            'config': data['fields'],
-                            'values': data['result']
-                        }, "*");
-                    }
-                });
+                debugger;
+                
+                // $.ajax({
+                //  url: "http://127.0.0.1:5000/api/args",
+                //     // send the base64 post parameter
+                //     data: {
+                //         user: window.location.origin,
+                //         image: imageToSend
+                //     },
+                //     // important POST method !
+                //     type: "get",
+                //     complete: function () {
+                //         document.getElementById('loading').hidden = true;
+                //         document.getElementById('formDrop').hidden = false;
+                //         imageToSend="";
+                //     },
+                //     success: function (data) {
+                //         window.parent.postMessage({
+                //             'config': data['fields'],
+                //             'values': data['result']
+                //         }, "*");
+                //     }
+                // });
             }
         </script>
 </body>

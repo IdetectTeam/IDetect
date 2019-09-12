@@ -169,11 +169,6 @@ button.btn-settings {
 }
 
 
-<<<<<<< HEAD
-
-=======
-*/
->>>>>>> 79a71ff560f59cb963ad8f6f495e84655e1dbcf8
 
 
 
@@ -205,14 +200,10 @@ a
 /*
 	AD
 */
-<<<<<<< HEAD
 .modal-header .close {
     margin-top:-10px;
     color:#fff;
   }
-=======
-
->>>>>>> 79a71ff560f59cb963ad8f6f495e84655e1dbcf8
 .ad
 {
 	width: 9.375rem; /* 150 */
@@ -881,6 +872,9 @@ button:hover:after {
 	left: 0;
 	top: 0;
 	display: flex;
+	align-items: center;
+	justify-content: center;
+
 	margin: 0;
 	padding: 0;
 	z-index: 1;

@@ -25,7 +25,7 @@ def algo():
     # fields=pre_ocr_api.getconfig(origin)send the origin  of the site
     # fields = {'Passpord Card no': 'id', 'Nationality': 'nationality', 'Surname': 'first_name',
     # 'Given Names': 'last_name', 'Sex': 'sex', 'Date of Birth': 'dateOfBirth', 'Place of Birth': 'birth_place'}
-    fields = connect_to_datastoresql.get_config(user)
+    fields = connect_to_datastoresql.get_config(user) 
     result = detect_id.detect_id(image)  # =call to algo function
     response = {'result': result, 'fields': json.dumps(fields)}
     return response

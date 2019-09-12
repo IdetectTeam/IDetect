@@ -52,3 +52,16 @@ def check_sql(site_name):
     if conf == None:
         return "false"
     return "true"
+
+
+def get_config(site):
+    datastore_client = datastore.Client()
+    # The kind for the new entity
+    kind = 'configuration'
+    # The name/ID for the new entity
+    id = site
+    key = datastore_client.key(kind, site)
+    conf = datastore_client.get(key)
+    if conf == None:
+        return None
+    return conf

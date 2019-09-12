@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 $.ajax({
                     url: "http://127.0.0.1:5000/api/addConfig", //the page containing python script
                     data: {
-                        adress: originsite,
+                        user: originsite,
                         configurationsite: json_response
                     },
                     type: "POST", //request type,

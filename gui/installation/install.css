@@ -881,12 +881,6 @@ button:hover:after {
 	left: 0;
 	top: 0;
 	display: flex;
-<<<<<<< HEAD
-	align-items: center;
-	justify-content: center;
-=======
-
->>>>>>> 79a71ff560f59cb963ad8f6f495e84655e1dbcf8
 	margin: 0;
 	padding: 0;
 	z-index: 1;
@@ -934,7 +928,6 @@ button:hover:after {
   }
   .buttons button:focus {
 	outline: 0;
-<<<<<<< HEAD
 } 
 h3{
     text-align: center;
@@ -966,9 +959,3 @@ h4{
   label:focus, label:hover {
 	border-bottom: 1px solid;
   }
-=======
-}  /* 
-  label:focus, label:hover {
-	border-bottom: 1px solid;
-  } */
->>>>>>> 79a71ff560f59cb963ad8f6f495e84655e1dbcf8

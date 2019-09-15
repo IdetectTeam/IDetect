@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', function () {
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            cancelText: 'Cancel',
+            // cancelText: 'Cancel',
             confirmButtonText: 'Save'
         }).then((result) => {
             if (result.value) {

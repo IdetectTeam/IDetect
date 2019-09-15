@@ -107,8 +107,14 @@ function onMessage(event) {
         sendImage(data['image']);
     else
         if(data['config']&&data['config']!=null)
-sendConfig(data['config']);
+        sendConfig(data['config']);
+    if(data['fieldToColor']&&data['fieldToColor']!=null)
+color_the_field(data['fieldToColor'],data['status'])
 }
+function color_the_field(idField,status){
+    document.getElementById(idField).style.boxShadow="5px yellow"
+}
+
 
 function sendConfig(configSite){
     configSite = JSON.stringify(configSite);

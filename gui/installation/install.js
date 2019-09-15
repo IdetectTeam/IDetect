@@ -170,28 +170,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 if(elm!='')
                 config_fields[passport_usa[index]] = elm;
                 alert( config_fields[passport_usa[index]]);
-                config_fields = JSON.stringify(config_fields);
-                json_response = `${config_fields}`;
-                alert(json_response);
+                window.parent.postMessage({
+                    'config': config_fields
+                }, "*");
                 
-                $.ajax({
-                    url: "http://127.0.0.1:5000/api/addConfig", //the page containing python script
-                    data: {
-                        adress: originsite,
-                        configurationsite: json_response
-                    },
-                    type: "POST", //request type,
-                    success: function (result) {
-                        console.log(result);
-                        alert(result);
-                        config_fields={};
-                        json_response=``;
-                        //open the idetect after install was succsessfully
-                        //need to be some fitures of uploading
-                        location.href= "https://storage.googleapis.com/idetect-252605.appspot.com/choose%20image.html"+ location.search;
-                    }
-                });
-
             }
 
         }

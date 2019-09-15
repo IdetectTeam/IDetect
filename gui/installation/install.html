@@ -2,61 +2,85 @@
 <html>
 
 <head>
-    <!-- <link rel="stylesheet" type="text/css" href="install.css">  -->
-
-
+    <!--  -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <script src="https://kit.fontawesome.com/021a8707ba.js"></script>
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> -->
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
 
-    <script src="https://storage.cloud.google.com/idetect-252605.appspot.com/install.js"></script>
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">-->
-
-    <link type="text/css" rel="stylesheet" href="https://storage.cloud.google.com/idetect-252605.appspot.com/install.css" />
+    <!-- <script src="install.js"></script> -->
+    <script src="https://storage.cloud.google.com/idetect-252605.appspot.com/install.js?hl=he"></script>
+        <!-- <link rel="stylesheet" type="text/css" href="install.css"> -->
+    <link type="text/css" rel="stylesheet" href="https://storage.cloud.google.com/idetect-252605.appspot.com/install.css?hl=he" />
 </head>
 
 <body>
-
-    <!-- <button href="#myModal" class="btn btn-settings" data-backdrop="false" data-toggle="modal">Open Modal</button> -->
-    <div id="myModal" class="modal fade">
+    <div class="todoList" id="myModal">
         <div id="modal-dialog" class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <div class="close">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    </div>
-                    <h4 type="image" style="background-size: contain"
-                        src="url('https://storage.cloud.google.com/idetectproject/logo2.png?authuser=2')"
-                        class="modal-title"></h4>
-
-                </div>
-                <div class="modal-body">
-                    <h3>installation</h3>
-                    <p id="manual"></p>
-                </div>
-                <div class="modal-footer">
-                    <div class="buttons">
-                        <button id="nextbtn" type="button" class="btn btn-default">next-></button>
-                    </div>
-                    <div class="buttons">
-                        <button id="prevbtn" type="button" class="btn btn-default">
-                            <-prev</button> </span> </span> </span> </span> <!-- /.modal-content -->
-                    </div>
-                    <div class="buttons">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    </div>
-                    <div class="buttons">
-                        <button id="loadpage" type="button" class="btn btn-primary">Save</button>
+                    <div class="header clearfix">
+                        <!-- <span class="menu-hamburger pull-left"></span>
+                        <span class="eye pull-right"></span> -->
+                        <h2 class="title">Installation</h2>
+                        <h4 class="title-description"></h4>
                     </div>
 
+                    <div class="profile">
+                        <!-- <h4 class="avatar" alt="idetect" type="image" style="background-size: contain"
+                class="modal-title">
+            </h4> -->
+                        <div class="avatar" style="background-size: contain"><i class="fas fa-id-card"
+                                style="font-size: 50px; margin-top: 15px"></i></div>
+                        <!-- <span class="actionItem"></span> -->
+                        <!-- <ul class="task clearfix">
+                <li class="task__item">
+                    <p class="task__count text-success">17</p>
+                    <p class="task__status text-info">Completed</p>
+                </li>
+                <li class="task__item">
+                    <p class="task__count text-primary">17</p>
+                    <p class="task__status text-info">Total</p>
+                </li>
+                <li class="task__item">
+                    <p class="task__count text-error">17</p>
+                    <p class="task__status text-info">Pending</p>
+                </li>
+            </ul> -->
+                        <ul class="task-list">
+                            <li class="list__item">
+                                <p class="item__title text-primary">
+                                    <p id="manual"></p>
+                                </p>
+                                <p class="item__desc text-info"></p>
+                            </li>
+                            <li class="list__item">
+                                <div class="modal-footer">
+                                    <div class="buttons">
+                                        <span id="prevbtn" title="prev" class="btn btn-default">
+                                            <i class="fas fa-arrow-alt-circle-left"></i></span>
+                                        <span id="nextbtn" title="next" class="btn btn-default"><i
+                                                class="fas fa-arrow-alt-circle-right"></i></span>
+                                        <span title="cancel" class="btn btn-default" data-dismiss="modal"><i
+                                                class="fas fa-times-circle"></i></span>
+                                        <span title="save" id="loadpage" class="btn btn-primary"><i
+                                                class="fas fa-check-circle"></i></span>
+                                    </div>
+
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
 
 </body>
 

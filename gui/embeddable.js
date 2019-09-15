@@ -17,7 +17,7 @@ document.addEventListener('click', sendMessage, false);
 function sendMessage($event) {
     try {
         var wn = document.getElementById('idetectiframe').contentWindow;
-        wn.postMessage(event.target.id, '*');
+        wn.postMessage(event.target.id, 'https://storage.googleapis.com');
     }
     catch{ }
 }
@@ -105,7 +105,6 @@ function onMessage(event) {
 }
 
 function sendImage(imageToSend) {
-    debugger;
     $.ajax({
         url: "http://127.0.0.1:5000/api/args",
         // send the base64 post parameter
@@ -118,8 +117,7 @@ function sendImage(imageToSend) {
         complete: function () {
             try {
                 var wn = document.getElementById('idetectiframe').contentWindow;
-                debugger;
-                wn.postMessage('', '*');
+                wn.postMessage('', 'https://storage.cloud.google.com');
             }
             catch{ }
             imageToSend = "";
@@ -184,7 +182,6 @@ function markField(currentElement) {
     fieldsFilledAutomatically.push(currentElement);
 }
 function setFieldsToEmpty() {
-    debugger;
     for (field in fieldsFilledAutomatically) {
         fieldsFilledAutomatically[field].value = "";
     }

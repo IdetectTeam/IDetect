@@ -62,6 +62,7 @@ def get_config(site):
     id = site
     key = datastore_client.key(kind, site)
     conf = datastore_client.get(key)
+
     if conf == None:
         return None
-    return conf
+    return conf['config']

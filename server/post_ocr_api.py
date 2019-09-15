@@ -16,7 +16,7 @@ def similarity(var, fields=['Passpord Card no', 'Nationality', 'Surname', 'Given
     return field_min
 
 
-def get_fields_value(response):
+def get_fields_value(response,config_fileds):
     res = response
     res = json.loads(res)
     statement = json.dumps(res['textAnnotations'][0]['description'])
@@ -24,8 +24,7 @@ def get_fields_value(response):
     statement = statement.split("\\n")
     id_fields_places = {}
     id_fields = {}
-    fields = ['Passpord Card no', 'Nationality', 'Surname', 'Given Names', 'Sex', 'Date of Birth',
-              'Place of Birth']  # some IDs contain the fields in this form
+    fields = config_fileds.keys()
     statement[0] = statement[0][1:]
     # and organize the word
     sfield = res['textAnnotations']
@@ -44,7 +43,7 @@ def get_fields_value(response):
                 if currentNameF > 0:
                     indexOfWord += currentNameF - 1
                     cnt -= currentNameF - 1
-            id_fields[currentNameField] = extrac_field_content.get_filed_value(indexOfWord, res)
+            id_fields[currentNameField] = extrac_field_content.get_filed_value(indexOfWord, res,config_fileds[currentNameField])
             id_fields_places[currentNameField] = indexOfWord
         indexOfWord += cnt
         index += 1

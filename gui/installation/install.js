@@ -1,7 +1,8 @@
 
 var index = -1;
 var config_fields = {};
-var passport_usa = new Array("passpord Card no", "nationality", "surname", "given names", "gender", "date of birth", "place of birth");
+var passport_usa = new Array('Passpord Card no', 'Nationality', 'Surname', 'Given Names', 'Sex', 'Date of Birth',
+'Place of Birth');
 var length = passport_usa.length;
 var elm = new Object();
 var dict = {};
@@ -35,8 +36,6 @@ document.addEventListener('DOMContentLoaded', function () {
         handle: ".modal-header"
     });
     document.getElementById("nextbtn").addEventListener('click', function () {
-
-        
         if (index < passport_usa.length - 1) {
             index++;
             if (index > -1) {
@@ -68,7 +67,6 @@ document.addEventListener('DOMContentLoaded', function () {
                             config_fields[passport_usa[index - 1]] = elm;
                     document.getElementById("manual").innerHTML = `click on field ${passport_usa[index]}`;
                 }
-
             }
             else {
                 // document.getElementById("nextbtn").style.display=this.hidden;
@@ -191,7 +189,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 $.ajax({
                     url: "http://127.0.0.1:5000/api/addConfig", //the page containing python script
                     data: {
-                        user: originsite,
+                        adress: originsite,
                         configurationsite: json_response
                     },
                     type: "POST", //request type,
@@ -202,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         json_response=``;
                         //open the idetect after install was succsessfully
                         //need to be some fitures of uploading
-                        location.href= "https://storage.cloud.google.com/idetectproject/choose%20image.html"+ location.search;
+                        location.href= "https://storage.googleapis.com/idetect-252605.appspot.com/choose%20image.html"+ location.search;
                     }
                 });
 

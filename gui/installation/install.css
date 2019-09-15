@@ -11,6 +11,7 @@ ul{
 	left: 20px;
 	
   }
+  
 .fas, .title{
 color: rgb(129, 126, 126);
 }
@@ -21,7 +22,7 @@ color: rgb(129, 126, 126);
   box-sizing: border-box;
 }
 body{
-  font-family: 'Roboto';
+  font-family: 'Roboto',sans-serif;
   color: #fff;
   
 }
@@ -89,7 +90,7 @@ body{
   text-align: center;
   overflow: hidden;
   font-size: 1.5em;
-  font-family: 'Roboto';
+  font-family: 'Roboto',sans-serif;
   text-transform: capitalize;
 }
 .title-description{
@@ -254,7 +255,7 @@ body{
     max-width: 600px;
     background: white;
     font-size: 14px;
-    font-family: 'Roboto';
+    font-family: 'Roboto',sans-serif;
     border-radius: 5px;
     overflow: hidden;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);

@@ -15,10 +15,7 @@ window.addEventListener('message', receiveMessage, false);
 
 
 function receiveMessage($event) {
-    //check if the response is from a site that he has account with us
-    //if ($event&& event.origin !== "http://127.0.0.1:5300")
-    //return;
-    //else{
+
 
     elm = $event.data;
     // if (index == 0) {
@@ -38,23 +35,26 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById("nextbtn").addEventListener('click', function () {
         if (index < passport_usa.length - 1) {
             index++;
-            if (elm == '') {
-                document.getElementById("manual").innerHTML = `click on field <b>${passport_usa[index]}</b>`;
-                return;
-            }
+            window.parent.postMessage({
+                'fieldToColor':elm,
+                'status':"yes"
+            }, "*");
+            // if (elm == '') {
+            //     document.getElementById("manual").innerHTML = `click on field <b>${passport_usa[index]}</b>`;
+            //     return;
+            // }
 
             if (index > -1) {
-                if ("gender" == passport_usa[index]) {
+                if ("gender" == passport_usa[index]||"Sex" == passport_usa[index]) {
                     config_fields[passport_usa[index - 1]] = elm;
                     Swal.fire({
                         title: 'gender',
                         text: "Are you have radio button for gender field?",
                         type: 'question',
                         showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        cancelText: 'Cancel',
-                        confirmButtonText: 'Save'
+                        confirmButtonColor: 'rgb(97, 95, 95)',
+                        cancelButtonColor: 'rgb(129, 126, 126)',
+                        confirmButtonText: 'Yes'
                     }).then((result) => {
                         if (result.value) {
                             passport_usa.splice(index, 1, "male", "female");
@@ -215,8 +215,8 @@ document.addEventListener('DOMContentLoaded', function () {
             text: "Are you sure you have done?",
             type: 'question',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
+            confirmButtonColor: 'rgb(97, 95, 95)',
+            cancelButtonColor: 'rgb(129, 126, 126)',
             // cancelText: 'Cancel',
             confirmButtonText: 'Save'
         }).then((result) => {

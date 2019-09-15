@@ -36,39 +36,55 @@ document.addEventListener('DOMContentLoaded', function () {
     //     handle: ".modal-header"
     // });
     document.getElementById("nextbtn").addEventListener('click', function () {
-
-
         if (index < passport_usa.length - 1) {
             index++;
-            if(elm=='')
-            {
-                document.getElementById("manual").innerHTML = `click on field ${passport_usa[index]}`;
+            if (elm == '') {
+                document.getElementById("manual").innerHTML = `click on field <b>${passport_usa[index]}</b>`;
                 return;
             }
-            
+
             if (index > -1) {
                 if ("gender" == passport_usa[index]) {
                     config_fields[passport_usa[index - 1]] = elm;
-                    Confirm.open({
+                    Swal.fire({
                         title: 'gender',
-                        message: 'Are you have radio button for gender field?',
-                        onok: () => {
+                        text: "Are you have radio button for gender field?",
+                        type: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        cancelText: 'Cancel',
+                        confirmButtonText: 'Save'
+                    }).then((result) => {
+                        if (result.value) {
                             passport_usa.splice(index, 1, "male", "female");
-                            document.getElementById("manual").innerHTML = `click on field ${passport_usa[index]}`;
-
-                        },
-                        oncancel: () => {
-                            document.getElementById("manual").innerHTML = `click on field ${passport_usa[index]}`;
+                            document.getElementById("manual").innerHTML = `click on field <b>${passport_usa[index]}</b>`;
+                        }
+                        else {
+                            document.getElementById("manual").innerHTML = `click on field <b>${passport_usa[index]}</b>`;
                         }
 
                     })
+                    // Confirm.open({
+                    //     title: 'gender',
+                    //     message: 'Are you have radio button for gender field?',
+                    //     onok: () => {
+                    //         passport_usa.splice(index, 1, "male", "female");
+                    //         document.getElementById("manual").innerHTML = `click on field <b>${passport_usa[index]}</b>`;
+
+                    //     },
+                    //     oncancel: () => {
+                    //         document.getElementById("manual").innerHTML = `click on field <b>${passport_usa[index]}</b>`;
+                    //     }
+
+                    // })
                 }
                 else {
                     if (passport_usa[index - 1] == 'male' || passport_usa[index - 1] == 'female') {
                         sex[passport_usa[index - 1]] = elm;
                         if (passport_usa[index - 1] == 'female') {
                             config_fields['gender'] = sex;
-                          
+
                         }
                     } else
                         if (index > 0)
@@ -80,11 +96,11 @@ document.addEventListener('DOMContentLoaded', function () {
             else {
                 // document.getElementById("nextbtn").style.display=this.hidden;
             }
-            elm='';
+            elm = '';
         }
     });
     document.getElementById("prevbtn").addEventListener('click', function () {
-        
+
         if (index > 0) {
             index--;
             document.getElementById("manual").innerHTML = `click on field <b>${passport_usa[index]}</b>`;
@@ -96,188 +112,140 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-    const Confirm = {
+    // const Confirm = {
 
-        open(options) {
-<<<<<<< HEAD
-            Swal.fire({
-                title: 'Do you want to save?',
-                text: "You won't be able to revert this!",
-                type: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                cancelText:'Cancel',
-                confirmButtonText: 'Save'
-              }).then((result) => {
-                if (result.value) {
-                  Swal.fire(
-                    // 'The configuration has been saved',
-                    'The configuration has been saved.',
-                    'success'
-                  );
+    //     open(options) {
+    //         Swal.fire({
+    //             title: 'Do you want to save?',
+    //             text: "You won't be able to revert this!",
+    //             type: 'question',
+    //             showCancelButton: true,
+    //             confirmButtonColor: '#3085d6',
+    //             cancelButtonColor: '#d33',
+    //             cancelText: 'Cancel',
+    //             confirmButtonText: 'Save'
+    //         }).then((result) => {
+    //             if (result.value) {
+    //                 options.onok();
+    //                 Swal.fire(
+    //                     // 'The configuration has been saved',
+    //                     'The configuration has been saved.',
+    //                     'success'
+    //                 );
+    //             }
+    //             else {
+    //                 options.oncancel();
+    //             }
 
-                }
-              })
-            // options = Object.assign({}, {
-            //     title: '',
-            //     message: '',
-            //     okText: 'OK',
-            //     cancelText: 'Cancel',
-            //     onok: function () {
+    //         })
+    // options = Object.assign({}, {
+    //     title: '',
+    //     message: '',
+    //     okText: 'OK',
+    //     cancelText: 'Cancel',
+    //     onok: function () {
 
 
-            //         // dict.push({
-            //         //     key:config_fields[0].value,
-            //         //     value: config_fields
-            //         // });
-            //     },
-            //     oncancel: function () { }
-            // }, options);
+    //         // dict.push({
+    //         //     key:config_fields[0].value,
+    //         //     value: config_fields
+    //         // });
+    //     },
+    //     oncancel: function () { }
+    // }, options);
 
-            // const html = `
-            //     <div class="confirm">
-            //         <div class="confirm__window">
-            //             <div class="confirm__titlebar">
-            //                 <span class="confirm__title">${options.title}</span>
-            //                 <button class="confirm__close">&times;</button>
-            //             </div>
-            //             <div class="confirm__content">${options.message}</div>
-            //             <div class="confirm__buttons">
-            //                 <button class="confirm__button confirm__button--ok confirm__button--fill">${options.okText}</button>
-            //                 <button class="confirm__button confirm__button--cancel">${options.cancelText}</button>
-            //             </div>
-            //         </div>
-            //     </div>
-            // `;
-=======
-            options = Object.assign({}, {
-                title: '',
-                message: '',
-                okText: 'OK',
-                cancelText: 'Cancel',
-                onok: function () {
-                },
-                oncancel: function () { }
-            }, options);
+    // const html = `
+    //     <div class="confirm">
+    //         <div class="confirm__window">
+    //             <div class="confirm__titlebar">
+    //                 <span class="confirm__title">${options.title}</span>
+    //                 <button class="confirm__close">&times;</button>
+    //             </div>
+    //             <div class="confirm__content">${options.message}</div>
+    //             <div class="confirm__buttons">
+    //                 <button class="confirm__button confirm__button--ok confirm__button--fill">${options.okText}</button>
+    //                 <button class="confirm__button confirm__button--cancel">${options.cancelText}</button>
+    //             </div>
+    //         </div>
+    //     </div>
+    // `;
 
-            const html = `
-                <div class="confirm">
-                    <div class="confirm__window">
-                        <div class="confirm__titlebar">
-                            <span class="confirm__title">${options.title}</span>
-                            <button class="confirm__close">&times;</button>
-                        </div>
-                        <div class="confirm__content">${options.message}</div>
-                        <div class="confirm__buttons">
-                            <button class="confirm__button confirm__button--ok confirm__button--fill">${options.okText}</button>
-                            <button class="confirm__button confirm__button--cancel">${options.cancelText}</button>
-                        </div>
-                    </div>
-                </div>
-            `;
->>>>>>> c2413ae6ad00e671cbbe795b9f8fb441338ae95f
+    // const template = document.createElement('template');
+    // template.innerHTML = html;
 
-            const template = document.createElement('template');
-            template.innerHTML = html;
+    // Elements
+    //     const confirmEl = template.content.querySelector('.confirm');
+    //     const btnClose = template.content.querySelector('.confirm__close');
+    //     const btnOk = template.content.querySelector('.confirm__button--ok');
+    //     const btnCancel = template.content.querySelector('.confirm__button--cancel');
 
-            // Elements
-            const confirmEl = template.content.querySelector('.confirm');
-            const btnClose = template.content.querySelector('.confirm__close');
-            const btnOk = template.content.querySelector('.confirm__button--ok');
-            const btnCancel = template.content.querySelector('.confirm__button--cancel');
+    //     confirmEl.addEventListener('click', e => {
+    //         if (e.target === confirmEl) {
+    //             options.oncancel();
+    //             this._close(confirmEl);
+    //         }
+    //     });
 
-            confirmEl.addEventListener('click', e => {
-                if (e.target === confirmEl) {
-                    options.oncancel();
-                    this._close(confirmEl);
-                }
-            });
+    //     btnOk.addEventListener('click', () => {
+    //         options.onok();
+    //         this._close(confirmEl);
+    //     });
 
-            btnOk.addEventListener('click', () => {
-                options.onok();
-                this._close(confirmEl);
-            });
+    //     [btnCancel, btnClose].forEach(el => {
+    //         el.addEventListener('click', () => {
+    //             options.oncancel();
+    //             this._close(confirmEl);
+    //         });
+    //     });
 
-            [btnCancel, btnClose].forEach(el => {
-                el.addEventListener('click', () => {
-                    options.oncancel();
-                    this._close(confirmEl);
-                });
-            });
+    //     document.getElementById('myModal').appendChild(template.content);
+    //     },
 
-            document.getElementById('myModal').appendChild(template.content);
-        },
+    //     _close(confirmEl) {
+    //         confirmEl.classList.add('confirm--close');
 
-        _close(confirmEl) {
-            confirmEl.classList.add('confirm--close');
-
-            confirmEl.addEventListener('animationend', () => {
-                document.getElementById('myModal').removeChild(confirmEl);
-            });
-        }
-    };
+    //         confirmEl.addEventListener('animationend', () => {
+    //             document.getElementById('myModal').removeChild(confirmEl);
+    //         });
+    //     }
+    // };
     document.getElementById("loadpage").addEventListener('click', function () {
-        Confirm.open({
-            title: 'configuration end',
-            message: 'Are you sure you have done ?',
-            onok: () => {
-<<<<<<< HEAD
-                config_fields = JSON.stringify(config_fields);
-                json_response = `${config_fields}`;
-                alert(json_response);
-                // $.ajax({
-                //     url: "http://127.0.0.1:5000/api/addConfig",
-                //     // send the configuration of the website to flask
-                //     data: {
-                //         cust: originsite,
-                //         configuration:json_response 
-                //     },
-                //     // important POST method !
-                //     type: "post",
-                //     complete: function () {
-                //         console.log("push succsesfull");
-                //     },
-                //     success: function (data) {
-                //         window.parent.postMessage({
-                //             'config': data['fields'],
-                //             'values': data['result']
-                //         }, "*");
-                //     }
-                // });
-
-                $.ajax({
-                    url: "http://127.0.0.1:5000/api/addConfig", //the page containing python script
-                    data: {
-                        adress: originsite,
-                        configurationsite: json_response
-                    },
-                    type: "POST", //request type,
-                    success: function (result) {
-                        console.log(result);
-                        alert(result);
-                        config_fields = {};
-                        json_response = ``;
-                        //open the idetect after install was succsessfully
-                        //need to be some fitures of uploading
-                        location.href = "https://storage.googleapis.com/idetect-252605.appspot.com/choose%20image.html" + location.search;
-                    }
-                });
-
-=======
-                if(elm!='')
-                config_fields[passport_usa[index]] = elm;
-                alert( config_fields[passport_usa[index]]);
+        Swal.fire({
+            title: 'Configuration end,',
+            text: "Are you sure you have done?",
+            type: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelText: 'Cancel',
+            confirmButtonText: 'Save'
+        }).then((result) => {
+            if (result.value) {
+                if (elm != '')
+                    config_fields[passport_usa[index]] = elm;
+                alert(config_fields[passport_usa[index]]);
                 window.parent.postMessage({
                     'config': config_fields
-                }, "*");
-                
->>>>>>> c2413ae6ad00e671cbbe795b9f8fb441338ae95f
+                }, "*")
             }
+        })
+    });
+    // Confirm.open({
+    //     title: 'configuration end',
+    //     message: 'Are you sure you have done ?',
+    //     onok: () => {
+    //         if (elm != '')
+    //             config_fields[passport_usa[index]] = elm;
+    //         alert(config_fields[passport_usa[index]]);
+    //         window.parent.postMessage({
+    //             'config': config_fields
+    //         }, "*");
 
-        }
-        )
-    })
+    //     }
+
+    // }
+    // )
+    // })
 
 
 

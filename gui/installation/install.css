@@ -21,7 +21,7 @@ color: rgb(129, 126, 126);
   box-sizing: border-box;
 }
 body{
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Roboto';
   color: #fff;
   
 }
@@ -89,7 +89,7 @@ body{
   text-align: center;
   overflow: hidden;
   font-size: 1.5em;
-  font-family: inherit;
+  font-family: 'Roboto';
   text-transform: capitalize;
 }
 .title-description{
@@ -254,7 +254,7 @@ body{
     max-width: 600px;
     background: white;
     font-size: 14px;
-    font-family: 'Noto Sans', sans-serif;
+    font-family: 'Roboto';
     border-radius: 5px;
     overflow: hidden;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
@@ -318,7 +318,7 @@ body{
     color: #009879;
     font-weight: bold;
     font-size: 1.1em;
-    font-family: 'Noto Sans', sans-serif;
+    font-family: 'Roboto', sans-serif;
     margin-left: 0.6em;
     cursor: pointer;
     outline: none;

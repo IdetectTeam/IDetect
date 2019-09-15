@@ -1,0 +1,11 @@
+Collecting pyopenssl
+  Using cached https://files.pythonhosted.org/packages/01/c8/ceb170d81bd3941cbeb9940fc6cc2ef2ca4288d0ca8929ea4db5905d904d/pyOpenSSL-19.0.0-py2.py3-none-any.whl
+Collecting cryptography>=2.3 (from pyopenssl)
+  Using cached https://files.pythonhosted.org/packages/c2/95/f43d02315f4ec074219c6e3124a87eba1d2d12196c2767fadfdc07a83884/cryptography-2.7.tar.gz
+Requirement already satisfied (use --upgrade to upgrade): six>=1.5.2 in c:\users\מחשב\appdata\local\programs\python\python37\lib\site-packages (from pyopenssl)
+Requirement already satisfied (use --upgrade to upgrade): asn1crypto>=0.21.0 in c:\users\מחשב\appdata\local\programs\python\python37\lib\site-packages (from cryptography>=2.3->pyopenssl)
+Collecting cffi!=1.11.3,>=1.8 (from cryptography>=2.3->pyopenssl)
+  Using cached https://files.pythonhosted.org/packages/93/1a/ab8c62b5838722f29f3daffcc8d4bd61844aa9b5f437341cc890ceee483b/cffi-1.12.3.tar.gz
+Requirement already satisfied (use --upgrade to upgrade): pycparser in c:\users\מחשב\appdata\local\programs\python\python37\lib\site-packages (from cffi!=1.11.3,>=1.8->cryptography>=2.3->pyopenssl)
+Installing collected packages: cffi, cryptography, pyopenssl
+  Running setup.py install for cffi

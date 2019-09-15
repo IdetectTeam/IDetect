@@ -40,6 +40,12 @@ document.addEventListener('DOMContentLoaded', function () {
         
         if (index < passport_usa.length - 1) {
             index++;
+            if(elm=='')
+            {
+                document.getElementById("manual").innerHTML = `click on field ${passport_usa[index]}`;
+                return;
+            }
+            
             if (index > -1) {
                 if ("gender" == passport_usa[index]) {
                     config_fields[passport_usa[index - 1]] = elm;
@@ -62,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         sex[passport_usa[index - 1]] = elm;
                         if (passport_usa[index - 1] == 'female') {
                             config_fields['gender'] = sex;
-                            // index++;
+                          
                         }
                     } else
                         if (index > 0)
@@ -74,6 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
             else {
                 // document.getElementById("nextbtn").style.display=this.hidden;
             }
+            elm='';
         }
     });
     document.getElementById("prevbtn").addEventListener('click', function () {
@@ -96,12 +103,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 okText: 'OK',
                 cancelText: 'Cancel',
                 onok: function () {
-
-
-                    // dict.push({
-                    //     key:config_fields[0].value,
-                    //     value: config_fields
-                    // });
                 },
                 oncancel: function () { }
             }, options);
@@ -166,29 +167,13 @@ document.addEventListener('DOMContentLoaded', function () {
             title: 'configuration end',
             message: 'Are you sure you have done ?',
             onok: () => {
+                if(elm!='')
+                config_fields[passport_usa[index]] = elm;
+                alert( config_fields[passport_usa[index]]);
                 config_fields = JSON.stringify(config_fields);
                 json_response = `${config_fields}`;
                 alert(json_response);
-                // $.ajax({
-                //     url: "http://127.0.0.1:5000/api/addConfig",
-                //     // send the configuration of the website to flask
-                //     data: {
-                //         cust: originsite,
-                //         configuration:json_response 
-                //     },
-                //     // important POST method !
-                //     type: "post",
-                //     complete: function () {
-                //         console.log("push succsesfull");
-                //     },
-                //     success: function (data) {
-                //         window.parent.postMessage({
-                //             'config': data['fields'],
-                //             'values': data['result']
-                //         }, "*");
-                //     }
-                // });
-
+                
                 $.ajax({
                     url: "http://127.0.0.1:5000/api/addConfig", //the page containing python script
                     data: {

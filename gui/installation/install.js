@@ -36,16 +36,18 @@ document.addEventListener('DOMContentLoaded', function () {
         handle: ".modal-header"
     });
     document.getElementById("nextbtn").addEventListener('click', function () {
-
-        
         if (index < passport_usa.length - 1) {
             index++;
+            window.parent.postMessage({
+                'fieldToColor':elm,
+                'status':yes
+            }, "*");
             if(elm=='')
             {
                 document.getElementById("manual").innerHTML = `click on field ${passport_usa[index]}`;
                 return;
             }
-            
+           
             if (index > -1) {
                 if ("gender" == passport_usa[index]) {
                     config_fields[passport_usa[index - 1]] = elm;
@@ -55,12 +57,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         onok: () => {
                             passport_usa.splice(index, 1, "male", "female");
                             document.getElementById("manual").innerHTML = `click on field ${passport_usa[index]}`;
-                     
                         },
                         oncancel: () => {
                             document.getElementById("manual").innerHTML = `click on field ${passport_usa[index]}`;
                         }
-
                     })
                 }
                 else {
@@ -75,7 +75,6 @@ document.addEventListener('DOMContentLoaded', function () {
                             config_fields[passport_usa[index - 1]] = elm;
                     document.getElementById("manual").innerHTML = `click on field ${passport_usa[index]}`;
                 }
-
             }
             else {
                 // document.getElementById("nextbtn").style.display=this.hidden;
@@ -86,6 +85,10 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById("prevbtn").addEventListener('click', function () {
         if (index > 0) {
             index--;
+            window.parent.postMessage({
+                'fieldToColor':config_fields[index],
+                'status':no
+            }, "*");
             document.getElementById("manual").innerHTML = `click on field ${passport_usa[index]}`;
         }
         else {

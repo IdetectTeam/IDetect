@@ -1,0 +1,40 @@
+.intercom-icbmz8 {
+    line-height: 1.5;
+    padding: 26px 24px 24px;
+}
+
+div {
+    display: block;
+}
+.intercom-home-screen-conversation-card {
+    margin-bottom: 17px;
+    background-color: #fff;
+    border-radius: 3px;
+    font-size: 14px;
+    /* line-height: 1.4; */
+    color: #000;
+    overflow: hidden;
+    position: relative;
+    /* -webkit-box-shadow: 0 4px 15px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.1), inset 0 2px 0 0 rgba(48, 71, 236, 0.5); */
+    box-shadow: 0 4px 15px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.1), inset 0 2px 0 0 rgba(48, 71, 236, 0.5);
+}
+html {
+    font-family: intercom-font, "Helvetica Neue", "Apple Color Emoji", Helvetica, Arial, sans-serif;
+    
+    font-style: normal;
+    letter-spacing: normal;
+    font-stretch: normal;
+    font-weight: normal;
+    text-align: left;
+    text-align-last: initial;
+    text-indent: 0px;
+    text-shadow: none;
+    text-transform: none;
+    box-sizing: content-box;
+    -webkit-font-smoothing: antialiased;
+
+    font-variant: normal;
+    text-decoration: none;
+}
+
+

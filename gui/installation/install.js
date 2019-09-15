@@ -40,6 +40,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (index < passport_usa.length - 1) {
             index++;
+            if(elm=='')
+            {
+                document.getElementById("manual").innerHTML = `click on field ${passport_usa[index]}`;
+                return;
+            }
+            
             if (index > -1) {
                 if ("gender" == passport_usa[index]) {
                     config_fields[passport_usa[index - 1]] = elm;
@@ -62,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         sex[passport_usa[index - 1]] = elm;
                         if (passport_usa[index - 1] == 'female') {
                             config_fields['gender'] = sex;
-                            // index++;
+                          
                         }
                     } else
                         if (index > 0)
@@ -74,6 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
             else {
                 // document.getElementById("nextbtn").style.display=this.hidden;
             }
+            elm='';
         }
     });
     document.getElementById("prevbtn").addEventListener('click', function () {
@@ -92,6 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const Confirm = {
 
         open(options) {
+<<<<<<< HEAD
             Swal.fire({
                 title: 'Do you want to save?',
                 text: "You won't be able to revert this!",
@@ -142,6 +150,33 @@ document.addEventListener('DOMContentLoaded', function () {
             //         </div>
             //     </div>
             // `;
+=======
+            options = Object.assign({}, {
+                title: '',
+                message: '',
+                okText: 'OK',
+                cancelText: 'Cancel',
+                onok: function () {
+                },
+                oncancel: function () { }
+            }, options);
+
+            const html = `
+                <div class="confirm">
+                    <div class="confirm__window">
+                        <div class="confirm__titlebar">
+                            <span class="confirm__title">${options.title}</span>
+                            <button class="confirm__close">&times;</button>
+                        </div>
+                        <div class="confirm__content">${options.message}</div>
+                        <div class="confirm__buttons">
+                            <button class="confirm__button confirm__button--ok confirm__button--fill">${options.okText}</button>
+                            <button class="confirm__button confirm__button--cancel">${options.cancelText}</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+>>>>>>> c2413ae6ad00e671cbbe795b9f8fb441338ae95f
 
             const template = document.createElement('template');
             template.innerHTML = html;
@@ -187,6 +222,7 @@ document.addEventListener('DOMContentLoaded', function () {
             title: 'configuration end',
             message: 'Are you sure you have done ?',
             onok: () => {
+<<<<<<< HEAD
                 config_fields = JSON.stringify(config_fields);
                 json_response = `${config_fields}`;
                 alert(json_response);
@@ -228,6 +264,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 });
 
+=======
+                if(elm!='')
+                config_fields[passport_usa[index]] = elm;
+                alert( config_fields[passport_usa[index]]);
+                window.parent.postMessage({
+                    'config': config_fields
+                }, "*");
+                
+>>>>>>> c2413ae6ad00e671cbbe795b9f8fb441338ae95f
             }
 
         }

@@ -12,12 +12,14 @@
 // @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } 
 // `;
 // document.head.appendChild(style);
+
+
 document.addEventListener('click', sendMessage, false);
 
 function sendMessage($event) {
     try {
         var wn = document.getElementById('idetectiframe').contentWindow;
-        wn.postMessage(event.target.id, 'https://storage.googleapis.com');
+        wn.postMessage(event.target.id, '*');
     }
     catch{ }
 }
@@ -62,7 +64,7 @@ function openForm() {
         url: "http://127.0.0.1:5000/api/hasConfig",
         // send the base64 post parameter
         data: {
-            user: document.location.origin
+            user: document.URL
         },
         // important POST method !
         type: "get",
@@ -76,6 +78,7 @@ function openForm() {
                 iframe.src = "https://storage.cloud.google.com/idetect-252605.appspot.com/install.html";
                 isIframeOpen = true;
             }
+            
         }
     });
     // document.body.appendChild(iframe);
@@ -99,9 +102,37 @@ function onMessage(event) {
     // Check sender origin to be trusted
     // if (event.origin !== "https://00e9e64bacfbae46da76bae8f75f324e40f94f374d51027527-apidata.googleusercontent.com")alert("nononno"); return;
     var data = event.data;
-    debugger;
-    if (data['image'] != null)
+    
+    if (data['image']&&data['image'] != null)
         sendImage(data['image']);
+    else
+        if(data['config']&&data['config']!=null)
+sendConfig(data['config']);
+}
+
+function sendConfig(configSite){
+    configSite = JSON.stringify(configSite);
+                json_response = `${configSite}`;
+                alert(json_response);
+                $.ajax({
+                    url: "http://127.0.0.1:5000/api/addConfig", //the page containing python script
+                    data: {
+                        adress:document.URL.split("?")[0],
+                        configurationsite: json_response
+                    },
+                    type: "POST", //request type,
+                    success: function (result) {
+                        console.log(result);
+                        alert(result);
+                        config_fields={};
+                        json_response=``;
+                        //open the idetect after install was succsessfully
+                        //need to be some fitures of uploading
+                        iframe.src = "https://storage.cloud.google.com/idetect-252605.appspot.com/choose%20image.html";
+                        //location.href= "https://storage.googleapis.com/idetect-252605.appspot.com/choose%20image.html"+ location.search;
+                    }
+                });
+
 }
 
 function sendImage(imageToSend) {
@@ -109,7 +140,7 @@ function sendImage(imageToSend) {
         url: "http://127.0.0.1:5000/api/args",
         // send the base64 post parameter
         data: {
-            user: window.location.origin,
+            user:document.URL.split("?")[0],
             image: imageToSend
         },
         // important POST method !
@@ -117,13 +148,13 @@ function sendImage(imageToSend) {
         complete: function () {
             try {
                 var wn = document.getElementById('idetectiframe').contentWindow;
-                wn.postMessage('', 'https://storage.cloud.google.com');
+                wn.postMessage('', '*');
             }
             catch{ }
             imageToSend = "";
         },
         success: function (data) {
-            debugger;
+          
             putDataIntoFields(JSON.parse(data['fields']), JSON.parse(data['result']));
         }
     });
@@ -134,7 +165,7 @@ function parentFunc(message) {
     alert(message);
 }
 function convertToDate(value) {
-    debugger;
+
     date = new Date(value);
     month = '' + (date.getMonth() + 1);
     day = '' + date.getDate();
@@ -154,7 +185,7 @@ function convertToNumber(value) {
 }
 
 function tryConvert(value, type) {
-    debugger;
+  
     tmp = value;
     length = value.length;
     ind = 0;
@@ -182,7 +213,7 @@ function markField(currentElement) {
     fieldsFilledAutomatically.push(currentElement);
 }
 function setFieldsToEmpty() {
-    debugger;
+ 
     for (field in fieldsFilledAutomatically) {
         fieldsFilledAutomatically[field].value = "";
     }

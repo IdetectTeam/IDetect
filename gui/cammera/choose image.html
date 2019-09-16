@@ -3,30 +3,50 @@
 <head>
     <meta charset="utf-8">
     <title>Drag and Drop File Uploading</title>
-    <script src="https://kit.fontawesome.com/021a8707ba.js"></script>
+    <script src="https://kit.fontawesome.com/021a8707ba.js"></script> 
+    <!-- <script type="text/javascript" src="choose image.js"></script> -->
+    <script type="text/javascript" src="https://storage.cloud.google.com/idetect-252605.appspot.com/choose%20image.js?hl=he"></script>
+    <!-- <link rel="stylesheet" href="choose image.css"> -->
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <link rel="stylesheet" href="https://storage.cloud.google.com/idetect-252605.appspot.com/main.css">
+    <link rel="stylesheet" href="https://storage.cloud.google.com/idetect-252605.appspot.com/choose%20image.css?hl=he">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </head>
 
-<body>
-    <div role="main">
-        <div id="camera" class="modal fade" style="visibility:hidden">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <!-- Camera sensor -->
-                    <canvas id="camera--sensor"></canvas>
-                    <!-- Camera view -->
-                    <video id="camera--view" autoplay playsinline></video>
-                    <!-- Camera output -->
-                    <img src="//:0" alt="" id="camera--output" style="visibility:hidden;">
-                    <!-- Camera trigger -->
-                    <button id="camera--trigger">Take a picture</button>
-                    <button id="camera--cencel">Close</button>
-                </div>
-            </div>
-        </div>
+<div class="todoList">
+    <div class="header clearfix">
+        <!-- <i class="fas fa-bars"  id="aboutButton"></i> -->
+        <span class="menu-hamburger pull-left" id="aboutButton"></span>
+        <!-- <span class="eye pull-right"></span> -->
+        <h2 class="title">IDetect</h2>
+        <h4 class="title-description">Add an image to fill the fields Automatically</h4>
     </div>
+    <div class="profile">
+        <div class="avatar" style="background-size: contain"><i class="fas fa-id-card"
+                style="font-size: 50px; margin-top: 15px"></i></div>
+        <ul class="task-list">
+            <li class="list__item">
+                <div role="main">
+                    <div id="camera" class="modal fade" style="visibility:hidden">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+
+                                <!-- Camera sensor -->
+                                <canvas id="camera--sensor"></canvas>
+                                <!-- Camera view -->
+                                <video id="camera--view" autoplay playsinline></video>
+                                <!-- Camera output -->
+                                <img src="//:0" alt="" id="camera--output" style="visibility:hidden;">
+                                <!-- Camera trigger -->
+                                <button id="camera--trigger">Take a picture</button>
+                                <button id="camera--cencel">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
     <div class="container" role="main" id="drop_zone">
         <div id='loading' hidden=true>
             <div class="load">
@@ -57,7 +77,8 @@
                         <feGaussianBlur in="SourceGraphic" stdDeviation="13"></feGaussianBlur>
                     </filter>
                     <circle cx="70" cy="70" r="66" fill="transparent" stroke="white" stroke-width="40"
-                        filter="url(#blur)"></circle>
+                        filter="url(#blur)">
+                    </circle>
                 </svg>
             </div>
             <div class='text'>loading</div>
@@ -100,236 +121,7 @@
         <button id="Upload" >Upload</button> -->
 
         <!-- Reference to your JavaScript file -->
-        <script>
-            var box__input = document.getElementById("box__input");
-            var upload_icon = document.getElementById("upload_icon");
-            var choose_file = document.getElementById("choose_file");
-            var formDragDrop = document.getElementById("formDrop");
-            var imageToSend = "";
-            var droppedFiles = false;
-            function handleFileSelect(evt) {
-                var files = evt.target.files; // FileList object
-
-                // Loop through the FileList and render image files as thumbnails.
-                for (var i = 0, f; f = files[i]; i++) {
-
-                    // Only process image files.
-                    if (!f.type.match('image.*')) {
-                        continue;
-                    }
-
-                    var reader = new FileReader();
-
-                    // Closure to capture the file information.
-                    reader.onload = (function (theFile) {
-                        return function (e) {
-                            // Render thumbnail.
-                            imageToSend = e.target.result;
-                            formDragDrop.style = "background-image:url(" + imageToSend + ")";
-                            try {
-                                box__input.removeChild(upload_icon);
-                            }
-                            catch{ }
-                            box__input.style = "text-align:center";
-                            choose_file.style = "position: absolute;bottom:10px;margin:auto;left: 11%;"
-                            var span = document.createElement('span');
-                            span.innerHTML = ['<img class="thumb" src="', e.target.result,
-                                '" title="', escape(theFile.name), '"/>'].join('');
-                            uploadImage(imageToSend);
-                        };
-                    })(f);
-
-                    // Read in the image file as a data URL.
-                    if (files[0].type.match('image.*'))
-                        reader.readAsDataURL(f);
-                }
-            }
-
-            document.getElementById('file').addEventListener('change', handleFileSelect, false);
-
-            function handleFileSelectD(evt) {
-
-                evt.stopPropagation();
-                evt.preventDefault();
-
-                var files = evt.dataTransfer.files; // FileList object.
-                for (var i = 0, f; f = files[i]; i++) {
-
-                    // Only process image files.
-                    if (!f.type.match('image.*')) {
-                        continue;
-                    }
-
-                    var reader = new FileReader();
-
-                    // Closure to capture the file information.
-                    reader.onload = (function (theFile) {
-                        return function (e) {
-                            // Render thumbnail.
-                            imageToSend = e.target.result;
-                            formDragDrop.style = "background-image:url(" + imageToSend + ")";
-                            try {
-                                box__input.removeChild(upload_icon);
-                            }
-                            catch{ }
-                            box__input.style = "text-align:center";
-                            choose_file.style = "position: absolute;bottom:10px;margin:autoleft: 11%;"
-                            var span = document.createElement('span');
-                            span.innerHTML = ['<img class="thumb" src="', e.target.result,
-                                '" title="', escape(theFile.name), '"/>'].join('');
-                            uploadImage(imageToSend);
-                        };
-                    })(f);
-                    var formDrop = document.getElementById("formDrop");
-                    var count = (formDrop.className.match(/box is-dragover/g) || []).length;
-                    while (count > 0) {
-
-                        formDrop.className = formDrop.className.replace("box is-dragover", " ");
-                        count = (formDrop.className.match(/box is-dragover/g) || []).length;
-                    }
-                    // Read in the image file as a data URL.
-                    reader.readAsDataURL(f);
-                }
-            }
-
-
-
-            function handleDragOver(evt) {
-                evt.stopPropagation();
-                evt.preventDefault();
-                var formDrop = document.getElementById("formDrop");
-                //dropZone.cFlassList.add('is-dragover');
-                formDrop.className += " " + "box is-dragover";
-
-                evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
-
-            }
-            function handleDragLeave(evt) {
-                var formDrop = document.getElementById("formDrop");
-                //dropZone.classList.add('is-dragover');
-
-                formDrop.className = formDrop.className.replace("/\box is-dragover/g", " ");
-                var count = (formDrop.className.match(/box is-dragover/g) || []).length;
-                while (count > 0) {
-
-                    formDrop.className = formDrop.className.replace("box is-dragover", " ");
-                    count = (formDrop.className.match(/box is-dragover/g) || []).length;
-                }
-            }
-            // Setup the dnd listeners.
-
-            function handleDragEnter(evt) {
-                evt.stopPropagation();
-                evt.preventDefault();
-                var formDrop = document.getElementById("formDrop");
-                //dropZone.classList.add('is-dragover');
-                formDrop.className += " " + "box is-dragover";
-
-                evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
-            }
-
-            var dropZone = document.getElementById('drop_zone');
-            dropZone.addEventListener('dragover', handleDragOver, false);
-            dropZone.addEventListener('dragleave', handleDragLeave, false);
-            dropZone.addEventListener("dragenter", handleDragEnter, false);
-            dropZone.addEventListener('drop', handleFileSelectD, false);
-
-            var constraints = { video: { facingMode: "user" }, audio: false };
-            // Define constants
-            const cameraView = document.querySelector("#camera--view"),
-                cameraOutput = document.querySelector("#camera--output"),
-                cameraSensor = document.querySelector("#camera--sensor"),
-                cameraTrigger = document.querySelector("#camera--trigger");
-            var cameraCencel = document.getElementById('camera--cencel');
-            var ToTakePicture = document.getElementById('ToTakePicture');
-            cameraCencel.addEventListener('click', cameraCencel, false);
-            ToTakePicture.addEventListener('click', cameraStart, false);
-            var localStream;
-            cameraCencel.onclick = function () {
-
-                var cameraV = document.getElementById("camera");
-                localStream.stop();
-
-                cameraV.style.visibility = "hidden";
-                var cameraOutput = document.getElementById("camera--output");
-                cameraOutput.style.visibility = "hidden";
-
-            }
-
-            function visibleC() {
-                var cameraV = document.getElementById("camera");
-                cameraV.style.visibility = "visible"
-                cameraV.style.position = "absolute";
-                cameraV.style.zIndex = "2";
-                cameraOutput.style.position = "absolute";
-                // cameraTriggerstyle.position = "absolute";
-                cameraSensor.style.position = "absolute";
-            }
-
-            // Access the device camera and stream to cameraView
-            function cameraStart() {
-                var flagCamera = true;
-                navigator.mediaDevices
-                    .getUserMedia(constraints)
-                    .then(function (stream) {
-                        track = stream.getTracks()[0];
-                        cameraView.srcObject = stream;
-                        localStream = track;
-                    })
-                    .catch(function (error) {
-                        flagCamera = false;
-                        console.error("Oops. Something is broken.", error);
-                    }).then(function () {
-                        if (flagCamera)
-                            visibleC();
-                    });
-            }
-            // Take a picture when cameraTrigger is tapped
-            cameraTrigger.onclick = function () {
-                cameraSensor.width = cameraView.videoWidth;
-                cameraSensor.height = cameraView.videoHeight;
-                cameraSensor.getContext("2d").drawImage(cameraView, 0, 0);
-                cameraOutput.src = cameraSensor.toDataURL("image/gif");//webp
-                imageToSend = cameraOutput.src;
-                cameraOutput.style.visibility = "visible";
-                cameraOutput.classList.add("taken");
-                formDragDrop.style = "background-image:url(" + imageToSend + ")";
-                uploadImage(imageToSend);
-            };
-            function setToBase64(image) {
-                ind = image.indexOf("base64,")
-                if (ind != -1) {
-                    ind += 7;
-                    image = image.substring(ind);
-                }
-                return image;
-            }
-            // var UploadButton = document.getElementById('Upload');
-            function uploadImage(imageToSend) {
-                if (imageToSend == "") {
-                    alert("please choose image");
-                    return;
-                }
-                imageToSend = setToBase64(imageToSend);
-                document.getElementById('loading').hidden = false;
-                document.getElementById('formDrop').hidden = true;
-                window.parent.postMessage({
-                    'image': imageToSend
-                }, "*");
-            }
-
-            //listening to messege from embeddable when success to send image to server
-            if (window.addEventListener) {
-                window.addEventListener("message", onMessage, false);
-            }
-            else if (window.attachEvent) {
-                window.attachEvent("onmessage", onMessage, false);
-            }
-            function onMessage(event) {
-                document.getElementById('loading').hidden = true;
-                document.getElementById('formDrop').hidden = false;
-            }
-        </script>
-</body>
+    </div>
+    </body>
 
 </html>

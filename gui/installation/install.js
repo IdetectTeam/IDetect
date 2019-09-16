@@ -90,7 +90,6 @@ document.addEventListener('DOMContentLoaded', function () {
                             config_fields[passport_usa[index - 1]] = elm;
                     document.getElementById("manual").innerHTML = `click on field <b>${passport_usa[index]}</b>`;
                 }
-
             }
             else {
                 // document.getElementById("nextbtn").style.display=this.hidden;
@@ -111,6 +110,53 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     document.getElementById("loadpage").addEventListener('click', function () {
+<<<<<<< HEAD
+        Confirm.open({
+            title: 'configuration end',
+            message: 'Are you sure you have done ?',
+            onok: () => {
+                config_fields = JSON.stringify(config_fields);
+                json_response = `${config_fields}`;
+                alert(json_response);
+                // $.ajax({
+                //     url: "http://127.0.0.1:5000/api/addConfig",
+                //     // send the configuration of the website to flask
+                //     data: {
+                //         cust: originsite,
+                //         configuration:json_response 
+                //     },
+                //     // important POST method !
+                //     type: "post",
+                //     complete: function () {
+                //         console.log("push succsesfull");
+                //     },
+                //     success: function (data) {
+                //         window.parent.postMessage({
+                //             'config': data['fields'],
+                //             'values': data['result']
+                //         }, "*");
+                //     }
+                // });
+
+                $.ajax({
+                    url: "http://127.0.0.1:5000/api/addConfig", //the page containing python script
+                    data: {
+                        adress: originsite,
+                        configurationsite: json_response
+                    },
+                    type: "POST", //request type,
+                    success: function (result) {
+                        console.log(result);
+                        alert(result);
+                        config_fields={};
+                        json_response=``;
+                        //open the idetect after install was succsessfully
+                        //need to be some fitures of uploading
+                        location.href= "https://storage.googleapis.com/idetect-252605.appspot.com/choose%20image.html"+ location.search;
+                    }
+                });
+
+=======
         Swal.fire({
             title: 'Configuration end,',
             text: "Are you sure you have done?",
@@ -128,6 +174,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 window.parent.postMessage({
                     'config': config_fields
                 }, "*")
+>>>>>>> f7016e93f33cf1cbe88140b3ce556d0fe4057d06
             }
         })
     });

@@ -219,7 +219,10 @@ function markField(currentElement) {
     fieldsFilledAutomatically.push(currentElement);
 }
 function setFieldsToEmpty() {
+<<<<<<< HEAD
+=======
  
+>>>>>>> f7016e93f33cf1cbe88140b3ce556d0fe4057d06
     for (field in fieldsFilledAutomatically) {
         fieldsFilledAutomatically[field].value = "";
     }

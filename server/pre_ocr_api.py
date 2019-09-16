@@ -56,14 +56,14 @@ def find_word_to_check(words):
             return w['boundingPoly']['vertices']
     return []
 
-#צריך לעבוד על תמנות מסובבות
+
 def pre_ocr(base64_image_id):  # pre ocr processing
     response = conecte_to_ocr.call_google_ocr_api(base64_image_id)  # try to detect text before rotate img
     res = json.loads(response)
     if res == {}:
         return {}
     some_word_vertices = find_word_to_check(res['textAnnotations'])  # search for word to get the
-    # vertexes use them in degree calculate.
+    # verteces use them in degree calculate.
     if some_word_vertices == []:
         return response
     print(some_word_vertices)
@@ -74,14 +74,9 @@ def pre_ocr(base64_image_id):  # pre ocr processing
     final_image.save(buffered, format=id_img.format)
     final_base64_img = base64.b64encode(buffered.getvalue())
     if degrees != 0:
-        return conecte_to_ocr.call_google_ocr_api(final_base64_img)  # Now, call ocr api with aligned image.
+        return conecte_to_ocr.call_google_ocr_api(final_base64_img)  #  call ocr api with aligned image.
     return response
 
-#def getconfig(site_address):
-    #adress= db search where the locallost==site
-    #if adress
-    #   return adress
-    #return 'false'
 
 
 if __name__ == "__main__":

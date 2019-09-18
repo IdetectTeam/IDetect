@@ -1,9 +1,9 @@
-<html lang="en" class="js">
+<html lang="en" class="js" style="overflow: hidden" overflow="hidden">
 
 <head>
     <meta charset="utf-8">
     <title>Drag and Drop File Uploading</title>
-    <script src="https://kit.fontawesome.com/021a8707ba.js"></script> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- <script type="text/javascript" src="choose image.js"></script> -->
     <script type="text/javascript" src="https://storage.cloud.google.com/idetect-252605.appspot.com/choose%20image.js?hl=he"></script>
     <!-- <link rel="stylesheet" href="choose image.css"> -->
@@ -21,7 +21,7 @@
         <h4 class="title-description">Add an image to fill the fields Automatically</h4>
     </div>
     <div class="profile">
-        <div class="avatar" style="background-size: contain"><i class="fas fa-id-card"
+        <div class="avatar" style="background-size: contain"><i class="fa fa-id-card"
                 style="font-size: 50px; margin-top: 15px"></i></div>
         <ul class="task-list">
             <li class="list__item">
@@ -37,8 +37,14 @@
                                 <!-- Camera output -->
                                 <img src="//:0" alt="" id="camera--output" style="visibility:hidden;">
                                 <!-- Camera trigger -->
-                                <button id="camera--trigger">Take a picture</button>
-                                <button id="camera--cencel">Close</button>
+                                <!-- <span title="cancel" class="btn btn-default" data-dismiss="modal"><i
+                                    class="fas fa-times-circle"></i></span>
+                            <span title="save" id="loadpage" class="btn btn-primary"><i
+                                    class="fas fa-check-circle"></i></span> -->
+
+                                <button title="Take a picture" class="btn btn-primary" id="camera--trigger">
+                                        <i class="fa fa-play-circle"></i></button>
+                                <button title="Close" class="btn btn-default" id="camera--cencel"><i class="fa fa-times-circle"></i></button>
                             </div>
                         </div>
                     </div>
@@ -107,7 +113,7 @@
         </form>
         <div class="buttons">
             <button title="open camera" id="ToTakePicture">
-                <p><i class="fas fa-camera"></i></p>
+                <p><i class="fa fa-camera"></i></p>
             </button>
 
         </div>

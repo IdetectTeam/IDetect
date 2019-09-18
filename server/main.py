@@ -22,7 +22,7 @@ def algo():
     if user is None:
         return {"error": "no user"}
     fields = connect_to_datastoresql.get_config(user)
-    result = detect_id.detect_id(image)
+    result = detect_id.detect_id(image, 'pasport_card_config.json')
     response = {'result': result, 'fields': fields}
     return response
 

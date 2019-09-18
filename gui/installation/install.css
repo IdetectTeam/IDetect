@@ -12,7 +12,7 @@ ul{
 	
   }
   
-.fas, .title{
+.fas, .title, .fa{
 color: rgb(129, 126, 126);
 }
 
@@ -24,6 +24,7 @@ color: rgb(129, 126, 126);
 body{
   font-family: 'Roboto',sans-serif;
   color: rgb(110, 109, 109);
+  background-color: #ffffff;
   
 }
 .todoList {

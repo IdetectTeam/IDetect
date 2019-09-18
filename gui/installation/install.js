@@ -9,16 +9,15 @@ var dict = {};
 var sex = {};
 var json_response;
 var originsite;
-var about=0;
+var about = 0;
 
 
 window.addEventListener('message', receiveMessage, false);
 
 
 function receiveMessage($event) {
-
-
     elm = $event.data;
+    debugger;
     // if (index == 0) {
     // json_response = `site{${$event.origin}`;
     originsite = `${$event.origin}`;
@@ -27,9 +26,9 @@ function receiveMessage($event) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById("aboutButton").addEventListener('click',function () {
+    document.getElementById("aboutButton").addEventListener('click', function () {
         about++;
-        if (about %2== 1) {
+        if (about % 2 == 1) {
             document.getElementById("about").style.display = "inline";
         }
         else {
@@ -46,26 +45,25 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById("nextbtn").addEventListener('click', function () {
         if (index < passport_usa.length - 1) {
             index++;
-            window.parent.postMessage({
-                'fieldToColor':elm,
-                'status':"yes"
-            }, "*");
-            // if (elm == '') {
-            //     document.getElementById("manual").innerHTML = `click on field <b>${passport_usa[index]}</b>`;
-            //     return;
-            // }
-
+            if (index == 0) {
+                window.parent.postMessage({}, "*");
+                // if (elm == '') {
+                //     document.getElementById("manual").innerHTML = `click on field <b>${passport_usa[index]}</b>`;
+                //     return;
+                // }
+            }
             if (index > -1) {
-                if ("gender" == passport_usa[index]||"Sex" == passport_usa[index]) {
+                if ("gender" == passport_usa[index] || "Sex" == passport_usa[index]) {
                     config_fields[passport_usa[index - 1]] = elm;
                     Swal.fire({
                         title: 'gender',
-                        text: "Are you have radio button for gender field?",
+                        text: "Do you have radio button for gender field?",
                         type: 'question',
                         showCancelButton: true,
                         confirmButtonColor: 'rgb(97, 95, 95)',
                         cancelButtonColor: 'rgb(129, 126, 126)',
-                        confirmButtonText: 'Yes'
+                        confirmButtonText: 'Yes',
+                        cancelButtonText: 'No'
                     }).then((result) => {
                         if (result.value) {
                             passport_usa.splice(index, 1, "male", "female");
@@ -110,19 +108,43 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     document.getElementById("loadpage").addEventListener('click', function () {
+        config_fields[passport_usa[index]] = elm;
+        const html = document.createElement('div');
+        html.style = "font-size: 20px;";
+        var fieldsTable = document.createElement('table');
+        fieldsTable.classList.add("table");
+        fieldsTable.style = "font-size: 17px;text-align: left;margin: auto;";
+        fieldsTable.classList.add("table-hover");
+        fieldsTable.classList.add("table-dark");
+        for (field in config_fields) {
+            var row = document.createElement('tr');
+            var fieldKey = document.createElement('td');
+            fieldKey.innerHTML = field + ":   ";
+            var fieldValue = document.createElement('td');
+            fieldValue.innerHTML = config_fields[field];
+            if (config_fields[field] == "")
+                fieldValue.innerHTML = "- - -";
+            row.appendChild(fieldKey);
+            row.appendChild(fieldValue);
+            fieldsTable.appendChild(row);
+        }
+        div = document.createElement('div');
+        div.innerHTML = "please confirm your configuration:";
+        div.style = "padding-bottom: 10px;color: #3fc3ee;";
+        html.appendChild(div);
+        html.appendChild(fieldsTable);
         Swal.fire({
-            title: 'Configuration end,',
-            text: "Are you sure you have done?",
-            type: 'question',
+            // title: 'Configuration end',
+            // text: "please confirm your configuration",
+            type: 'info',
             showCancelButton: true,
             confirmButtonColor: 'rgb(97, 95, 95)',
             cancelButtonColor: 'rgb(129, 126, 126)',
             // cancelText: 'Cancel',
-            confirmButtonText: 'Save'
+            confirmButtonText: 'Save',
+            html: html
         }).then((result) => {
             if (result.value) {
-                if (elm != '')
-                    config_fields[passport_usa[index]] = elm;
                 alert(config_fields[passport_usa[index]]);
                 window.parent.postMessage({
                     'config': config_fields

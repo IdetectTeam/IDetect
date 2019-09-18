@@ -12,14 +12,31 @@
 // @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } 
 // `;
 // document.head.appendChild(style);
-
-
+document.write(`<script src="https://kit.fontawesome.com/021a8707ba.js"></script>`)
 document.addEventListener('click', sendMessage, false);
+var install_icon = document.createElement("i");
+install_icon.style.position = "absolute";
+install_icon.style.color = "red";
+// install_icon.aria_hidden = "true";
+install_icon.style.zIndex = "2"
+install_icon.className = "fas fa-id-card";
+inConfiguration = false;
+install_icon.style.width="15px";
+install_icon.style.height="14px";
 
 function sendMessage($event) {
     try {
         var wn = document.getElementById('idetectiframe').contentWindow;
-        wn.postMessage(event.target.id, '*');
+        debugger;
+        if (event.target.id!=null && event.target.nodeName=="INPUT") {
+            debugger;
+            if (inConfiguration) {
+                var positionCurrentElement = event.target.getBoundingClientRect()
+                install_icon.style.top = (positionCurrentElement.top + 8) + "px"
+                install_icon.style.left = positionCurrentElement.left - 20 + "px";
+            }
+            wn.postMessage(event.target.id, '*');
+        }
     }
     catch{ }
 }
@@ -78,7 +95,7 @@ function openForm() {
                 iframe.src = "https://storage.cloud.google.com/idetect-252605.appspot.com/install.html";
                 isIframeOpen = true;
             }
-            
+
         }
     });
     // document.body.appendChild(iframe);
@@ -102,42 +119,47 @@ function onMessage(event) {
     // Check sender origin to be trusted
     // if (event.origin !== "https://00e9e64bacfbae46da76bae8f75f324e40f94f374d51027527-apidata.googleusercontent.com")alert("nononno"); return;
     var data = event.data;
-    
-    if (data['image']&&data['image'] != null)
+    debugger;
+    if (Object.keys(data).length === 0) {
+        inConfiguration = true;
+        document.body.appendChild(install_icon);
+        return;
+    }
+    if (data['image'] && data['image'] != null)
         sendImage(data['image']);
     else
-        if(data['config']&&data['config']!=null)
-        sendConfig(data['config']);
-    if(data['fieldToColor']&&data['fieldToColor']!=null)
-color_the_field(data['fieldToColor'],data['status'])
+        if (data['config'] && data['config'] != null)
+            sendConfig(data['config']);
+    if (data['fieldToColor'] && data['fieldToColor'] != null)
+        color_the_field(data['fieldToColor'], data['status'])
 }
-function color_the_field(idField,status){
-    document.getElementById(idField).style.boxShadow="5px yellow"
+function color_the_field(idField, status) {
+    document.getElementById(idField).style.boxShadow = "5px yellow"
 }
 
 
-function sendConfig(configSite){
+function sendConfig(configSite) {
     configSite = JSON.stringify(configSite);
-                json_response = `${configSite}`;
-                alert(json_response);
-                $.ajax({
-                    url: "http://127.0.0.1:5000/api/addConfig", //the page containing python script
-                    data: {
-                        adress:document.URL.split("?")[0],
-                        configurationsite: json_response
-                    },
-                    type: "POST", //request type,
-                    success: function (result) {
-                        console.log(result);
-                        alert(result);
-                        config_fields={};
-                        json_response=``;
-                        //open the idetect after install was succsessfully
-                        //need to be some fitures of uploading
-                        iframe.src = "https://storage.cloud.google.com/idetect-252605.appspot.com/choose%20image.html";
-                        //location.href= "https://storage.googleapis.com/idetect-252605.appspot.com/choose%20image.html"+ location.search;
-                    }
-                });
+    json_response = `${configSite}`;
+    alert(json_response);
+    $.ajax({
+        url: "http://127.0.0.1:5000/api/addConfig", //the page containing python script
+        data: {
+            adress: document.URL.split("?")[0],
+            configurationsite: json_response
+        },
+        type: "POST", //request type,
+        success: function (result) {
+            console.log(result);
+            alert(result);
+            config_fields = {};
+            json_response = ``;
+            //open the idetect after install was succsessfully
+            //need to be some fitures of uploading
+            iframe.src = "https://storage.cloud.google.com/idetect-252605.appspot.com/choose%20image.html";
+            //location.href= "https://storage.googleapis.com/idetect-252605.appspot.com/choose%20image.html"+ location.search;
+        }
+    });
 
 }
 
@@ -146,7 +168,7 @@ function sendImage(imageToSend) {
         url: "http://127.0.0.1:5000/api/args",
         // send the base64 post parameter
         data: {
-            user:document.URL.split("?")[0],
+            user: document.URL.split("?")[0],
             image: imageToSend
         },
         // important POST method !
@@ -160,7 +182,7 @@ function sendImage(imageToSend) {
             imageToSend = "";
         },
         success: function (data) {
-          
+
             putDataIntoFields(JSON.parse(data['fields']), JSON.parse(data['result']));
         }
     });
@@ -191,7 +213,7 @@ function convertToNumber(value) {
 }
 
 function tryConvert(value, type) {
-  
+
     tmp = value;
     length = value.length;
     ind = 0;
@@ -219,10 +241,6 @@ function markField(currentElement) {
     fieldsFilledAutomatically.push(currentElement);
 }
 function setFieldsToEmpty() {
-<<<<<<< HEAD
-=======
- 
->>>>>>> f7016e93f33cf1cbe88140b3ce556d0fe4057d06
     for (field in fieldsFilledAutomatically) {
         fieldsFilledAutomatically[field].value = "";
     }

@@ -1,4 +1,4 @@
-<html lang="en" class="js">
+<html lang="en" class="js" style="overflow: hidden" overflow="hidden">
 
 <head>
     <meta charset="utf-8">
@@ -37,8 +37,14 @@
                                 <!-- Camera output -->
                                 <img src="//:0" alt="" id="camera--output" style="visibility:hidden;">
                                 <!-- Camera trigger -->
-                                <button id="camera--trigger">Take a picture</button>
-                                <button id="camera--cencel">Close</button>
+                                <!-- <span title="cancel" class="btn btn-default" data-dismiss="modal"><i
+                                    class="fas fa-times-circle"></i></span>
+                            <span title="save" id="loadpage" class="btn btn-primary"><i
+                                    class="fas fa-check-circle"></i></span> -->
+
+                                <button title="Take a picture" class="btn btn-primary" id="camera--trigger">
+                                        <i class="fas fa-play-circle"></i></button>
+                                <button title="Close" class="btn btn-default" id="camera--cencel"><i class="fas fa-times-circle"></i></button>
                             </div>
                         </div>
                     </div>

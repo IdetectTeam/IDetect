@@ -78,7 +78,7 @@ function openOrCloseForm() {
 function openForm() {
     // button.classList.add('rotate');
     $.ajax({
-        url: "http://127.0.0.1:5000/api/hasConfig",
+        url: "https://europe-west1-idetect-252605.cloudfunctions.net/app/api/hasConfig",
         // send the base64 post parameter
         data: {
             user: document.URL

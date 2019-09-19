@@ -16,8 +16,6 @@ var fieldsFilledAutomatically = [];
 var install_icon = document.createElement("i");
 install_icon.style="position:absolute;color:red;zIndex:100000;width:15px;height:14px";
 install_icon.className='fas fa-id-card'
-
-
 //create buttonOpenIframe
 var IForButton = document.createElement("i");   
 var buttonOpenIframe = document.createElement("button");   

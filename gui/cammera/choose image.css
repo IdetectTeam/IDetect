@@ -22,7 +22,10 @@ body {
 	font-family: 'Roboto', sans-serif;
 	color: rgb(110, 109, 109);
 }
-
+.buttons .fa {
+	color: rgb(118, 65, 101);
+  
+   }
 .todoList {
 	background-color: white;
 	border-radius: 10px;
@@ -35,7 +38,7 @@ body {
 }
 
 .header {
-	background-image: linear-gradient(45deg, black, #000000);
+	background-image: linear-gradient(45deg, #e47ec5, #000000);;
     padding: 20px;
     height: 150px;
 }
@@ -683,7 +686,8 @@ body {
 
 #camera--trigger {
 	width: 50px;
-	background-color: white;
+    background-color: transparent;
+	color: rgb(118, 65, 101);
 	font-size: 30px;
 	border-radius: 30px;
 	border: none;
@@ -698,8 +702,9 @@ body {
 
 #camera--cencel {
 	width: 50px;
-	background-color: white;
-	font-size: 30px;
+    background-color: transparent;
+	color: rgb(118, 65, 101);
+		font-size: 30px;
 	border-radius: 30px;
 	border: none;
 	padding: 7px;

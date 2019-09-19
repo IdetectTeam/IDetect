@@ -17,7 +17,6 @@ window.addEventListener('message', receiveMessage, false);
 
 function receiveMessage($event) {
     elm = $event.data;
-    debugger;
     // if (index == 0) {
     // json_response = `site{${$event.origin}`;
     originsite = `${$event.origin}`;
@@ -60,8 +59,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         text: "Do you have radio button for gender field?",
                         type: 'question',
                         showCancelButton: true,
-                        confirmButtonColor: 'rgb(97, 95, 95)',
-                        cancelButtonColor: 'rgb(129, 126, 126)',
+                        confirmButtonColor: 'rgb(118, 65, 101)',
+                        cancelButtonColor: 'rgb(224, 145, 200)',
                         confirmButtonText: 'Yes',
                         cancelButtonText: 'No'
                     }).then((result) => {
@@ -130,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         div = document.createElement('div');
         div.innerHTML = "please confirm your configuration:";
-        div.style = "padding-bottom: 10px;color: #3fc3ee;";
+        div.style = "padding-bottom: 10px;color: rgb(118, 65, 101);";
         html.appendChild(div);
         html.appendChild(fieldsTable);
         Swal.fire({
@@ -138,8 +137,8 @@ document.addEventListener('DOMContentLoaded', function () {
             // text: "please confirm your configuration",
             type: 'info',
             showCancelButton: true,
-            confirmButtonColor: 'rgb(97, 95, 95)',
-            cancelButtonColor: 'rgb(129, 126, 126)',
+            confirmButtonColor: 'rgb(118, 65, 101)',
+            cancelButtonColor: 'rgb(224, 145, 200)',
             // cancelText: 'Cancel',
             confirmButtonText: 'Save',
             html: html

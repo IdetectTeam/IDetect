@@ -2,14 +2,16 @@ ul{
 	padding-inline-start: 0px;
 
 }
- 
+ .buttons .fa {
+  color: rgb(118, 65, 101);
+
+ }
 .buttons {
 	font-size: 30px;
 	display: flex;
 	justify-content: space-around;
 	top: 20px;
 	left: 20px;
-	
   }
   
 .fas, .title, .fa{
@@ -25,22 +27,22 @@ body{
   font-family: 'Roboto',sans-serif;
   color: rgb(110, 109, 109);
   background-color: #ffffff;
-  
+  margin: 0px;
 }
 .todoList {
   border-radius: 10px;
   overflow: hidden;
   display: block;
   width: 300px;
-  margin: 10px auto;
-  height: 100%;
+  margin: auto;
+  height: 600px;
   box-shadow: 0 8px 17px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
 }
 
 .header {
-  background-image: linear-gradient(45deg, black, #000000);
-  padding: 30px;
-  height: 150px;
+	background-image: linear-gradient(45deg, #e47ec5, #000000);;
+    padding: 20px;
+    height: 150px;
 }
 
 .eye {
@@ -88,14 +90,16 @@ body{
   border: 0.125em solid rgb(201, 212, 235);
 }
 
-.title{
-  text-align: center;
-  overflow: hidden;
-  font-size: 1.5em;
-  font-family: 'Roboto',sans-serif;
-  text-transform: capitalize;
-  color: #fff;
+.title {
+	text-align: center;
+	overflow: hidden;
+	font-size: 1.5em;
+	font-family: 'Roboto', sans-serif;
+	text-transform: capitalize;
+	color: #fff;
+	margin: 5px;
 }
+
 .title-description{
   text-align: center;
   font-size: 0.875em;

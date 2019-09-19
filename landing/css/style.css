@@ -1126,7 +1126,7 @@ h6 {
 #contact .info i {
   font-size: 32px;
   color: #007bff;
-  float: left;
+  float: inherit;
   line-height: 1;
 }
 

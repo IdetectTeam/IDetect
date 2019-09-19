@@ -2750,14 +2750,14 @@ return Item;
   if ( typeof define == 'function' && define.amd ) {
     // AMD
     define( 'isotope-layout/js/layout-modes/masonry',[
-        '../layout-mode',
+        'https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/font-awesome/layout-mode',
         'masonry-layout/masonry'
       ],
       factory );
   } else if ( typeof module == 'object' && module.exports ) {
     // CommonJS
     module.exports = factory(
-      require('../layout-mode'),
+      require('https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/font-awesome/layout-mode'),
       require('masonry-layout')
     );
   } else {
@@ -2823,13 +2823,13 @@ return Item;
   if ( typeof define == 'function' && define.amd ) {
     // AMD
     define( 'isotope-layout/js/layout-modes/fit-rows',[
-        '../layout-mode'
+        'https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/font-awesome/layout-mode'
       ],
       factory );
   } else if ( typeof exports == 'object' ) {
     // CommonJS
     module.exports = factory(
-      require('../layout-mode')
+      require('https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/font-awesome/layout-mode')
     );
   } else {
     // browser global
@@ -2892,13 +2892,13 @@ return FitRows;
   if ( typeof define == 'function' && define.amd ) {
     // AMD
     define( 'isotope-layout/js/layout-modes/vertical',[
-        '../layout-mode'
+        'https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/font-awesome/layout-mode'
       ],
       factory );
   } else if ( typeof module == 'object' && module.exports ) {
     // CommonJS
     module.exports = factory(
-      require('../layout-mode')
+      require('https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/font-awesome/layout-mode')
     );
   } else {
     // browser global

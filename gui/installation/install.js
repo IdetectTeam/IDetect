@@ -1,8 +1,8 @@
 
 var index = -1;
 var config_fields = {};
-var passport_usa = new Array('Passpord Card no', 'Nationality', 'Surname', 'Given Names', 'Sex', 'Date of Birth',
-    'Place of Birth');
+var passport_usa = new Array('Passpord Card no', 'Nationality', 'Surname', 'Given Names', 'Sex', 'Date of Birth','Expires on'
+    ,'Place of Birth');
 var length = passport_usa.length;
 var elm = new Object();
 var dict = {};
@@ -17,7 +17,6 @@ window.addEventListener('message', receiveMessage, false);
 
 function receiveMessage($event) {
     elm = $event.data;
-    debugger;
     // if (index == 0) {
     // json_response = `site{${$event.origin}`;
     originsite = `${$event.origin}`;
@@ -42,16 +41,19 @@ document.addEventListener('DOMContentLoaded', function () {
     // $(".modal-dialog").draggable({
     //     handle: ".modal-header"
     // });
+
+ 
+
     document.getElementById("nextbtn").addEventListener('click', function () {
         if (index < passport_usa.length - 1) {
             index++;
-            if (index == 0) {
+            if (index == 0) 
                 window.parent.postMessage({}, "*");
                 if (elm == '') {
                     document.getElementById("manual").innerHTML = `click on field <b>${passport_usa[index]}</b>`;
                     return;
                 }
-            }
+            
             if (index > -1) {
                 if ("gender" == passport_usa[index] || "Sex" == passport_usa[index]) {
                     config_fields[passport_usa[index - 1]] = elm;
@@ -60,8 +62,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         text: "Do you have radio button for gender field?",
                         type: 'question',
                         showCancelButton: true,
-                        confirmButtonColor: 'rgb(97, 95, 95)',
-                        cancelButtonColor: 'rgb(129, 126, 126)',
+                        confirmButtonColor: 'rgb(118, 65, 101)',
+                        cancelButtonColor: 'rgb(224, 145, 200)',
                         confirmButtonText: 'Yes',
                         cancelButtonText: 'No'
                     }).then((result) => {
@@ -84,6 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         }
                     } else
+
                         if (index > 0)
                             config_fields[passport_usa[index - 1]] = elm;
                     document.getElementById("manual").innerHTML = `click on field <b>${passport_usa[index]}</b>`;
@@ -107,6 +110,9 @@ document.addEventListener('DOMContentLoaded', function () {
     })
 
 
+
+
+    
     document.getElementById("loadpage").addEventListener('click', function () {
         config_fields[passport_usa[index]] = elm;
         const html = document.createElement('div');
@@ -130,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         div = document.createElement('div');
         div.innerHTML = "please confirm your configuration:";
-        div.style = "padding-bottom: 10px;color: #3fc3ee;";
+        div.style = "padding-bottom: 10px;color: rgb(118, 65, 101);";
         html.appendChild(div);
         html.appendChild(fieldsTable);
         Swal.fire({
@@ -138,8 +144,8 @@ document.addEventListener('DOMContentLoaded', function () {
             // text: "please confirm your configuration",
             type: 'info',
             showCancelButton: true,
-            confirmButtonColor: 'rgb(97, 95, 95)',
-            cancelButtonColor: 'rgb(129, 126, 126)',
+            confirmButtonColor: 'rgb(118, 65, 101)',
+            cancelButtonColor: 'rgb(224, 145, 200)',
             // cancelText: 'Cancel',
             confirmButtonText: 'Save',
             html: html

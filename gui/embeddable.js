@@ -68,7 +68,7 @@ function openForm() {
             user: document.URL
         },
         // important POST method !
-        type: "get",
+        type: "GET",
         success: function (data) {
         //  iframe.style = "position:fixed;right:50px;bottom:200px;height:500px;width:400px;border-radius:50px;width:300px;border: 4px solid black;";
         //open iframe

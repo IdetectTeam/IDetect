@@ -47,10 +47,10 @@ document.addEventListener('DOMContentLoaded', function () {
             index++;
             if (index == 0) {
                 window.parent.postMessage({}, "*");
-                // if (elm == '') {
-                //     document.getElementById("manual").innerHTML = `click on field <b>${passport_usa[index]}</b>`;
-                //     return;
-                // }
+                if (elm == '') {
+                    document.getElementById("manual").innerHTML = `click on field <b>${passport_usa[index]}</b>`;
+                    return;
+                }
             }
             if (index > -1) {
                 if ("gender" == passport_usa[index] || "Sex" == passport_usa[index]) {

@@ -1,8 +1,8 @@
 
 var index = -1;
 var config_fields = {};
-var passport_usa = new Array('Passpord Card no', 'Nationality', 'Surname', 'Given Names', 'Sex', 'Date of Birth',
-    'Place of Birth');
+var passport_usa = new Array('Passpord Card no', 'Nationality', 'Surname', 'Given Names', 'Sex', 'Date of Birth','Expires on'
+    ,'Place of Birth');
 var length = passport_usa.length;
 var elm = new Object();
 var dict = {};
@@ -42,16 +42,19 @@ document.addEventListener('DOMContentLoaded', function () {
     // $(".modal-dialog").draggable({
     //     handle: ".modal-header"
     // });
+
+ 
+
     document.getElementById("nextbtn").addEventListener('click', function () {
         if (index < passport_usa.length - 1) {
             index++;
-            if (index == 0) {
+            if (index == 0) 
                 window.parent.postMessage({}, "*");
                 if (elm == '') {
                     document.getElementById("manual").innerHTML = `click on field <b>${passport_usa[index]}</b>`;
                     return;
                 }
-            }
+            
             if (index > -1) {
                 if ("gender" == passport_usa[index] || "Sex" == passport_usa[index]) {
                     config_fields[passport_usa[index - 1]] = elm;
@@ -84,6 +87,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         }
                     } else
+
                         if (index > 0)
                             config_fields[passport_usa[index - 1]] = elm;
                     document.getElementById("manual").innerHTML = `click on field <b>${passport_usa[index]}</b>`;
@@ -107,6 +111,9 @@ document.addEventListener('DOMContentLoaded', function () {
     })
 
 
+
+
+    
     document.getElementById("loadpage").addEventListener('click', function () {
         config_fields[passport_usa[index]] = elm;
         const html = document.createElement('div');

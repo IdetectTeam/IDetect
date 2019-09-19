@@ -1,1 +1,3 @@
-gcloud functions deploy app --runtime python37 --trigger-http --region europe-west1 --env-vars-file env.yaml
+gcloud functions deploy hasConfig --runtime python37 --trigger-http --region europe-west1 --env-vars-file env.yaml
+gcloud functions deploy addConfig --runtime python37 --trigger-http --region europe-west1 --env-vars-file env.yaml
+gcloud functions deploy detectImg --runtime python37 --trigger-http --region europe-west1 --env-vars-file env.yaml

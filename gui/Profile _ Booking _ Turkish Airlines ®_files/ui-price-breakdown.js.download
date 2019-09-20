@@ -1,0 +1,32 @@
+define([
+	'knockout',
+	'eteration/widgets/widget-util',
+	'text!eteration/widgets/template/template-price-breakdown.html'
+],
+function(ko, widgetUtil, template) {
+
+	widgetUtil.setupStringBasedTemplate(ko);
+
+	ko.templates["price-breakdown"] = template;
+	
+	ko.bindingHandlers['price-breakdown'] = {
+
+		makeTemplateValueAccessor : function(valueAccessor, allBindings, element) {
+			var self = valueAccessor();
+			self.showTaxPriceDetails = valueAccessor().showTaxPriceDetails || ko.observable(false);
+			return function() { return { name : 'price-breakdown', data : self } };
+		},
+		
+		init : function(element, valueAccessor, allBindings) {
+			return ko.bindingHandlers.template.init(element, ko.bindingHandlers['price-breakdown'].makeTemplateValueAccessor(valueAccessor, allBindings, element), allBindings);
+		},
+		
+		update : function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+			return ko.bindingHandlers.template.update(element, ko.bindingHandlers['price-breakdown'].makeTemplateValueAccessor(valueAccessor, allBindings, element), allBindings, viewModel, bindingContext);
+		}
+		
+	};
+	
+	ko.virtualElements.allowedBindings['price-breakdown'] = true;
+
+});

@@ -1,0 +1,71 @@
+define([ 'knockout', 'eteration/eteration-ajax' ],
+
+function(ko, etrAjax) {
+
+	
+
+	
+	function registerPassengersForOneWayFlight(flight, passengers) {
+		startPassengerRegistirationProcess(flight, null, true, passengers);
+	}		
+
+	function registerPassengersForRoundTripFlight(originatingFlight, returnFlight, passengers) {
+		startPassengerRegistirationProcess(originatingFlight, returnFlight, false, passengers);
+	}		
+	
+	function startPassengerRegistirationProcess(originatingFlight, returnFlight, oneWay, passengers) {
+
+		
+		
+		var x = {};
+		
+		
+		x.departureAirportLocationCode = originatingFlight.originAirport.code;
+		x.arrivalAirportLocationCode = originatingFlight.destinationAirport.code;
+		x.operatingAirlineCode = 'TK'; //originatingFlight.segments[0].airline.code
+
+		
+
+
+		x.departureDateTime = moment(originatingFlight.segments[0].departureDateTime).format('YYYY-MM-DD hh:mm:ss');
+		x.arrivalDateTime = moment(originatingFlight.segments[0].arrivalDateTime).format('YYYY-MM-DD hh:mm:ss');
+
+		
+		
+		var flightNumber = originatingFlight.segments[0].flightNumber;
+		var num = flightNumber.substr(2,flightNumber.length);
+		
+		x.flightNumber = num;
+		x.fareBasisCode = 'B';
+		x.rph = '1'; // originatingFlight.segments[0].airline.RPH
+
+
+		x.passengerCodeCountMap = {};
+
+		for (var int = 0; int < passengers.length; int++) {
+			var element = passengers[int];
+			x.passengerCodeCountMap[element.code] = element.count;
+		}
+
+		
+		etrAjax.post({
+			app : 'app.ibs',
+			service : '/booking/passengerregister',
+			data : x,
+		});
+
+	};
+	
+	
+	
+
+	
+	
+	
+	
+	return {
+		registerPassengersForOneWayFlight : registerPassengersForOneWayFlight,
+		registerPassengersForRoundTripFlight : registerPassengersForRoundTripFlight,
+	};
+
+});

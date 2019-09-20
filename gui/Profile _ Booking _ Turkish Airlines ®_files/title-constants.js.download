@@ -1,0 +1,22 @@
+define([ 'knockout', 'eteration/eteration-i18n' ], function(ko, i18n) {
+
+	var adultTitles = function() {
+		return [ {code: 'MR', name: i18n.getWithDefault('TextField-OB-210.male', 'MR')},
+				{code:'MS', name: i18n.getWithDefault('TextField-OB-210.female', 'MS')} ];
+	};
+
+	var childTitles = function() {
+		return [ {code:'MSTR', name: i18n.getWithDefault('TextField-OB-90.boy', 'MSTR')},
+				{code:'MISS', name: i18n.getWithDefault('TextField-OB-90.girl', 'MISS')} ];
+	};
+	var infantTitles = function() {
+		return [ {code:'MSTR', name: i18n.getWithDefault('TextField-OB-91.babyboy', 'MSTR')},
+				{code:'MISS', name: i18n.getWithDefault('TextField-OB-91.babygirl', 'MISS')} ];
+	};
+	
+	return {
+		adultTitles : adultTitles,
+		childTitles : childTitles,
+		infantTitles : infantTitles
+	};
+});

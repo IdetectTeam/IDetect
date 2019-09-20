@@ -1,0 +1,126 @@
+define(['jquery', 'knockout', 'moment', 'humanize-duration','eteration/eteration-i18n' ], 
+
+function($, ko, moment, humanize, i18n) {
+
+	ko.bindingHandlers.moment = {
+
+		update : function(element, valueAccessor, allBindingsAccessor) {
+
+			var accessor = valueAccessor();
+
+			var value = accessor.value || 0;
+
+			var timeZoneRawOffset = accessor.timeZoneRawOffset;
+
+			var pattern = accessor.pattern || 'DD/MM/YYYY';
+			
+			var upperCase = accessor.upperCase || false; 
+			
+			var formatter = null;
+
+			if(isNaN(timeZoneRawOffset)){
+				formatter = moment.utc(value);
+			} else{
+				formatter = moment.utc(value + timeZoneRawOffset);
+			}
+			
+			
+			
+			if (formatter && formatter.isValid()) {
+				var momentized = formatter.format(pattern);
+				
+				$(element).text(upperCase ? momentized.toUpperCase() : momentized);
+			}
+		}
+	};
+
+	ko.virtualElements.allowedBindings.moment = true;
+	
+	ko.bindingHandlers.humanize = {
+
+		update : function(element, valueAccessor, allBindingsAccessor) {
+
+			var accessor = valueAccessor();
+
+			var value = accessor.value || 0;
+
+			var language = accessor.language || i18n.getUserLocale();
+
+			// var units = accessor.pattern || 'DD/MM/YYYY';
+
+			var formatedDuration = humanizeDuration(value, {
+				units : [ "hours", "minutes" ],
+				language : language,
+				delimiter : ''
+			});
+
+			if (formatedDuration) {
+
+				$(element).text(formatedDuration);
+
+			}
+
+		}
+
+	};
+	
+	
+	ko.bindingHandlers.commonconverts = {
+		
+		convertToDay : function(value) {
+			
+			var duration = moment.duration(value);
+			return parseInt(duration.asDays());
+		},
+		
+		convertToHour : function(value) {
+			
+			var duration = moment.duration(value);
+			return duration.hours();
+		},
+		
+		convertToMinute : function(value) {
+			
+			var duration = moment.duration(value);
+			return duration.minutes();
+		}
+	}
+	
+	ko.bindingHandlers.humanizeBy24Hours = {
+		
+		update : function(element, valueAccessor, allBindingsAccessor) {
+
+			var accessor = valueAccessor();
+
+			var value = accessor.value || 0;
+
+			var language = accessor.language || "en";
+			var formatedDuration;
+
+			// var units = accessor.pattern || 'DD/MM/YYYY';
+			var milisecondOfADay = 24 * 60 * 60 * 1000;
+
+			// remaining more than a day
+			if (value > milisecondOfADay) {
+				formatedDuration = humanizeDuration(value, {
+					units : [ "days", "hours" ],
+					language : language
+				});
+			} else {
+				formatedDuration = humanizeDuration(value, {
+					units : [ "hours", "minutes" ],
+					language : language
+				});
+			}
+
+			if (formatedDuration) {
+
+				$(element).text(formatedDuration);
+
+			}
+
+		}
+
+	};
+
+});

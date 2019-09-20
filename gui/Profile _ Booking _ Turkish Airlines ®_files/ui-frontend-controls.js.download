@@ -1,0 +1,596 @@
+
+define(['jquery', 'bootbox', 'eteration/eteration-ajax', 'eteration/eteration-i18n',
+	'eteration/eteration-urlparser', 'jstorage'
+], function($, bootbox, etrAjax, i18n, urlParser) {
+	'use strict';
+	var date = new Date(),
+	newDate,
+	showConfirmation,
+	getPassSession,
+	firstPopupShowed = false,
+	secondPopupShowed = false,
+	timeExtended = true;
+
+	var frontEndControls = {
+		loadTime : parseInt(date.getTime() / 1000),
+		activePageNumber: 0,
+		toSession: 600,
+		toWarn: 360,
+		toCounter: 240,
+		f5ButtonPressed: false,
+		txtConfirm: null,
+		isMyTrips:false,
+		doubleCheckRefreshFlag:false,
+		isAwardTicket:false,
+		flowOrigin:"",
+		pagesTimeout:800000,
+		sessionKey:" sessionKey ",
+		paymentOperationType:" paymentOperationType ",
+		setPaymentOperationType: function(operationTypeParam) {
+			var that = this;
+			that.paymentOperationType=operationTypeParam;
+		},
+		setActivePageNumber: function(activePageNumber) {
+			var that = this;
+			that.activePageNumber = activePageNumber;
+			if(activePageNumber==1){
+				that.updateStartSchedulePageUrl();
+			}
+			if($.frontEndControls)
+				$.frontEndControls.init();
+		},
+		isIE9OrUnder: function() {
+			if ((window.location.host.indexOf('localhost') > -1) || (window.location.host.indexOf('127.0.0.1') > -1)) {
+				return false;
+			}
+			var ua = window.navigator.userAgent;
+			var msie = ua.indexOf("MSIE ");
+			var minIeVersion = 10;
+			if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+				var vNumber = parseInt(ua.substring(msie + 5, ua.indexOf(".",
+					msie)));
+				if ("NaN" == vNumber)
+					return false;
+				if (minIeVersion > vNumber)
+					return true;
+				else
+					return false;
+			}
+	
+			return false;
+		},
+		disallowBack: function() {
+			var that = this;
+			var ieOldBrowser = that.isIE9OrUnder();
+			if (ieOldBrowser == false) {
+				history.pushState(null, null, location.href);
+				window.onpopstate = function(event) {
+					history.go(1);
+				};
+			}
+		},
+		isPaymentTicketing: function(activePageNumber) {
+			var that = this;
+			if(that.activePageNumber==5){
+				if('TICKETING'==that.paymentOperationType || 'AWARD_TICKET'==that.paymentOperationType){
+					return true;
+				}
+			}
+			return false;
+		},
+		disallowForward: function() {
+			history.pushState("", window.document.title, document.URL);
+	
+			window.onload = 'neverBack()';
+	
+			window.onpageshow = function(evt) {
+				if (evt.persisted)
+					neverBack();
+			};
+			window.onunload = function() {
+				void(0);
+			}
+		},
+		noBack: function() {
+			window.history.forward();
+		},
+		neverBack: function() {
+			window.history.forward();
+		},	
+		updateStartSchedulePageUrl: function() {
+			var that = this;
+			sessionStorage.setItem("startScheduculePageUrl", document.URL);
+			document.cookie = "startScheduculePageUrl=" + document.URL + "; path=/";
+			window.startUrl = document.URL;
+		},
+		thingsAfterTimeoutConversation: function() {
+			var that = this;
+			etrAjax.post({
+				app: 'app.ibs',
+				service: '/frontEnd/endConversationSafely/' + that.activePageNumber + "/" + that.sessionKey + "/" + new Date().getTime(),
+				disableLoader: true,
+				global: false,
+				callback: function(response) { }
+			});
+			if (6!=that.activePageNumber)
+				that.redirect();
+		},
+		findStartPage: function() { },
+		writeStartPage: function(page) { },
+		getStartPageUrl: function() {
+			var that = this;
+			var redirectPage = null;
+			if (!redirectPage)
+				redirectPage = sessionStorage.getItem("startScheduculePageUrl");
+			if (!redirectPage) {
+				try {
+					var cname = "startScheduculePageUrl=";
+					var ca = document.cookie.split(';');
+					for (var i = 0; i < ca.length; i++) {
+						var c = ca[i];
+						while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+						if (c.indexOf(cname) == 0) {
+							redirectPage = c.substring(cname.length, c.length);
+							if (redirectPage.indexOf("?") == 0) {
+								var pos = redirectPage.indexOf("?");
+								if (pos > -1)
+									redirectPage = redirectPage.substring(0, pos);
+							}
+						}
+					}
+				} catch (e) { }
+			}
+	
+			if (!redirectPage) {
+				redirectPage = window.startUrl;
+				if (!redirectPage) {
+					redirectPage = window.location.protocol + "//" + window.location.hostname;
+				}
+			}
+	
+			var pos = redirectPage.indexOf("?");
+			if (pos > -1)
+				redirectPage = redirectPage.substring(0, pos);
+			return redirectPage;
+		},
+		redirect: function() {
+			var that = this;
+			if(window.loggedIn() && document.URL.indexOf('miles-and-smiles') > -1) {
+				$('#signoutBTN').trigger('click');
+			}
+			
+			if(document.URL != that.getStartPageUrl())
+				window.location.replace(that.getStartPageUrl());
+		},
+		reInitForPayment: function() {
+			var that = this;
+			that. resumeToken();	
+		},
+		applyPageLogic: function() {
+			var that = this;
+			that.disallowForward();
+			if(1==that.activePageNumber){
+				that.updateStartSchedulePageUrl();
+			}
+			if(1==that.activePageNumber||6==that.activePageNumber){
+				that.disallowBack();
+			}
+		},
+		resumeAmedeusToken:function() {
+			var that = this;
+			etrAjax.post({
+				app: 'app.ibs',
+				service: '/frontEnd/resumeAmedeusSession/' + that.activePageNumber + "/" + that.sessionKey + "/" + new Date().getTime(),
+				disableLoader: true,
+				global: false,
+				callback: function(response) {
+					
+				}
+			});
+		},
+		resumeToken:function() {
+			var that = this;
+			bootbox.hideAll();
+			that.toSession = 700;
+			that.toWarn = 700 - 243;
+			that.toCounter = 243;
+			
+			if (that.isMyTrips==false || that.activePageNumber == 99) {
+				etrAjax.post({
+					app: 'app.ibs',
+					service: '/frontEnd/resumeToken/' + that.activePageNumber + "/" + that.sessionKey + "/" + new Date().getTime(),
+					disableLoader: true,
+					global: false,
+					callback: function(response) {		
+						
+						if(response!=null&&response.data!=null&&(response.data.endSession==true||response.data.endSession=="true")){
+							bootbox.hideAll();	
+							that.setTimeoutConversation();
+							that.extendSession();
+								bootbox.dialog({
+								title: ' ',
+								closeButton: false,
+								message: i18n.get("Label-Genel-603"),
+								buttons: { 
+									success: { 
+										label: "OK",
+										className: 'btn btn-primary',
+										callback: function () {
+											that.redirect();
+										}
+									}
+								}
+							});
+								
+							return;
+						}else{
+							if(response!=null&&response.data!=null&&(response.data.reInit==true||response.data.reInit=="true")){
+								that.reInit();
+							}
+						}
+					}
+				});
+			}else{
+				that.reInit();
+			}
+		},
+		setTimeoutConversation:function() {
+			var cid = urlParser.getUrlVar("cId");
+			if(cid){
+				$.jStorage.set('app/terminatedConversationBofTimeout/'+cid,
+				cid, {
+					TTL: 3600000
+				});
+			}
+		},
+		checkTimeoutConversation:function() {
+			var cid = urlParser.getUrlVar("cId");
+			if(cid){
+				var result = $.jStorage.get('app/terminatedConversationBofTimeout/'+cid);
+				if(result==null)
+					return false;
+				return true;
+			}
+			return false;
+		},
+		clearTerminal:function(options) {
+			var that = this;
+			etrAjax.post({
+				app: 'app.ibs',
+				service: '/frontEnd/clearTerminal/' + that.activePageNumber + "/" + that.sessionKey + "/" + new Date().getTime(),
+				disableLoader: true,
+				global: false,
+				async: false,
+				callback: function(response) {
+					console.log(response);
+				}
+			});
+		},
+		init: function(options) {
+			var that = this;
+			
+			setTimeout(function() {
+				var that = $.frontEndControls ;
+				var sessionKey = sessionData.getItem("tabSessionId");
+	
+				if (!sessionKey) {
+					sessionKey = Math.floor((Math.random() * 10000) + 1) + '-' +
+						Math.floor((Math.random() * 10000) + 1);
+					sessionData.setItem("tabSessionId", sessionKey)
+					that.sessionKey=sessionKey;
+				}
+				if (options && typeof options == "object") {
+					that.setOptions(options);
+				}
+	
+				var setupProcess = function(response) {
+					if (response != null) {
+						that.toSession = response;
+						that.toWarn = response - 240;
+						that.toCounter = 240;
+						if (that.toWarn < 0) {
+							that.toWarn = 20;
+							if(that.toSession < 20)
+								that.toWarn = 5;
+						}
+					} else {
+						that.toSession = 800;
+						that.toWarn = 800 - 240;
+						that.toCounter = 240;
+					}
+					that.txtConfirm = "Label-Genel-605";
+					that.start();
+				};
+				if(that.checkTimeoutConversation()){
+					bootbox.hideAll();
+					bootbox.dialog({
+					title: ' ',
+					closeButton: false,
+						message: i18n.get("Label-Genel-603"),
+						buttons: {
+							success: {
+								label: "OK",
+								className: 'btn btn-primary',
+								callback: function () { 
+									that.thingsAfterTimeoutConversation();
+								}
+							}
+						}
+					});
+				
+					return;
+				}
+				etrAjax.post({
+					app: 'app.ibs',
+					service: '/frontEnd/fecParams/' + that.activePageNumber + "/" + that.sessionKey + "/" + new Date().getTime(),
+					disableLoader: true,
+					global: false,
+					callback: function(response) {
+						if(response!=null&&response.data!=null){
+							that.isMyTrips=response.data.IS_MY_TRIPS;
+							that.isAwardTicket=response.data.IS_AWARD_TICKET;
+							that.flowOrigin=response.data.FLOW_ORIGIN;
+							that.pagesTimeout=response.data.PAGES_TIMEOUT;
+							setupProcess(that.pagesTimeout);
+						}
+					}
+				});
+			}, 100);
+			setInterval(function() {
+				var that = this;
+				if($.frontEndControls)
+					$.frontEndControls.extendSession();
+			}, 500000);
+	
+		},
+		extendSession: function() {
+			etrAjax.post({
+				app: 'app.ibs',
+				service: '/frontEnd/extendSession/'+ new Date().getTime(),
+				disableLoader: true,
+				global: false,
+				callback: function(response) { }
+			});
+		},
+		reInit: function() {
+			console.info("frontendControlsreInited ");
+			var that = this;
+			that.init();
+		},
+		start: function() {
+			var that = this;
+			var counterIntervalFunc, checkIntervalFunc,
+			secondPopupShowed = false,
+			firstPopupShowed = false;
+			window.timeout = false;
+	
+			if (that.isMyTrips == false || that.activePageNumber == 99) {
+				
+				counterIntervalFunc = function() {
+					if ($.frontEndControls && $.frontEndControls.toCounter) {
+						$.frontEndControls.toCounter--;
+						if ($.frontEndControls.toCounter < 0) {
+							$.frontEndControls.toCounter = 0;
+							clearInterval(that.counterInterval);
+						}
+						if (document.getElementById('remainingTimeSpan') != null)
+							document.getElementById('remainingTimeSpan').innerHTML = $.frontEndControls.toCounter.toString();
+					}
+				};
+				
+				checkIntervalFunc = function() {
+					newDate = new Date();
+					newDate = parseInt(newDate.getTime() / 1000);
+					if (that.activePageNumber != 1 && that.activePageNumber != 6) {
+						if(timeExtended) {
+							if(that.loadTime + that.toSession < newDate && !secondPopupShowed) {
+								secondPopupShowed = true;
+								getPassSession();
+							} else if(that.loadTime + that.toWarn < newDate && !firstPopupShowed) {
+								firstPopupShowed = true;
+								showConfirmation();
+							} else if(secondPopupShowed) {
+								clearInterval(that.counterInterval);
+								clearInterval(that.checkInterval);
+							}
+						}
+					} else {
+						clearInterval(that.checkInterval);
+					}
+				};
+				
+				getPassSession = function() {
+					clearInterval(that.checkInterval);
+					bootbox.hideAll();
+					that.setTimeoutConversation();
+					that.extendSession();
+					bootbox.dialog({
+						title: ' ',
+						closeButton: false,
+						message: i18n.get("Label-Genel-603"),
+						buttons: {
+							success: {
+								label: "OK",
+								className: 'btn btn-primary',
+								callback: function () {
+									that.redirect();
+								}
+							}
+						}
+					});
+					return;
+				}
+				
+				showConfirmation = function() {
+					bootbox.confirm({
+						message:  i18n.get(that.txtConfirm)+" <span id='remainingTimeSpan'></span>",
+						closeButton: false,
+						buttons: {
+							confirm: {
+								label: i18n.get("Label-OB-121"),
+								className: 'btn btn-primary'
+							},
+							cancel: {
+								label: i18n.get("Label-OB-122"),
+								className: 'btn btn-default'
+							}
+						},
+						callback: function (result) {
+							clearInterval(that.counterInterval);
+							clearInterval(that.checkInterval);
+							if (result) {
+								timeExtended = true;
+								that.loadTime = newDate;
+								that.checkInterval = setInterval(checkIntervalFunc, 1000, true);
+								if (2 == that.activePageNumber || 3 == that.activePageNumber || 4 == that.activePageNumber || that.isPaymentTicketing()) {
+									that.resumeToken();
+								} else if (5 == that.activePageNumber && !that.isPaymentTicketing()) {
+									that.reInit();
+								} else {
+									that.reInit();
+								}
+							} else {
+								timeExtended = false;
+								if(that.isMyTrips == false) {
+									that.checkInterval = setInterval(checkIntervalFunc, 1000, true);
+									if (4 == that.activePageNumber || that.isPaymentTicketing())
+										that.clearTerminal();
+								}
+								that.redirect();
+							}
+							firstPopupShowed = false;
+							secondPopupShowed = false;
+						}
+					});
+					
+					that.toCounter = that.toCounter - (newDate - (that.toWarn + that.loadTime));
+					if ($.frontEndControls && $.frontEndControls.toCounter) {
+						if (document.getElementById('remainingTimeSpan') != null)
+							document.getElementById('remainingTimeSpan').innerHTML = $.frontEndControls.toCounter.toString();
+					}
+					clearInterval(that.counterInterval);
+					secondPopupShowed = false;
+					that.counterInterval = setInterval(counterIntervalFunc, 1000, true);
+				};
+				clearInterval(that.checkInterval);
+				that.checkInterval = setInterval(checkIntervalFunc, 1000);
+			}
+		},
+		initExtendSessionForCheckin: function(){
+			var that = this;
+			that.tokenStartTime = 0;
+			that.severTime = 0;
+			that.durationLimit = 0;
+			that.coutDownInterval;
+			that.modalIsOpen = false;
+			that.modalEndIsOpen = false;
+			that.countDown = function(){
+				that.severTime = that.severTime + 1000;
+				var durationTime = that.severTime - that.tokenStartTime;
+				var countDownValue = that.durationLimit - durationTime;
+				if(countDownValue <= 0) {
+					clearInterval(that.coutDownInterval);
+				} else if(countDownValue <= 1000) {
+					if(!that.modalEndIsOpen) {
+						that.openEndModal();
+					}
+				} else if(countDownValue <= 59000) {
+					if(!that.modalIsOpen) {
+						that.openModal();
+					}
+				}
+				if (document.getElementById('remainingTimeSpan') !== null && countDownValue>=0){
+					document.getElementById('remainingTimeSpan').innerHTML = Math.floor(countDownValue / 1000).toString();
+				}
+			};
+			that.getDataForExtend = function(){
+				etrAjax.post({
+					app: 'app.ibs',
+					service: '/checkinYUS/getseatpurchasetokendatetime',
+					callback: function(response) {
+						if( response && response.data && response !== null && response.data !== null ){
+							that.durationLimit = response.data.expireIntervalInMillis;
+							that.severTime = response.data.nowDateTimeInMillis;
+							that.tokenStartTime = response.data.startDateTimeInMillis;
+							if((that.severTime-that.tokenStartTime) < that.durationLimit){
+								that.coutDownInterval=setInterval(that.countDown, 1000);
+							}else{
+								etrAjax.post({
+									app: 'app.ibs',
+									service: '/checkinYUS/rollbackseatpurchase',
+									callback: function(response) {
+										if( response && response.data && response !== null && response.data !== null ){
+											clearInterval(that.coutDownInterval);
+											that.modalIsOpen = false;
+											location.reload();
+										}
+									}
+								});
+							}
+						}
+					}
+				});
+			};
+			that.openModal = function() {
+				that.modalIsOpen = true;
+				bootbox.confirm({
+					message: i18n.get("TextField-OCI-341")+" <span id='remainingTimeSpan'></span>",
+					closeButton: false,
+					buttons: {
+						confirm: {
+							label: i18n.get("Label-OB-121"),
+							className: 'btn btn-primary'
+						},
+						cancel: {
+							label: i18n.get("Label-OB-122"),
+							className: 'btn btn-default'
+						}
+					},
+					callback: function (result) {
+						if (result) {
+							etrAjax.post({
+								app: 'app.ibs',
+								service: '/checkinYUS/extendseatpurchase',
+								callback: function(response) {
+									if( response && response.data && response !== null && response.data !== null ){
+										clearInterval(that.coutDownInterval);
+										that.getDataForExtend();
+										that.modalIsOpen = false;
+									}
+								}
+							});
+						} else {
+							that.redirect();
+						}
+					}
+				});
+			};
+			that.openEndModal = function() {
+				bootbox.hideAll();
+				that.modalEndIsOpen = true;
+				bootbox.dialog({
+					title: ' ',
+					closeButton: false,
+					message: i18n.get("TextField-OCI-355"),
+					buttons: {
+						success: {
+							label: "OK",
+							className: 'btn btn-primary',
+							callback: function () {
+								that.redirect();
+							}
+						}
+					}
+				});
+				return;
+			};
+
+			that.getDataForExtend();
+		}
+	};
+	$.frontEndControls = frontEndControls;
+	
+	return {
+		frontEndControls :frontEndControls
+	};
+});

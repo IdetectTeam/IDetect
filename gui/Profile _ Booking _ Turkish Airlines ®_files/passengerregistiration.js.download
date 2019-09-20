@@ -1,0 +1,32 @@
+define([ 'jquery', 
+         'knockout',
+         'eteration/eteration', 
+         'eteration/eteration-i18n',
+		 './viewmodels/passengerregistiration-view.js', 		 
+		 'eteration/widgets/ui-frontend-controls',
+		 'eteration/ui/login-viewmodel',
+		 'accessibility/accessibility-component'
+         ], 
+		 
+function($, ko, Eteration, i18n, VM,fec) {
+	
+	 $(document).ready(function() {
+		   if(fec){
+				fec.frontEndControls.setActivePageNumber(4);	
+				fec.frontEndControls.applyPageLogic();	
+		   }
+	});	
+
+	
+	i18n.loadMsgs([ 'common','ibs','citylookup','mim','ms'], function() {
+		Eteration.loadStaticFragment({
+			module : 'passengerregistiration',
+			success : function() {
+				ko.applyBindings(new VM.ViewModel(), $("#passengerregistiration")[0]);
+			}
+
+		});
+	},"passengerregistiration");
+	
+
+});

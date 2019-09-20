@@ -1,0 +1,43 @@
+define([
+		'knockout',
+		'eteration/widgets/widget-util',
+		'eteration/eteration-i18n',
+		'text!eteration/widgets/template/template-price-selector-domestic.html',
+		'underscore'
+],
+function (ko, widgetUtil, i18n, template, underscore) {
+
+	widgetUtil.setupStringBasedTemplate(ko);
+
+	ko.templates["price-selector-domestic"] = template;
+
+	ko.bindingHandlers['price-selector-domestic'] = {
+		makeTemplateValueAccessor: function (valueAccessor) {
+			var self = valueAccessor();
+			
+			self.toggleActive = function(data, event){
+				$(event.target).siblings('.brand-detail-list').toggleClass('show-more');
+//				data.isActive(!data.isActive());//toggle the isActive value between true/false
+			}
+			self.buttonText = (self.data && self.data.status !== 'AVAILABLE') ? 'Sold Out' : 'Select Flight';
+			self.selectPanelFlight = function (cabinClass, category) {
+				if(typeof(enableOnlineBooker) != 'undefined') {
+					self.panel.executeExternalCallback(self.flight, completeAvailabilityPageSingleCity, [false]);
+				} else if(category) {
+					self.panel.updateSelectedFlight(self.flight, category.brandCode, cabinClass);
+				}
+			}
+			
+			return function () {
+				return { name: 'price-selector-domestic', data: self }
+			};
+		},
+		init: function (element, valueAccessor, allBindings) {
+			return ko.bindingHandlers.template.init(element, ko.bindingHandlers['price-selector-domestic'].makeTemplateValueAccessor(valueAccessor, allBindings, element), allBindings);
+		},
+		update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+			return ko.bindingHandlers.template.update(element, ko.bindingHandlers['price-selector-domestic'].makeTemplateValueAccessor(valueAccessor, allBindings, element), allBindings, viewModel, bindingContext);
+		}
+	};
+
+});

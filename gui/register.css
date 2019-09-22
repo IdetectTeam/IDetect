@@ -823,6 +823,7 @@ body {
     position: relative;
     border-color: #ffffff;
     color: #ffffff;
+    box-shadow: none;
   }
   .card.alt .title .close {
     cursor: pointer;

@@ -1,11 +1,7 @@
 add to embeddable full name and age
-capital letter
-Cancel upload
+add to installation full name and age
 fix register to tryIt
-smaller upload 
-finish landin
-remove classes and icons when close iframe
+finish landing
 add css file to javascript
 use in embeddable with json file
 upload all files to storage 
-add to installation full name and age

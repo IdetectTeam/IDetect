@@ -1,0 +1,380 @@
+/*
+
+HumanizeDuration.js
+http://git.io/j0HgmQ
+
+*/
+
+(function() {
+
+  var UNITS = {
+    year: 31557600000,
+    month: 2629800000,
+    week: 604800000,
+    day: 86400000,
+    hour: 3600000,
+    minute: 60000,
+    second: 1000,
+    millisecond: 1
+  };
+
+  var languages = {
+	ar: {
+		year: function (c) { return 'عام'},
+		month: function (c) { return 'شهر' },
+		week: function (c) { return 'أسبوع' },
+		day: function (c) { return 'يوم' },
+		hour: function (c) { return 'س' },
+		minute: function (c) { return 'د' },
+		second: function (c) { return 'ث' },
+		millisecond: function (c) { return 'ميللي ثانية' },
+	},
+    ca: {
+      year: function(c) { return "a"},
+      month: function(c) { return "me"},
+      week: function(c) { return "s"},
+      day: function(c) { return "d"},
+      hour: function(c) { return "h"},
+      minute: function(c) { return "m"},
+      second: function(c) { return "s"},
+      millisecond: function(c) { return "ms"}
+    },
+    da: {
+      year: function() { return "å"; },
+      month: function(c) { return "må"},
+      week: function(c) { return "u"},
+      day: function(c) { return "d"},
+      hour: function(c) { return "t"},
+      minute: function(c) { return "m"},
+      second: function(c) { return "s"},
+      millisecond: function(c) { return "ms"}
+    },
+    de: {
+      year: function(c) { return "j"; },
+      month: function(c) { return "m"},
+      week: function(c) { return "w"},
+      day: function(c) { return "t"},
+      hour: function(c) { return "h"},
+      minute: function(c) { return "m"},
+      second: function(c) { return "s"},
+      millisecond: function(c) { return "ms"}
+    },
+    
+    en: {
+        year: function(c) { return "y";},
+        month: function(c) { return "mt";},
+        week: function(c) { return "w"; },
+        day: function(c) { return "d"; },
+        hour: function(c) { return "h"; },
+        minute: function(c) { return "m"; },
+        second: function(c) { return "s"; },
+        millisecond: function(c) { return "ms"; }
+      },
+      
+      tr: {
+          year: function(c) { return "y"; },
+          month: function(c) { return "a"; },
+          week: function(c) { return "h"; },
+          day: function(c) { return "g"; },
+          hour: function(c) { return "s"; },
+          minute: function(c) { return "d"; },
+          second: function(c) { return "sn"; },
+          millisecond: function(c) { return "ms"; }
+       },
+    
+    /*
+    en: {
+      year: function(c) { return "year" + ((c !== 1) ? "s" : ""); },
+      month: function(c) { return "month" + ((c !== 1) ? "s" : ""); },
+      week: function(c) { return "week" + ((c !== 1) ? "s" : ""); },
+      day: function(c) { return "day" + ((c !== 1) ? "s" : ""); },
+      hour: function(c) { return "hour" + ((c !== 1) ? "s" : ""); },
+      minute: function(c) { return "minute" + ((c !== 1) ? "s" : ""); },
+      second: function(c) { return "second" + ((c !== 1) ? "s" : ""); },
+      millisecond: function(c) { return "millisecond" + ((c !== 1) ? "s" : ""); }
+    },
+    
+    tr: {
+        year: function(c) { return "yıl"; },
+        month: function(c) { return "ay"; },
+        week: function(c) { return "hafta"; },
+        day: function(c) { return "gün"; },
+        hour: function(c) { return "saat"; },
+        minute: function(c) { return "dakika"; },
+        second: function(c) { return "saniye"; },
+        millisecond: function(c) { return "millisaniye"; }
+     },
+     
+     */
+   it: {
+	   year: function (c) { return "a"; },
+	   month: function (c) { return "m"; },
+	   week: function (c) { return "set"; },
+	   day: function (c) { return "g"; },
+	   hour: function (c) { return "h"; },
+	   minute: function (c) { return "m"; },
+	   second: function (c) { return "s"; },
+	   millisecond: function (c) { return "ms"; },
+	},
+    nl: {
+      year: function() { return "j"; },
+      month: function(c) { return  "ma"; },
+      week: function(c) { return "we";},
+      day: function(c) { return "d"; },
+      hour: function() { return "u"; },
+      minute: function(c) { return "m"; },
+      second: function(c) { return "s"; },
+      millisecond: function(c) { return  "ms"; }
+    },
+    es: {
+      year: function(c) { return "a"; },
+      month: function(c) { return "m"; },
+      week: function(c) { return "s"; },
+      day: function(c) { return "d"; },
+      hour: function(c) { return "h"; },
+      minute: function(c) { return "min"; },
+      second: function(c) { return "s"; },
+      millisecond: function(c) { return "ms"; }
+    },
+    fr: {
+      year: function(c) { return "a"; },
+      month: function() { return "m"; },
+      week: function(c) { return "s"; },
+      day: function(c) { return "j"; },
+      hour: function(c) { return "h"; },
+      minute: function(c) { return "min"; },
+      second: function(c) { return "s"; },
+      millisecond: function(c) { return "ms"; }
+    },
+    ko: {
+      year: function() { return "년"; },
+      month: function() { return "개월"; },
+      week: function() { return "주일"; },
+      day: function() { return "일"; },
+      hour: function() { return "시간"; },
+      minute: function() { return "분"; },
+      second: function() { return "초"; },
+      millisecond: function() { return "밀리 초"; }
+    },
+    nob: {
+      year: function() { return "å"; },
+      month: function(c) { return "må"; },
+      week: function(c) { return "u"; },
+      day: function(c) { return "d"; },
+      hour: function(c) { return "ti"; },
+      minute: function(c) { return "m"; },
+      second: function(c) { return "s"; },
+      millisecond: function(c) { return "ms"; }
+    },
+    pl: {
+      year: function(c) { return "r"; },
+      month: function(c) { return "mi"; },
+      week: function(c) { return "t"; },
+      day: function(c) { return "d"; },
+      hour: function(c) { return "g"; },
+      minute: function(c) { return "m"; },
+      second: function(c) { return "s"; },
+      millisecond: function(c) { return "ms"; }
+    },
+    pt: {
+      year: function(c) { return "a"; },
+      month: function(c) { return  "m"; },
+      week: function(c) { return "s"; },
+      day: function(c) { return "d"; },
+      hour: function(c) { return "h"; },
+      minute: function(c) { return "m"; },
+      second: function(c) { return "s"; },
+      millisecond: function(c) { return "ms"; }
+    },
+    ru: {
+      year: function(c) { return "г"; },
+      month: function(c) { return "мес"; },
+      week: function(c) { return "нед"; },
+      day: function(c) { return "дн"; },
+      hour: function(c) { return "ч"; },
+      minute: function(c) { return "мин"; },
+      second: function(c) { return "с"; },
+      millisecond: function(c) { return "мс"; }
+    },
+    "zh": {
+      year: function() { return "年"; },
+      month: function() { return "个月"; },
+      week: function() { return "周"; },
+      day: function() { return "天"; },
+      hour: function() { return "时"; },
+      minute: function() { return "分"; },
+      second: function() { return "秒"; },
+      millisecond: function() { return "毫秒"; }
+    },
+    "zh-TW": {
+      year: function() { return "年"; },
+      month: function() { return "個月"; },
+      week: function() { return "周"; },
+      day: function() { return "天"; },
+      hour: function() { return "时"; },
+      minute: function() { return "分"; },
+      second: function() { return "秒"; },
+      millisecond: function() { return "毫秒"; }
+    },
+    ja: {
+      year: function() { return "年"; },
+      month: function() { return "月"; },
+      week: function() { return "週"; },
+      day: function() { return "日"; },
+      hour: function() { return "時間"; },
+      minute: function() { return "分"; },
+      second: function() { return "秒"; },
+      millisecond: function() { return "ミリ秒"; }
+    }
+    
+
+  };
+
+  // You can create a humanizer, which returns a function with defaults
+  // parameters.
+  function humanizer(passedOptions) {
+
+    var result = function humanizer(ms, passedOptions) {
+      var options = extend({}, result, passedOptions || {});
+      return doHumanization(ms, options);
+    };
+
+    extend(result, {
+      language: "en",
+    // delimiter: ", ",
+      delimiter: " ",
+      units: [
+        "year",
+        "month",
+        "week",
+        "day",
+        "hour",
+        "minute",
+        "second"
+      ],
+      languages: {}
+    }, passedOptions);
+
+    return result;
+
+  }
+
+  // The main function is just a wrapper around a default humanizer.
+  var defaultHumanizer = humanizer({});
+  function humanizeDuration(ms, passedOptions) {
+    return defaultHumanizer(ms, passedOptions);
+  }
+
+  // doHumanization does the bulk of the work.
+  function doHumanization(ms, options) {
+
+    // Make sure we have a positive number.
+    // Has the nice sideffect of turning Number objects into primitives.
+    ms = Math.abs(ms);
+
+    if (ms === 0) {
+      return "0";
+    }
+
+    var dictionary = options.languages[options.language] || languages[options.language];
+    if (!dictionary) {
+      throw new Error("No language " + dictionary + ".");
+    }
+
+    var result = [];
+
+    // Start at the top and keep removing units, bit by bit.
+    var unitName, unitMS, unitCount, mightBeHalfUnit;
+    for (var i = 0, len = options.units.length; i < len; i ++) {
+
+      unitName = options.units[i];
+      if (unitName[unitName.length - 1] === "s") { // strip plurals
+        unitName = unitName.substring(0, unitName.length - 1);
+      }
+      unitMS = UNITS[unitName];
+
+      // If it's a half-unit interval, we're done.
+/*      if (result.length === 0) {
+        mightBeHalfUnit = (ms / unitMS) * 2;
+        if (mightBeHalfUnit === Math.floor(mightBeHalfUnit)) {
+          return render(mightBeHalfUnit / 2, unitName, dictionary);
+        }
+      }
+*/
+      // What's the number of full units we can fit?
+      if ((i + 1) === len) {
+        unitCount = ms / unitMS;
+      } else {
+        unitCount = Math.floor(ms / unitMS);
+      }
+
+      // Add the string.
+      if (unitCount) {
+        result.push(render(unitCount, unitName, dictionary, options));
+      }
+
+      // Remove what we just figured out.
+      ms -= unitCount * unitMS;
+
+    }
+
+    //return result.join(options.delimiter);
+    return result.join(" ");
+  }
+
+  humanizeDuration.humanizer = humanizer;
+  if ((typeof module !== "undefined") && (module.exports)) {
+    module.exports = humanizeDuration;
+  } else {
+    this.humanizeDuration = humanizeDuration;
+  }
+
+//  function render(count, word, dictionary) {
+//    return count + " " + dictionary[word](count);
+//  }
+
+  function render(count, word, dictionary, options) {
+	    return  Math.floor(count) + options.delimiter + dictionary[word](count);
+  }
+
+  
+  function extend(destination) {
+    var source;
+    for (var i = 1; i < arguments.length; i ++) {
+      source = arguments[i];
+      for (var prop in source) {
+        destination[prop] = source[prop];
+      }
+    }
+    return destination;
+  }
+
+  // Internal helper function for Polish language.
+  function getPolishForm(c) {
+    if (c === 1) {
+      return 0;
+    } else if (Math.floor(c) !== c) {
+      return 1;
+    } else if (2 <= c % 10 && c % 10 <= 4 && !(10 < c % 100 && c % 100 < 20)) {
+      return 2;
+    } else {
+      return 3;
+    }
+  }
+
+  // Internal helper function for Russian language.
+  function getRussianForm(c) {
+    if (Math.floor(c) !== c) {
+      return 2;
+    } else if (c === 0 || (c >= 5 && c <= 20) || (c % 10 >= 5 && c % 10 <= 9) || (c % 10 === 0) ) {
+      return 0;
+    } else if (c === 1 || c % 10 === 1) {
+      return 1;
+    } else if (c > 1) {
+      return 2;
+    } else {
+      return 0;
+    }
+  }
+
+})();

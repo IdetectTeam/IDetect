@@ -1,0 +1,343 @@
+define([ 'knockout', 'eteration/eteration-i18n', 'underscore' ], function(ko, i18n, _) {
+
+	function Country(code, region, name) {
+
+		var self = this;
+		self.code = code;
+		self.region = region;
+		self.name = name;
+
+		self.id = function () {
+			return countryRegion.getId(self.code, self.region);
+		}
+		
+		self.regionCode = function() {
+			
+			if(self.region) {
+				return self.region;
+			}
+			
+			return "";
+		}
+	}
+
+	var countryRegion = {
+			countryRegionList : function() {
+				return [ 
+						countryRegion.getCountry('AF', 93),
+						countryRegion.getCountry('AL', 355),
+						countryRegion.getCountry('DZ', 213),
+						countryRegion.getCountry('AS', 684),
+						countryRegion.getCountry('AD', 376),
+						countryRegion.getCountry('AO', 244),
+						countryRegion.getCountry('AI', 1264),
+						countryRegion.getCountry('AQ', 672),
+						countryRegion.getCountry('AG', 268),
+						countryRegion.getCountry('AN', 599),
+						countryRegion.getCountry('AR', 54),
+						countryRegion.getCountry('AM', 374),
+						countryRegion.getCountry('AW', 297),
+						countryRegion.getCountry('AU', 61),
+						countryRegion.getCountry('AT', 43),
+						countryRegion.getCountry('AZ', 994),
+						countryRegion.getCountry('BS', 1242),
+						countryRegion.getCountry('BH', 973),
+						countryRegion.getCountry('BD', 880),
+						countryRegion.getCountry('BB', 1246),
+						countryRegion.getCountry('BY', 375),
+						countryRegion.getCountry('BE', 32),
+						countryRegion.getCountry('BZ', 501),
+						countryRegion.getCountry('BJ', 229),
+						countryRegion.getCountry('BM', 1441),
+						countryRegion.getCountry('BT', 975),
+						countryRegion.getCountry('BO', 591),
+						countryRegion.getCountry('BA', 387),
+						countryRegion.getCountry('BW', 267),
+						countryRegion.getCountry('BR', 55),
+						countryRegion.getCountry('IO', 246),
+						countryRegion.getCountry('BN', 673),
+						countryRegion.getCountry('BG', 359),
+						countryRegion.getCountry('BF', 226),
+						countryRegion.getCountry('BI', 257),
+						countryRegion.getCountry('KH', 855),
+						countryRegion.getCountry('CM', 237),
+						countryRegion.getCountry('CA', 1),
+						countryRegion.getCountry('CV', 238),
+						countryRegion.getCountry('KY', 1345),
+						countryRegion.getCountry('CF', 236),
+						countryRegion.getCountry('TD', 223),
+						countryRegion.getCountry('CL', 56),
+						countryRegion.getCountry('CN', 86),
+						countryRegion.getCountry('CX', 61),
+						countryRegion.getCountry('CC', 61),
+						countryRegion.getCountry('CO', 57),
+						countryRegion.getCountry('KM', 269),
+						countryRegion.getCountry('CG', 242),
+						countryRegion.getCountry('CD', 243),
+						countryRegion.getCountry('CK', 682),
+						countryRegion.getCountry('CR', 506),
+						countryRegion.getCountry('CI', 225),
+						countryRegion.getCountry('HR', 385),
+						countryRegion.getCountry('CU', 53),
+						countryRegion.getCountry('CZ', 420),
+						countryRegion.getCountry('DK', 45),
+						countryRegion.getCountry('DJ', 253),
+						countryRegion.getCountry('DM', 1767),
+						countryRegion.getCountry('DO', 1809),
+						countryRegion.getCountry('EC', 593),
+						countryRegion.getCountry('EG', 20),
+						countryRegion.getCountry('SV', 503),
+						countryRegion.getCountry('GQ', 240),
+						countryRegion.getCountry('ER', 291),
+						countryRegion.getCountry('EE', 372),
+						countryRegion.getCountry('ET', 251),
+						countryRegion.getCountry('FK', 500),
+						countryRegion.getCountry('FO', 298),
+						countryRegion.getCountry('FJ', 679),
+						countryRegion.getCountry('FI', 358),
+						countryRegion.getCountry('FR', 33),
+						countryRegion.getCountry('GF', 594),
+						countryRegion.getCountry('PF', 689),
+						countryRegion.getCountry('GA', 241),
+						countryRegion.getCountry('GM', 220),
+						countryRegion.getCountry('PS', 970),
+						countryRegion.getCountry('GE', 995),
+						countryRegion.getCountry('DE', 49),
+						countryRegion.getCountry('GH', 233),
+						countryRegion.getCountry('GI', 350),
+						countryRegion.getCountry('GR', 30),
+						countryRegion.getCountry('GL', 299),
+						countryRegion.getCountry('GD', 473),
+						countryRegion.getCountry('GP', 590),
+						countryRegion.getCountry('GU', 1671),
+						countryRegion.getCountry('GT', 502),
+						countryRegion.getCountry('GN', 224),
+						countryRegion.getCountry('GW', 245),
+						countryRegion.getCountry('GY', 592),
+						countryRegion.getCountry('HT', 509),
+						countryRegion.getCountry('HN', 504),
+						countryRegion.getCountry('HK', 852),
+						countryRegion.getCountry('HU', 36),
+						countryRegion.getCountry('IS', 354),
+						countryRegion.getCountry('IN', 91),
+						countryRegion.getCountry('ID', 62),
+						countryRegion.getCountry('IR', 98),
+						countryRegion.getCountry('IQ', 964),
+						countryRegion.getCountry('IE', 353),
+						countryRegion.getCountry('IL', 972),
+						countryRegion.getCountry('IT', 39),
+						countryRegion.getCountry('JM', 1876),
+						countryRegion.getCountry('JP', 81),
+						countryRegion.getCountry('JO', 962),
+						countryRegion.getCountry('KZ', 7),
+						countryRegion.getCountry('KE', 254),
+						countryRegion.getCountry('KI', 686),
+						countryRegion.getCountry('KT', 90),
+						countryRegion.getCountry('KP', 850),
+						countryRegion.getCountry('KR', 82),
+						countryRegion.getCountry('XK', 383),
+						countryRegion.getCountry('KW', 965),
+						countryRegion.getCountry('KG', 996),
+						countryRegion.getCountry('LA', 856),
+						countryRegion.getCountry('LV', 371),
+						countryRegion.getCountry('LB', 961),
+						countryRegion.getCountry('LS', 266),
+						countryRegion.getCountry('LR', 231),
+						countryRegion.getCountry('LY', 218),
+						countryRegion.getCountry('LI', 41),
+						countryRegion.getCountry('LT', 370),
+						countryRegion.getCountry('LU', 352),
+						countryRegion.getCountry('MO', 853),
+						countryRegion.getCountry('MK', 389),
+						countryRegion.getCountry('MG', 261),
+						countryRegion.getCountry('MW', 265),
+						countryRegion.getCountry('MY', 60),
+						countryRegion.getCountry('MV', 960),
+						countryRegion.getCountry('ML', 223),
+						countryRegion.getCountry('MT', 356),
+						countryRegion.getCountry('MH', 692),
+						countryRegion.getCountry('MQ', 596),
+						countryRegion.getCountry('MR', 222),
+						countryRegion.getCountry('MU', 230),
+						countryRegion.getCountry('YT', 269),
+						countryRegion.getCountry('MX', 52),
+						countryRegion.getCountry('FM', 691),
+						countryRegion.getCountry('MD', 373),
+						countryRegion.getCountry('MC', 377),
+						countryRegion.getCountry('MN', 976),
+						countryRegion.getCountry('ME', 382),
+						countryRegion.getCountry('MS', 1664),
+						countryRegion.getCountry('MA', 212),
+						countryRegion.getCountry('MZ', 258),
+						countryRegion.getCountry('MM', 95),
+						countryRegion.getCountry('NA', 264),
+						countryRegion.getCountry('NR', 674),
+						countryRegion.getCountry('NP', 977),
+						countryRegion.getCountry('NL', 31),
+						countryRegion.getCountry('NC', 687),
+						countryRegion.getCountry('NZ', 64),
+						countryRegion.getCountry('NI', 505),
+						countryRegion.getCountry('NE', 227),
+						countryRegion.getCountry('NG', 234),
+						countryRegion.getCountry('NU', 683),
+						countryRegion.getCountry('NF', 672),
+						countryRegion.getCountry('MP', 670),
+						countryRegion.getCountry('NO', 47),
+						countryRegion.getCountry('OM', 968),
+						countryRegion.getCountry('PK', 92),
+						countryRegion.getCountry('PW', 680),
+						countryRegion.getCountry('PA', 507),
+						countryRegion.getCountry('PG', 675),
+						countryRegion.getCountry('PY', 595),
+						countryRegion.getCountry('PE', 51),
+						countryRegion.getCountry('PH', 63),
+						countryRegion.getCountry('PN', 64),
+						countryRegion.getCountry('PL', 48),
+						countryRegion.getCountry('PT', 351),
+						countryRegion.getCountry('PR', 1787),
+						countryRegion.getCountry('QA', 974),
+						countryRegion.getCountry('RE', 262),
+						countryRegion.getCountry('RO', 40),
+						countryRegion.getCountry('RU', 7),
+						countryRegion.getCountry('RW', 250),
+						countryRegion.getCountry('KN', 869),
+						countryRegion.getCountry('LC', 758),
+						countryRegion.getCountry('VC', 784),
+						countryRegion.getCountry('WS', 685),
+						countryRegion.getCountry('SM', 378),
+						countryRegion.getCountry('ST', 239),
+						countryRegion.getCountry('SA', 966),
+						countryRegion.getCountry('SN', 221),
+						countryRegion.getCountry('RS', 381),
+						countryRegion.getCountry('SC', 248),
+						countryRegion.getCountry('SL', 232),
+						countryRegion.getCountry('SG', 65),
+						countryRegion.getCountry('SK', 421),
+						countryRegion.getCountry('SI', 386),
+						countryRegion.getCountry('SB', 677),
+						countryRegion.getCountry('SO', 252),
+						countryRegion.getCountry('ZA', 27),
+						countryRegion.getCountry('ES', 34),
+						countryRegion.getCountry('LK', 94),
+						countryRegion.getCountry('SH', 290),
+						countryRegion.getCountry('PM', 508),
+						countryRegion.getCountry('SD', 249),
+						countryRegion.getCountry('SR', 597),
+						countryRegion.getCountry('SJ', 47),
+						countryRegion.getCountry('SZ', 268),
+						countryRegion.getCountry('SE', 46),
+						countryRegion.getCountry('CH', 41),
+						countryRegion.getCountry('SY', 963),
+						countryRegion.getCountry('TW', 886),
+						countryRegion.getCountry('TJ', 992),
+						countryRegion.getCountry('TZ', 255),
+						countryRegion.getCountry('TH', 66),
+						countryRegion.getCountry('TG', 228),
+						countryRegion.getCountry('TK', 690),
+						countryRegion.getCountry('TO', 676),
+						countryRegion.getCountry('TT', 1868),
+						countryRegion.getCountry('TN', 216),
+						countryRegion.getCountry('TR', 90),
+						countryRegion.getCountry('TM', 993),
+						countryRegion.getCountry('TC', 1649),
+						countryRegion.getCountry('TV', 688),
+						countryRegion.getCountry('UG', 256),
+						countryRegion.getCountry('UA', 380),
+						countryRegion.getCountry('AE', 971),
+						countryRegion.getCountry('GB', 44),
+						countryRegion.getCountry('US', 1),
+						countryRegion.getCountry('UY', 598),
+						countryRegion.getCountry('UM', 1),
+						countryRegion.getCountry('UZ', 998),
+						countryRegion.getCountry('VU', 678),
+						countryRegion.getCountry('VA', 39),
+						countryRegion.getCountry('VE', 58),
+						countryRegion.getCountry('VN', 84),
+						countryRegion.getCountry('WF', 681),
+						countryRegion.getCountry('EH', 212),
+						countryRegion.getCountry('YE', 967),
+						countryRegion.getCountry('ZM', 260),
+						countryRegion.getCountry('ZW', 263)
+						];
+			},
+			getCountry : function(code, region) {
+				return new Country(code, region, i18n.get('countrylookup.' + code).replace('\'', '&#39;'));
+			},
+			findCountryByCode : function(list, code) {
+				if(code) {
+					return _.find(list, function(val) {
+						return val.code == code
+					});	
+				}
+				return undefined;
+			},
+			findCountryByUserCountryCode : function(list) {
+				var identifiedCountry = i18n.getUserCountry().toUpperCase();
+				return countryRegion.findCountryByCode(list, identifiedCountry);
+			},
+			findCountryByRegion : function(list, region) {
+				if(region) {
+					var defaultCountryRegionList = _.filter(list, function(val) {
+						return val.region == region;
+					});	
+
+					if(defaultCountryRegionList.length == 1)
+						return defaultCountryRegionList[0];
+					else if(defaultCountryRegionList.length > 1){
+						var identifiedCountry = i18n.getUserCountry().toUpperCase();
+						defaultCountryRegion = _.find(defaultCountryRegionList, function(val) {
+							return val.code == identifiedCountry;
+						});
+						if(!defaultCountryRegion){
+							return defaultCountryRegionList[0];
+						} else{
+							return defaultCountryRegion;
+						}
+					}
+				}
+				return undefined;
+			},
+			findDefaultCountryByRegion : function(list, region) {
+				var result = countryRegion.findCountryByRegion(list, region);
+				return result ? result : countryRegion.findCountryByUserCountryCode(list);
+			},
+			findCountryById : function(list, id) {
+				if(id) {
+					return _.find(list, function(val) {
+						return val.id() == id
+					});
+				}
+				return undefined;
+			},
+			getId : function(code, region) {
+				if(code && region)
+					return code + "_" + region;
+				else
+					return "";
+			},
+			getIdFromCountryRegion : function(val) {
+				if(val) {
+					return val.id();
+				}
+				return undefined;
+			},
+			getCountryRegionFromId: function(id) {
+				var result =null;
+				if(id && id.indexOf('_') >-1) {
+					var code_region = id.split("_");
+					if(code_region.length == 2)
+						result = {'code': code_region[0], 'region': code_region[1]};
+				}
+				return result;
+			},
+			sortedCountryRegionList : function() {
+				var countryRegionList = countryRegion.countryRegionList();
+				countryRegionList.sort(function(a, b) {
+					return a.name.localeCompare(b.name);
+				});
+			return countryRegionList;
+		}
+	}
+
+	return countryRegion;
+});

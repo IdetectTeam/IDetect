@@ -1,0 +1,116 @@
+
+define(['jquery', 
+        'knockout'
+        ], function($, ko){
+	
+	
+	function SearchBar() {
+		
+		var self = this;
+		
+		self.companionPanelSearchBarVisibility = false;
+		
+	    ko.searchbar = {
+	        viewModel: function (configuration) {
+	        	
+	        	var self = this;
+	        	self.dataSource = configuration.dataSource;
+	        	self.searchResults = configuration.results;
+	        	self.keyWord = ko.observable();
+	
+	        	self.search = function() {
+	        		if(self.keyWord().length == 0) {
+	        			self.searchResults(self.dataSource());
+	        		}
+	        		else {
+	        			var data = self.dataSource();
+	        			var filteredData = new Array();
+	        			var keyWord = self.keyWord();
+	        			keyWord = keyWord.toLowerCase();
+	        			data.filter(function(item){
+	        				
+	        				item.toString = function() {
+	        					var rowStr = "";
+	        					for (var key in item) {
+		        				    if(item.hasOwnProperty(key)) {
+		        				    	if(typeof item[key] == 'function') {
+		        				    		continue;
+		        				    	}
+		        				    	if(item[key]) {
+		        				    		rowStr += " " + item[key].toString();
+		        				    	}
+		        				    }
+		        				}
+	        					return rowStr;
+	        				}
+	        				
+				    		var results = item.toString().toLowerCase().match(new RegExp(keyWord, 'g')); 
+				    		if(results) {
+				    			if(results.length > 0) {
+				    				filteredData.push(item);
+				    			}
+				    		}
+				    		
+	        			});
+	        			self.searchResults(filteredData);
+	        		}
+	    	    }
+	        }
+	    };
+	    
+	    
+	    self.ViewModel = function(configuration) {
+	    	return new ko.searchbar.viewModel(configuration);
+	    }
+	    
+	    self.templateEngine = new ko.nativeTemplateEngine();
+	    self.templateEngine.addTemplate = function(templateName, templateMarkup) {
+	    	var templateElement = document.getElementById(templateName);
+	    	templateElement.innerHTML = templateMarkup;
+	    };
+	
+	    self.loadTemplates = function() {
+	    	
+	    	var searchBar = "";
+	    	
+	    	if(!self.companionPanelSearchBarVisibility) {
+	    		searchBar = "<form role=\"form\" class=\"form-inline nopadding pull-right\">\
+								<div class=\"form-group\">\
+									<input type=\"text\" data-bind=\"value: keyWord \" placeholder=\"Buraya yazınız\" class=\"form-control input-gray\">\
+								</div>\
+								<div class=\"form-group\">\
+									<a role=\"button\" tabindex=\"0\" class=\"btn btn-danger bold\" data-bind=\"click: search \">Ara</a>\
+								</div>\
+	    					</form>";
+	    	}
+	    	else {
+	    		searchBar = "<div class=\"row grid-bottom\"> <div class=\"col-sm-4 col-sm-offset-4\"> <h4>Select Adult</h4> </div> </div> <div class=\"row grid-bottom\"><div class=\"col-sm-4 col-sm-offset-4\"><div class=\"form-group input-icon\">\
+	    						<input class=\"form-control input-gray\" data-bind=\"value: keyWord \" type=\"text\" placeholder=\"Search companion\" />\
+	    						<a role=\"button\" tabindex=\"0\" class=\"btn\"><i class=\"fa fa-search\" data-bind=\"click: search \"></i></a>\
+	    					 </div></div></div>";
+	    	}
+	    	
+	    	
+	    	
+		    self.templateEngine.addTemplate("ui_searchbar_tmplt", searchBar);
+	    }
+	
+	    ko.bindingHandlers.searchbar = {
+	        init: function(element, viewModelAccessor, allBindings) {
+	            return { 'controlsDescendantBindings': true };
+	        },
+	        update: function (element, viewModelAccessor, allBindings) {
+	            var viewModel = viewModelAccessor();
+	            var searchBarTemplateName = "ui_searchbar_tmplt";
+	            var searchBarContainer = element.appendChild(document.createElement("DIV"));
+	            ko.renderTemplate(searchBarTemplateName, viewModel, { templateEngine: self.templateEngine }, searchBarContainer, "replaceNode");
+	        }
+	    };
+	    
+	}
+	
+	return {
+		ViewModel : SearchBar
+	};
+    
+});

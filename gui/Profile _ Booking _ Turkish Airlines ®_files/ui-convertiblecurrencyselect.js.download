@@ -1,0 +1,107 @@
+define([
+	'knockout',
+	'eteration/widgets/widget-util',
+	'eteration/eteration-ajax',
+	 'eteration/eteration-i18n',
+	 'eteration/ui/form-viewmodel',
+	 'underscore'
+	], function(ko,widgetUtil,etrAjax,i18n,FormViewModel,underscore){
+		
+	widgetUtil.setupStringBasedTemplate(ko);
+	
+	   ko.components.register('convertible-currency-select', {
+	        viewModel: function(params) {
+	        	
+	        	var self = this;
+		    	ko.utils.extend(self, new FormViewModel.FormViewModel());
+	        	
+	            self.conversionCurrencyList = ko.observableArray();
+	            self.currency = ko.observable();
+	            self.presentCurrency = params.preferredCurrency;
+	            self.hideWarning = params.hideWarning || false;
+	            self.originalCurrency = params.originalCurrency;
+
+	            isCurrencyLong();
+	            
+	            self.callback = function(){
+	            	params.preferredCurrency(self.currency());
+	            	if(underscore.isFunction(params.callback)){
+	            		params.callback();
+	            	}
+	            };
+	            
+	            self.changeCurrency = function(data){
+	            	self.currency(data);
+	            	self.presentCurrency(data);
+	            	self.callback();
+	            	$('.currenciesContainer .popupToggler').trigger('click');
+	            	isCurrencyLong();
+	            };
+	            var  availableCurrenciesQuery = {
+		                app: 'app.ibs',
+		                service:'/booking/conversioncurrencies',
+		                global: false,
+		                callback:function(response) {
+		                	self.conversionCurrencyList(response.data || []);
+		                	
+		                	if(self.conversionCurrencyList() && self.conversionCurrencyList().length > 0){
+		                		if(self.conversionCurrencyList().indexOf(self.originalCurrency()) < 0){ 		                		
+		                			self.conversionCurrencyList.push(self.originalCurrency());
+		                		}
+		                	}
+		                }
+	            };
+	            
+	            //değeri düşük olup fiyat uzunluğu fazla olan para birimleri için
+	            function isCurrencyLong() {
+//	            	if(self.presentCurrency() == 'IRR' || self.presentCurrency() == 'JPY')
+	            		$('body').addClass('long-currency');
+//	            	else
+//	            		$('body').removeClass('long-currency');
+				};
+	            
+	           etrAjax.get(availableCurrenciesQuery);
+	           
+		    },
+		    template:
+		    	"<!-- ko if:(conversionCurrencyList && conversionCurrencyList().length > 0 ) -->\n" + 
+		    	"	<div class=\"currenciesContainer\">\n" + 
+		    	"		<span data-bind='' class=\"pay-with\"></span>\n" + 
+		    	"		<div id=\"currenciesHolder\" data-bind=\"css: $root.isMobile() ? 'modal currenciesHolder' : 'popup currenciesHolder'\">\n" +
+		    	"			<div data-bind=\"css: $root.isMobile() ? 'modal-dialog' : ''\">\n" +
+		    	"				<div data-bind=\"css: $root.isMobile() ? 'modal-content panel-primary' : ''\">\n" +
+		    	"					<a href=\"#currenciesHolder\" data-bind=\"togglepopup\" class=\"modal-close\">\n" +
+		    	"						<i class=\"fa fa-times\"></i>\n" +
+		    	"					</a>\n" +
+		    	"					<div class=\"panel-heading\">\n" +
+		    	"						<h3 class=\"mt-5 mb-5\" data-bind=\"i18n-text : { key : 'Label-OB-251' } \"></h3>" +
+		    	"					</div>\n" +
+		    	"					<nav data-bind=\"css: $root.isMobile() ? 'modal-body panel-body' : ''\" class=\"payableCurrencies\">\n" +
+		    	"                       <label class=\"title fs-14 fw900\" data-bind=\"i18n-text : { key : 'Label-OB-251' } \"></label>" +
+		    	"						<ul class=\"clearfix\">\n" + 
+		    	"						<!-- ko foreach: {data: conversionCurrencyList, as : 'currency'}-->"+
+		    	"							<li>\n" + 
+		    	"								<a data-bind=\" attr: { 'data-value': currency }, click : function(data, event) { $parent.changeCurrency(currency) } \">\n" + 
+		    	"									<span class=\"logo\"><i data-bind=\"css: currency ? 'fa cfa-' + currency.toLowerCase() : ''\"></i></span>"+
+		    	"									<span class=\"\" data-bind=\"text : currency\"></span>\n" + 
+		    	"								</a>\n" + 
+		    	"							</li>\n" + 
+		    	"						<!-- /ko -->"+
+		    	"						</ul>\n" +
+		    	"						<!-- ko if:!hideWarning -->\n" + 
+		    	"							<div class=\"fs-14\"><i class=\"fa fa-info-circle red\"></i><label class=\"fs-12 normal ml-5 inline\" data-bind=\"i18n-text : { key : 'Label-OB-252' } \"></label></div>" +
+		    	"						<!-- /ko -->"+
+		    	"					</nav>\n" +
+		    	"				</div>\n" + 
+		    	"			</div>\n" + 
+		    	"		</div>\n" + 
+		    	"		<a data-bind=\"togglepopup\" href=\"#currenciesHolder\" role=\"button\" tabindex=\"0\" class=\"popupToggler\">" +
+		    	"			<span class=\"sign fs-16\"><i data-bind=\"css: presentCurrency() ? 'fa cfa-' + presentCurrency().toLowerCase() : ''\"></i></span>"+
+		    	"			<span class=\"fs-16 h5\" data-bind=\"text : presentCurrency\"></span>\n" +
+		    	"			<i class=\"fa fa-angle-down fs-18 red\"></i>"	+			
+		    	"		</a>\n" + 
+		    	"	</div>" +
+		    	"<!-- /ko -->"
+	});
+	
+});

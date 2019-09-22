@@ -1,0 +1,2706 @@
+define([ 'jquery',
+         'knockout',
+         'moment',
+         'eteration/eteration',
+         'eteration/ui/form-viewmodel',
+         'eteration/eteration-ajax',
+         'eteration/ui/validation-helper',
+         'ui-helper/passenger-register-helper',
+         'eteration/widgets/ui-companionpanel',
+         'eteration/ui/login-viewmodel',
+         'eteration/eteration-i18n',
+//         'eteration/widgets/ui-send-flight',
+         'ui-helper/cookie-helper',
+         'constants/title-constants',
+         'constants/countryregion-constants',
+         'ui-helper/gtm-helper',
+         'underscore',
+         'eteration/widgets/ui-isodate',
+		 'eteration/widgets/ui-selected-item-flight',
+         'eteration/widgets/ui-closepopup', 
+         'eteration/widgets/ui-togglepopup', 
+         'eteration/widgets/ui-selectpicker',
+         'eteration/widgets/ui-dropdownselect',
+         'eteration/widgets/ui-etrselect',
+         'eteration/widgets/ui-money',
+         'eteration/widgets/ui-common' ,
+         'eteration/widgets/ui-moment', 
+         'eteration/widgets/ui-flight',
+         'eteration/widgets/ui-cms',
+         'eteration/widgets/ui-timerange',
+         'eteration/widgets/ui-msloginbannerforob',
+//       'eteration/widgets/ui-subscribe-promotions',
+         'eteration/widgets/ui-keyboard-events',
+         'eteration/widgets/ui-layover-duration' ,
+         'eteration/widgets/managebooking/ui-farerules',
+         'eteration/widgets/ui-layover',
+         'eteration/widgets/ui-convertiblecurrencyselect',
+		 'eteration/widgets/ui-headerbreadcrumb',
+         'eteration/widgets/ui-booking-header',
+         'eteration/widgets/ui-flight-detail',
+         'eteration/widgets/ui-price-breakdown',
+         'eteration/widgets/booking/ui-availablechargeableseat'
+         ],
+
+
+function($, ko, moment, Eteration, BaseViewModel, etrAjax, validation,passengerRegisterHelper,CompanionPanel,loginView,i18n,cookieHelper, titleConstants, countryRegionUtil, gtmUtil, underscore) {
+
+	function PassengerRegistirationViewModel(tccBooking, initialProfileData, pageLinks) {
+
+		var self = this;
+
+		ko.utils.extend(self, new BaseViewModel.FormViewModel());
+
+		self.debug =  ko.observable(false);
+		
+		self.tccBooking = tccBooking;
+		
+		//SEND THIS FLIGHT
+        //self.sendFlightData = sendFlightComponent.createDataModel({'flights':[]});
+		
+		if(typeof(passengerregistirationLinks) != 'undefined') {
+			self.pageLinks = passengerregistirationLinks;
+		} else if(typeof(pageLinks) != 'undefined') {
+			self.pageLinks = pageLinks;
+		}
+		
+        self.preferredCurrency = ko.observable('ORIGINAL_PRICE');
+        
+        self.originalCurrency = ko.observable();
+        
+        self.isAwardTicket = ko.observable(false);
+        
+        self.currencyConversionAvailable = ko.observable(false)
+
+        self.currencyChangeCallback=function(){
+    		cookieHelper.setCookie("Currency", self.preferredCurrency(), 365, "/", true);
+        };
+        
+		self.originAirportCode = ko.observable();
+		self.destinationAirportCode = ko.observable();
+		
+		self.homepageLink = ko.observable();
+		
+		//SUBSCRIBE TO PROMOTIONS
+		self.subscribeToPromotionsAccepted = ko.observable(false);
+		self.subscribeToPromotionsFirstName = ko.observable();
+		self.subscribeToPromotionsSurname = ko.observable();
+		self.subscribeToPromotionsEmail = ko.observable();
+		self.subscribeToPromotionsOrigin = ko.observable();
+		self.subscribeToPromotionsDestination = ko.observable();
+		self.subscribeToPromotionsValidationContext = ko.jqValidation({});
+		
+		self.passengers = ko.observableArray();
+		self.ffpPrograms = ko.observableArray();
+		self.selectedMSPassengers = ko.observableArray();
+		
+		self.holdThisFlightAgree =  ko.observable(false);
+
+		self.termsConditions = ko.observable('http://www.turkishairlines.com/en-us/corporate/legal-notice/conditions-for-booking');
+		self.generalConditions = ko.observable('http://www.turkishairlines.com/en-us/corporate/legal-notice/conditions-carriage');
+		self.fareRules = ko.observable('http://www.turkishairlines.com/en-us/flights/help/fare-rules');
+		
+		self.profileCompleted = ko.observable(false);
+		self.loginStatus = ko.observable();
+		self.loggedIn = ko.observable(false);
+		self.extraPrices = ko.observableArray();
+		self.flightDetailsAreOpen = ko.observable(false);
+		self.msLoginDivIsOpen = ko.observable(false);
+        
+        self.companionsConvenient =  ko.observable(false);
+        
+        self.companionPanelConvenient=ko.computed(function(){
+        	
+        	return self.companionsConvenient() && self.loggedIn();
+        	
+        });
+        
+		self.milesOperationsInactive = ko.observable(false);
+		self.pureDomestic = ko.observable(true);
+		self.pureInternational = ko.observable(false);
+		
+		var count = 0;
+		var intervalMilesInactive = setInterval(function() {
+			count++;
+			if(window.milesInactiveRequested) {
+				var milesParamInactive = window.milesInactiveFunction();
+				clearInterval(intervalMilesInactive);
+				self.milesOperationsInactive(milesParamInactive);
+			} else if(count > 6) {
+				clearInterval(intervalMilesInactive);
+			}
+		}, 1000);
+        
+		self.unaccompaniedMinorsAgreeVisible =  ko.observable(false);
+		self.unaccompaniedMinorsAgree =  ko.observable(false);
+		
+		self.disabledPassengersAgreeVisible =  ko.observable(false);
+		self.disabledPassengersAgree =  ko.observable(false);
+		
+		self.companionPanels = ko.observableArray();
+
+		self.adultTitles = titleConstants.adultTitles();
+		self.childTitles = titleConstants.childTitles();
+		self.infantTitles = titleConstants.infantTitles();
+
+		self.countryRegionCodes = ko.observableArray();
+
+		self.loadDefaultCountryListResponse = function() {
+			var baseCountryRegionList = countryRegionUtil.sortedCountryRegionList();			
+			var userCountryRegion = countryRegionUtil.findCountryByUserCountryCode(baseCountryRegionList);
+			if(userCountryRegion) {
+				baseCountryRegionList.unshift(userCountryRegion);
+			}
+			self.countryRegionCodes(baseCountryRegionList);
+		}
+		
+		self.returnToHomepageWarning = function(){
+        	$("#returnHomePagePopup").modal("show");
+        }
+
+		self.loadTopRegionCodes = function() {
+
+			var topRegionCodesQuery ={
+	    		app: 'app.ms',
+	    		service:'/parameters/topcountrylist',
+	    		disableErrorHandling: true,
+	    		preError: self.loadDefaultCountryListResponse,
+	    		callback:function(response) {
+	    			self.parseTopCountryRegionList(response.data);
+	    		}
+			};
+
+			etrAjax.get(topRegionCodesQuery);
+		}
+		
+		self.parseTopCountryRegionList = function(data) {
+			if(data && data.length) {
+                var userCountryIndex = data.indexOf(i18n.getUserCountry().toUpperCase());
+                
+                if(userCountryIndex != -1) {
+                    data.splice(userCountryIndex, 1);
+                }
+                var topCountryRegionCodes = [];
+				var baseCountryRegionList = countryRegionUtil.sortedCountryRegionList();
+				
+				data.forEach(function(country) {
+					var val = countryRegionUtil.findCountryByCode(baseCountryRegionList, country);
+					if(val) {
+						topCountryRegionCodes.push(val);
+					}
+				});
+
+				var userCountryRegion = countryRegionUtil.findCountryByUserCountryCode(baseCountryRegionList);
+				if(userCountryRegion) {
+					topCountryRegionCodes.unshift(userCountryRegion);
+				}
+				self.countryRegionCodes(topCountryRegionCodes.concat(baseCountryRegionList));
+
+			} else {
+				self.loadDefaultCountryListResponse();
+			}
+		};
+		
+		self.toggleVisibility = function(index) {
+	    	var id = "#tax_codes_" + index;
+	    	$(id).toggle();
+	    };
+		
+	    
+	    self.priceBreakdownTopVisibility = ko.observable(false);
+	    self.priceBreakdownBottomVisibility = ko.observable(false);
+		
+	    self.togglePriceBreakdownTop= function(){
+			self.priceBreakdownTopVisibility(!self.priceBreakdownTopVisibility());
+		}
+	    
+	    self.togglePriceBreakdownBottom= function(){
+			self.priceBreakdownBottomVisibility(!self.priceBreakdownBottomVisibility());
+		}
+	    
+		self.bookingSelectionHolder = ko.observable();
+		
+	    self.priceBreakdownVisibility = ko.observable(false);
+		self.togglePriceBreakdown= function(){
+			self.priceBreakdownVisibility(!self.priceBreakdownVisibility());
+		}
+
+		self.categorizedPassengers = function(){
+
+			var adultOrEquivalentPassengers = [];
+			var childPassengers = [];
+			var infantPassengers = [];
+			
+			if (self.passengers() && self.passengers().length){			
+				for (var passengerIndex = 0; passengerIndex < self.passengers().length; passengerIndex++) {
+
+					var passenger = self.passengers()[passengerIndex]
+					if(passenger.isCodeAdultOrEquivalent()){
+						adultOrEquivalentPassengers.push(passenger);
+					}else if(passenger.isCodeChild()){
+						childPassengers.push(passenger);
+					}else if(passenger.isCodeInfant()){
+						infantPassengers.push(passenger);
+					}
+					
+				}
+			}
+			
+			return { 
+				'adultOrEquivalentPassengers' : adultOrEquivalentPassengers,
+				'childPassengers' : childPassengers,
+				'infantPassengers' : infantPassengers
+			};
+			
+		};
+		
+		
+		function ContactOptionModel() {
+			
+			var self = this;
+
+			self.contactOptionIndex = ko.observable();
+			self.title = ko.observable();
+		    self.firstName = ko.observable();
+		    self.lastName = ko.observable();
+		    self.textContactLabel = ko.observable();
+		    self.email = ko.observable();
+		    self.accountOwner = ko.observable(false);
+		    self.code = ko.observable();
+		    
+		    self.countryRegionId = ko.observable();
+		    self.phoneNumber = ko.observable();
+		    
+		    self.countryRegionOptId = ko.observable();
+		    self.phoneNumberOpt = ko.observable();
+		    self.dateOfBirth = ko.observable();		 
+		    self.amongPassengers = ko.observable(true);
+		    self.nationality = ko.observable();
+		    self.identity = ko.observable();
+		    
+		    self.optionsText = ko.pureComputed(function() {
+		    	var explanation = ''; 
+		    	var passengerInfo = i18n.getWithArgs("TextField-OB-211", {'paxtypelookup': self.code(), 'passengerTypeIndex':self.contactOptionIndex()});
+		    	
+		    	explanation += self.amongPassengers() ? ' ( ' + passengerInfo + ' )' : '';
+		    	explanation += self.accountOwner() ? ' ( ' + i18n.get('Label-TY-70') + ' )' : '';
+
+		        return (self.firstName() + ' ' + self.lastName() + explanation).toUpperCase();
+		    });
+		}
+		
+		$(document).ready(function () {
+            var count = 0;
+            var passengerRegistirationLinksInterval = setInterval(function() {
+            	count++;
+                if (window.passengerregistirationLinks) {
+                	self.homepageLink(self.pageLinks.homepage);
+                	clearInterval(passengerRegistirationLinksInterval);
+                }
+                if(count > 5)
+                	clearInterval(passengerRegistirationLinksInterval);
+			}, 1000);
+        });
+		
+		
+		
+		self.contactOptionsForNotLoggedInUser = function() {
+
+			var contactOptions = [];
+			
+			if (!self.bookingSelectionHolder()) {
+				return contactOptions;
+			}
+			
+			var passengers = self.passengers();
+			
+			for (var passengerIndex = 0; passengerIndex < passengers.length; passengerIndex++) {
+				
+				var passenger = passengers[passengerIndex];
+				
+				var contactOptionModel = new ContactOptionModel();
+				
+				contactOptionModel.contactOptionIndex(passengerIndex+1);
+
+				contactOptionModel.title(passenger.title());
+				contactOptionModel.firstName(passenger.firstName());
+			    contactOptionModel.lastName(passenger.lastName());
+			    contactOptionModel.email(passenger.email());				
+			    contactOptionModel.accountOwner(false);
+			    contactOptionModel.code(passenger.code());
+			    contactOptionModel.dateOfBirth(passenger.dateOfBirth());
+			    contactOptionModel.nationality(passenger.nationality());
+			    
+				
+				
+		        if (passenger.isCodeAdultOrEquivalent() && passenger.firstName() && passenger.lastName()){
+		        	contactOptions.push(contactOptionModel);
+		        } 
+
+			}
+			
+			return contactOptions;
+		};
+		
+		self.contactOptionsForLoggedInUser = function() {
+			
+			var contactOptions = [];
+			
+			if (!self.bookingSelectionHolder()) {
+				return contactOptions;
+			}
+
+			
+			var passengers = self.selectedMSPassengers();
+			var accountOwnerAmongPassengers = false;
+
+			passengers.sort(function(a, b){
+			  return a.index() - b.index();
+			});
+			var contactOptionModel;
+			for (var passengerIndex = 0; passengerIndex < passengers.length; passengerIndex++) {
+				
+				var passenger = passengers[passengerIndex];
+
+				if (passenger.accountOwner()) {
+					accountOwnerAmongPassengers = true;
+				}
+				
+				contactOptionModel = new ContactOptionModel();
+				
+				contactOptionModel.passengerIndex = passenger.index();
+				contactOptionModel.contactOptionIndex(passenger.index()+1);
+				contactOptionModel.title(passenger.title());
+				contactOptionModel.firstName(passenger.firstName());
+			    contactOptionModel.lastName(passenger.lastName());
+			    contactOptionModel.email(passenger.email());				
+			    contactOptionModel.accountOwner(passenger.accountOwner());	
+			    contactOptionModel.code(passenger.code());
+			    contactOptionModel.dateOfBirth(passenger.dateOfBirth());
+			    contactOptionModel.countryRegionId(passenger.countryRegionId());
+			    contactOptionModel.phoneNumber(passenger.phoneNumber());
+			    contactOptionModel.countryRegionOptId(passenger.countryRegionOptId());
+			    contactOptionModel.phoneNumberOpt(passenger.phoneNumberOpt());
+			    contactOptionModel.accountOwner(passenger.accountOwner());
+			    contactOptionModel.nationality(passenger.nationality);
+			    
+		        if (passenger.isCodeAdultOrEquivalent()){
+		        	contactOptions.push(contactOptionModel);
+		        } 
+			}
+			
+			
+			if (!accountOwnerAmongPassengers) {
+				var companions = self.bookingSelectionHolder().companions;
+				if (companions) {
+					
+					for (var companionIndex = 0; companionIndex < companions.length; companionIndex++) {
+						var companion = companions[companionIndex];
+						
+						if (companion.accountOwner) {
+							contactOptionModel = new ContactOptionModel();
+							
+							contactOptionModel.contactOptionIndex(0);
+							contactOptionModel.title(companion.title ? companion.title.replace(".", "").toUpperCase() : "");
+							contactOptionModel.firstName(companion.name);
+							contactOptionModel.lastName(companion.surname);
+							contactOptionModel.email(companion.email);				
+							contactOptionModel.accountOwner(companion.accountOwner);	
+							contactOptionModel.amongPassengers(false);
+							
+							contactOptionModel.countryRegionId(countryRegionUtil.getIdFromCountryRegion(countryRegionUtil.findDefaultCountryByRegion(self.countryRegionCodes(), companion.regionCode)));
+							contactOptionModel.phoneNumber(companion.phoneNumber);
+							contactOptionModel.countryRegionOptId(countryRegionUtil.getIdFromCountryRegion(countryRegionUtil.findCountryByRegion(self.countryRegionCodes(), companion.regionCodeOpt)));
+							contactOptionModel.phoneNumberOpt(companion.phoneNumberOpt);
+							contactOptionModel.nationality(companion.nationality);
+							
+							if (companion.eligibilityOfPaxTypeCode['ADULT']){
+								contactOptions.unshift(contactOptionModel);
+							}
+						}
+					}
+				}
+			}
+
+			var uniqueContactOptions = [];
+			
+			for (var firstLoopIndex = contactOptions.length-1; firstLoopIndex > -1; firstLoopIndex--) {
+
+				var duplicateFound = false;
+				var first = contactOptions[firstLoopIndex];
+				for (var secondLoopIndex = 0; secondLoopIndex < firstLoopIndex; secondLoopIndex++) {
+					var second = contactOptions[secondLoopIndex];
+					
+					if (first.firstName() == second.firstName() && first.lastName() == second.lastName() && first.email() == second.email()) {
+						duplicateFound = true;
+					}
+				}
+				
+				if (!duplicateFound) {
+					uniqueContactOptions.unshift(first);
+				}
+			}
+			return uniqueContactOptions;
+		};
+		
+		self.contactOptions = ko.pureComputed({
+			
+		    read: function() {
+				var userLoggedIn = self.loggedIn && self.loggedIn()
+				
+				if (userLoggedIn) {
+					return self.contactOptionsForLoggedInUser();
+				}
+				
+				return self.contactOptionsForNotLoggedInUser();
+		    },
+		    deferEvaluation: true
+		}).extend({ throttle: 1000 });
+
+		self.totalAmountPrices = function() {
+			var currency = self.bookingSelectionHolder().fareBreakdown.totalAmountConvertedPrices[self.preferredCurrency()].currency;
+			var amount = self.bookingSelectionHolder().fareBreakdown.totalAmountConvertedPrices[self.preferredCurrency()].amount;
+			
+			var totalAmount={};
+			
+			if(self.extraPrices()){
+			
+				for (var i = 0; i < self.extraPrices().length; i++) {
+					var paymentExtraPrice = self.extraPrices()[i];
+					if(paymentExtraPrice.convertedTotalPrices[self.preferredCurrency()] && paymentExtraPrice.convertedTotalPrices[self.preferredCurrency()].amount){
+						amount = amount + paymentExtraPrice.convertedTotalPrices[self.preferredCurrency()].amount;
+					}
+				}
+			}
+			
+			totalAmount.currency =currency;
+			totalAmount.amount = amount;
+			
+			return totalAmount;
+			
+		}
+		
+		
+		self.contactOptions.subscribe(function(newValue){
+
+    		if(self.loggedIn()) {
+    			self.selectedContactOption('');
+    			
+    			if (self.bookingSelectionHolder().bookingSelectionContact.passengerIndex > -1) {
+
+	    			var bookingSelectionContact = self.bookingSelectionHolder().bookingSelectionContact;
+	    							
+					var selectedContact;
+					if(bookingSelectionContact.passengerIndex == 1) {
+						selectedContact = self.contactOptions()[bookingSelectionContact.passengerIndex];
+						
+						if(!selectedContact) {
+							selectedContact = self.contactOptions()[bookingSelectionContact.passengerIndex - 1];
+						}
+					}
+	    			self.selectedContactOption(selectedContact);
+    			}
+    		}
+
+    		if(self.selectedContactOption()){
+    			if(newValue && newValue.length == 1){
+    				self.selectedContactOption(newValue[0]);				
+    			}
+    			var contactOption  = _.find(newValue, function(item) {
+    			    return item.firstName() == self.selectedContactOption().firstName() && item.lastName() == self.selectedContactOption().lastName(); 
+    			})
+    			if(contactOption){
+    				self.selectedContactOption(contactOption);
+    			}
+    			
+    		}else{
+    			if(newValue && newValue.length == 1){
+    				self.selectedContactOption(newValue[0]);				
+    			}
+    		}
+    		
+	    });
+
+
+		self.quickMembershipPassword = ko.observable(''); 
+		self.quickMembershipPasswordConfirm = ko.observable(''); 
+
+		// CONTACT OBJECTS
+
+		//CONTACT INPUT METHOD THREE POSSIBLE VALUES : SELECT , FIXED , TEXT
+		//SELECT = > DEFAULT INPUT METHOD FOR ITINERARIES WITH MULTIPLE ADULT GROUP PASSENGERS
+		//FIXED = > DEFAULT INPUT METHOD FOR ITINERARIES WITH SINGLE ADULT GROUP PASSENGER
+		//TEXT = > DEFAULT INPUT METHOD FOR ITINERARIES WITH NO ADULT GROUP PASSENGER
+		//UNKNOWN  = > STATE IS NOT READY
+		self.contactInputMethod = ko.pureComputed({
+			
+			read: function() {
+
+				//autocomplete for input which has mask
+				$.each($('[data-autocomplete]'), function() {
+					$(this).attr('autocomplete',$(this).attr('data-autocomplete'));
+				});
+				
+				if(self.bookingSelectionHolder()){
+					
+					if (self.loggedIn()) {
+	
+						if(self.bookingSelectionHolder().unaccompaniedMinors){
+							return 'TEXT';
+						}
+						
+						var contactOptionsForLoggedInUser = self.contactOptionsForLoggedInUser();
+						
+						if (contactOptionsForLoggedInUser.length > 1) {
+							return 'SELECT';
+						} 
+						
+						if(contactOptionsForLoggedInUser.length == 1) {
+							return 'FIXED';
+						}
+						
+						if(contactOptionsForLoggedInUser.length == 0) {
+							return 'TEXT';
+						}
+						
+					} else {
+						
+						if(self.bookingSelectionHolder().unaccompaniedMinors){
+							return 'TEXT';
+						}
+						
+						var adultOrEquivalentPassengers = self.categorizedPassengers().adultOrEquivalentPassengers;
+											
+						if (adultOrEquivalentPassengers.length > 1) {
+							return 'SELECT';
+						} 
+						
+						if(adultOrEquivalentPassengers.length == 1) {
+							return 'FIXED';
+						}
+					}
+				}
+				return 'UNKNOWN';
+			},
+		    deferEvaluation: true
+		}).extend({ throttle: 1000 });
+
+		
+		self.contactInputMethod.subscribe(function(newValue){
+			if (newValue == 'FIXED') {
+				var contactOptions = self.contactOptions();
+				if (contactOptions && contactOptions.length) {
+					self.selectedContactOption(contactOptions[0]);
+				}
+			}
+			
+			self.updateValidationContext("#contactInfoValidationContextId", function() { return self.contactInfoValidationContext });
+	    });
+		
+		
+		//SET THIS TO TRUE WHEN ALL CONTACT OBJECTS ARE READY
+		self.contactVisibility = ko.observable(false);
+		
+		//CONTACT VALUES STORED ON THIS OBJECT
+		self.contact = ko.observable();
+
+		//WHEN contactInputMethod IS SELECT, SELECTION IS STORED HERE
+		self.selectedContactOption = ko.observable();
+		self.selectedContactOption.subscribe(function(newValue){
+			if (!self.loggedIn() && !self.contact().countryRegionId()) {
+				self.contact().countryRegionId(countryRegionUtil.getIdFromCountryRegion(countryRegionUtil.findCountryByUserCountryCode(self.countryRegionCodes())));
+				$(".dropdownselect").selectpicker("refresh");
+				return;
+			}
+			var bookingSelectionContact;
+			if (self.bookingSelectionHolder().bookingSelectionContact.passengerIndex > -1 && newValue && newValue.passengerIndex != undefined && self.contact().passengerIndex() === undefined) {
+				
+				self.contact().email('');
+				self.contact().countryRegionId('');
+				self.contact().phoneNumber('');
+				self.contact().countryRegionSecondaryId('');
+				self.contact().phoneNumberSecondary('');
+				
+				bookingSelectionContact = self.bookingSelectionHolder().bookingSelectionContact;
+				
+				self.contact().passengerIndex(bookingSelectionContact.passengerIndex);
+				self.contact().firstName(bookingSelectionContact.firstName);
+				self.contact().lastName(bookingSelectionContact.lastName);
+				self.contact().email(bookingSelectionContact.email);
+				self.contact().phoneNumber(bookingSelectionContact.phoneNumber);
+				self.contact().phoneNumberSecondary(bookingSelectionContact.phoneNumberSecondary);
+				if(bookingSelectionContact.countryRegion) {
+					self.contact().countryRegionId(countryRegionUtil.getId(bookingSelectionContact.countryRegion.code, bookingSelectionContact.countryRegion.region));
+				}
+				if(bookingSelectionContact.countryRegionSecondary) {
+					self.contact().countryRegionSecondaryId(countryRegionUtil.getId(bookingSelectionContact.countryRegionSecondary.code, bookingSelectionContact.countryRegionSecondary.region));
+				}
+				
+				self.contact().sms(bookingSelectionContact.sms);
+
+				self.contact().initialCountryRegionId(self.contact().countryRegionId());
+
+			} else if(self.bookingSelectionHolder().bookingSelectionContact.passengerIndex > -1 && newValue && (newValue.passengerIndex != undefined && newValue.passengerIndex == self.bookingSelectionHolder().bookingSelectionContact.passengerIndex)) {
+				self.contact().email('');
+				self.contact().countryRegionId('');
+				self.contact().phoneNumber('');
+				self.contact().countryRegionSecondaryId('');
+				self.contact().phoneNumberSecondary('');
+				
+				bookingSelectionContact = self.bookingSelectionHolder().bookingSelectionContact;
+				
+				self.contact().passengerIndex(bookingSelectionContact.passengerIndex);
+				self.contact().firstName(bookingSelectionContact.firstName);
+				self.contact().lastName(bookingSelectionContact.lastName);
+				self.contact().email(bookingSelectionContact.email);
+				self.contact().phoneNumber(bookingSelectionContact.phoneNumber);
+				self.contact().phoneNumberSecondary(bookingSelectionContact.phoneNumberSecondary);
+				self.contact().sms(bookingSelectionContact.sms);
+				
+				if(bookingSelectionContact.countryRegion) {
+					self.contact().countryRegionId(countryRegionUtil.getId(bookingSelectionContact.countryRegion.code, bookingSelectionContact.countryRegion.region));
+				}
+				if(bookingSelectionContact.countryRegionSecondary) {
+					self.contact().countryRegionSecondaryId(countryRegionUtil.getId(bookingSelectionContact.countryRegionSecondary.code, bookingSelectionContact.countryRegionSecondary.region));
+				}
+				self.contact().initialCountryRegionId(self.contact().countryRegionId());
+			} else if (self.contact() && self.loggedIn()) {			
+				self.contact().passengerIndex(-1);
+				self.contact().email('');
+				self.contact().countryRegionId('');
+				self.contact().phoneNumber('');
+				self.contact().countryRegionSecondaryId('');
+				self.contact().phoneNumberSecondary('');
+				
+				if(newValue) {
+					self.contact().email(newValue.email());
+					self.contact().countryRegionId(newValue.countryRegionId());
+					self.contact().phoneNumber(newValue.phoneNumber());
+					
+					self.contact().countryRegionSecondaryId(newValue.countryRegionOptId());
+					self.contact().phoneNumberSecondary(newValue.phoneNumberOpt());
+				}
+			}
+
+			$(".dropdownselect").selectpicker("refresh");
+
+	    });
+		
+		self.qmsv = ko.pureComputed({
+		    
+			read: function() {
+	
+				var userLoggedIn = self.loggedIn && self.loggedIn()
+				
+				if (!userLoggedIn && self.selectedContactOption()) {
+					var val = $.trim(self.passengers()[self.selectedContactOption().contactOptionIndex()-1].loyaltyMembershipID());
+					var isValid = self.passengers()[self.selectedContactOption().contactOptionIndex()-1].isFFPIDValid();
+			    	return val == null || val=="" || !isValid;
+				}
+				return true;
+		    },
+		    
+		    deferEvaluation: true
+		
+		}).extend({ throttle: 1000 });	
+
+
+
+		// COMPUTED FIELD FOR ONE ADULT GROUP PASSENGER ITINERARY
+		self.fixedContactLabel = ko.pureComputed({
+		    
+			read: function() {
+				var userLoggedIn = self.loggedIn && self.loggedIn()
+				
+				var firstContactOption = userLoggedIn ? self.contactOptionsForLoggedInUser()[0] : self.contactOptionsForNotLoggedInUser()[0];
+				
+				if (firstContactOption) {
+			    	return firstContactOption.firstName() + ' ' + firstContactOption.lastName();
+				}
+				return '';
+		    },
+		    
+		    deferEvaluation: true
+		
+			}).extend({ throttle: 10 });	
+
+		
+		//TEXT INPUT FIELD FOR NO ADULT GROUP ITINERARY 
+		self.textContactLabel = ko.observable();
+		
+
+		//####################################################
+		 self.firstNameWelcome = ko.observable();
+		 self.lastNameWelcome = ko.observable();
+		
+		self.contactNameSurnameIndex = function(){
+			
+			var value = null;
+
+			var firstName = null;
+			var lastName = null;
+			var passengerIndex = null;
+			
+			var contactInputMethod = self.contactInputMethod();
+			
+			if (contactInputMethod == 'SELECT' || contactInputMethod == 'FIXED') {
+				firstName = $.trim(self.selectedContactOption().firstName());
+				lastName = $.trim(self.selectedContactOption().lastName());
+				value = $.trim(self.selectedContactOption().firstName()) + ' ' + $.trim(self.selectedContactOption().lastName());
+				passengerIndex = self.selectedContactOption().contactOptionIndex();
+			} else if (contactInputMethod == 'TEXT') {
+				value = self.textContactLabel().replace(/\s{2,}/g,' ');
+				passengerIndex = 0;
+			}
+
+			value = $.trim(value);
+
+			
+    		if(!value){
+				return {'firstName' : firstName,'lastName' : lastName, 'passengerIndex' : passengerIndex};
+			}
+			
+
+            var lastSpacePos = value.lastIndexOf(" ");
+            
+            if (lastSpacePos > 0) {
+            	firstName = value.substring(0, lastSpacePos);
+            	lastName = value.substring(lastSpacePos + 1);
+            } else{
+            	firstName = value;
+            	lastName = null;
+            }
+
+			return {'firstName' : firstName,'lastName' : lastName, 'passengerIndex' : passengerIndex};
+			
+		};
+
+		self.isPhoneNumberPartValid = function(countryCode, phoneNumber, partIndex){
+			if (partIndex == 0 && phoneNumber && !countryCode) {
+				return false;
+			}
+			
+			if (partIndex == 1 && !phoneNumber && countryCode) {
+				return false;
+			}
+			
+			return true;
+			
+		}
+
+		self.validationProperties = ko.observableArray();
+		self.arrivalDayDifference = ko.observable();
+		
+		$(document).on('change', '#contacts', function() {
+			setTimeout(function() {
+				if(self.contactInfoValidationContext.Validate().valid) {
+					$('#contacts').parents('.form-asterisk').find('input#email').focus().blur();
+				}
+			}, 500);
+		});
+		
+		self.contactInfoValidationContext =  ko.jqValidation({
+
+			validationProperties : self.validationProperties,
+			
+			validationPropertyResolver : self.validationPropertyResolver,
+			
+			customValidators : {
+				
+				contactNameSurnameValidator : function(el) {
+					
+					var contactNameSurnameIndex = self.contactNameSurnameIndex();
+					
+	            	var firstName = contactNameSurnameIndex['firstName'];
+	            	var lastName = contactNameSurnameIndex['lastName'];
+
+            		if(!firstName || firstName.length < 2 || firstName.length > 41){
+						return i18n.get('Error-OB-18');
+					}
+					
+            		if(!lastName || lastName.length < 2 || lastName.length > 41){
+						return i18n.get('Error-OB-18');
+					}
+
+            		if(firstName.indexOf(' ') > -1){
+            			var names = firstName.split(" ");
+                		for (var i = 0; i < names.length; i++) {
+                			var name = names[i];
+                			if(name && name.length < 2){
+        						return i18n.get('Error-OB-18');
+        					}
+                		}
+            		}
+            		
+            		return validation.validators["latinAndTurkishChar"](el);
+            		
+				},	
+				
+				firstPhoneNumberValidator : function(el) {
+					var partValid = self.isPhoneNumberPartValid(self.contact().countryRegionId(), self.contact().phoneNumber(), 1);
+					if(!partValid){
+						return i18n.get("ERR-MS-LOGIN-380");
+					}           		
+				},
+				
+				firstCountryCodeValidator : function(el) {
+					var partValid = self.isPhoneNumberPartValid(self.contact().countryRegionId(), self.contact().phoneNumber(), 0);
+					if(!partValid){
+						return i18n.get("ERR-MS-LOGIN-380");
+					}      		
+				},
+				
+				secondPhoneNumberValidator : function(el) {
+					var partValid = self.isPhoneNumberPartValid(self.contact().countryRegionSecondaryId(), self.contact().phoneNumberSecondary(), 1);
+					if(!partValid){
+						return i18n.get("ERR-MS-LOGIN-380");
+					}           		
+				},
+				
+				secondCountryCodeValidator : function(el) {
+					var partValid = self.isPhoneNumberPartValid(self.contact().countryRegionSecondaryId(), self.contact().phoneNumberSecondary(), 0);
+					if(!partValid){
+						return i18n.get("ERR-MS-LOGIN-380");
+					}      		
+				},
+				
+            	passwordValidator : function(el) {
+            		
+            		
+            		if(self.quickMembershipPassword()){
+            		
+	            		if(self.quickMembershipPassword().length!=6){
+							return i18n.get("Error-OB-61");
+						}
+	            		if(self.quickMembershipPassword()!=self.quickMembershipPasswordConfirm()){
+							return i18n.get("Error-OB-62");
+						}
+	            		
+	            		
+	            		var seq = ["012", "123", "234", "345", "456", "567", "678", "789"];
+	            		
+	            		var seqFound = false;
+	            		
+	            		for (var i = 0; i < seq.length; i++) {
+							if(self.quickMembershipPassword().indexOf(seq[i])>=0){
+								seqFound = true;
+							}
+						}
+	            		if(seqFound){
+							return i18n.get("Error-OB-64");
+						}
+	            		
+	            		/*var replaceAll = function (find, replace, str) {
+	          			  return str.replace(new RegExp(find, 'g'), replace);
+	            		};*/
+	          		
+	            		var bDate = null;
+	            		
+	            		if(self.selectedContactOption()){
+	            			bDate = self.selectedContactOption().dateOfBirth();
+	            		}
+	            		if(bDate){
+	            			
+	            			var d = new Date(bDate);
+	
+	            			var day = d.getDate()+"";
+	            			var m = (d.getMonth()+1)+"";
+	
+	            			if(m.length ==1){
+	            				m = "0"+m;
+	            			} 
+	
+	            			if(day.length ==1){
+	            				day = "0"+day;
+	            			}
+	
+	            			var y = (d.getFullYear()+"").substring(0,2);
+	            			var invalidaPass = day+m+y;
+	            			
+	            			
+	            			var byear = (d.getFullYear()+"").substring(2,4);
+	            			var fyear = d.getFullYear();
+	            			
+	            			var bdateComb = [fyear+day+m,m+fyear+day,day+m+fyear,fyear+day+m,m+fyear+day,day+m+fyear,day+m+byear,byear+day+m,m+byear+day,day+m+byear,byear+day+m,m+byear+day];
+	            			
+	            			for(var j =0;j<bdateComb.length;j++){
+	            				  if(bdateComb[j].indexOf(self.quickMembershipPassword())>=0){
+	            					 return i18n.get("Error-OB-63");
+	            				}
+	            			}
+	            			
+	            			
+	            			if(invalidaPass == self.quickMembershipPassword()){
+	    						return i18n.get("Error-OB-63");
+	    					}
+	            		}
+	            		
+	            		String.prototype.count=function(s1) {   
+	            		    return (this.length - this.replace(new RegExp(s1,"g"), '').length) / s1.length;  
+	            		} 
+	            		
+	            		var password = self.quickMembershipPassword();
+	            		for (var k = 0; k < password.length; k++) {
+							if(password.count(password[k])>2){
+								return i18n.get("Error-OB-65");
+							}
+						}
+            		
+            		}
+            		
+            	}
+				
+            },
+			postValidators:[{
+				name:"unaccompaniedMinorsAgreeName",
+				id:"unaccompaniedMinorsAgreeId",//Optional
+				func:function() {
+					if(!self.unaccompaniedMinorsAgree()){
+						return i18n.get("Error-OB-3003");
+					}
+				}
+			},
+           	{
+				name:"disabledPassengersAgreeName",
+				id:"disabledPassengersAgreeId",//Optional
+				func:function() {
+					if(!self.disabledPassengersAgree()){
+						return i18n.get("Error-OB-7000");
+					}
+				}
+			},
+			{
+				name:"holdThisFlightAgreeName",
+				id:"holdThisFlightAgreeId",//Optional
+				func:function() {
+					if(!self.holdThisFlightAgree()){
+						return i18n.get("Error-ODM-02");
+					}
+				}
+			}]
+	    });
+		
+		
+		self.checkLoginStatus = function() {
+			
+			var applicationName = self.tccBooking ? 'app.cc' : 'app.ms';
+			var webServiceUrl = self.tccBooking ? '/corporateclub/loginstatus' : '/login';
+			
+			var logincheck = {
+	    		app: applicationName,
+	    		disableLoader: true,
+	    		service: webServiceUrl,
+	    		callback:function(response) {
+	    			
+	    			self.loginStatus(response.data);	
+	    			self.parseLoginStatus();
+					
+					var completeFunction = function(){ $('html, body').off("scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove")};
+					scrollToEl($('#contentScroll'), undefined, 0, undefined, 1000, undefined, undefined, undefined, completeFunction);
+
+					var page = $('html, body');
+					page.on("scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove", function(){ page.stop()});
+	    		}
+			
+			};
+			
+			etrAjax.get(logincheck);
+			
+		}
+		
+		self.parseLoginStatus = function() {
+			self.loggedIn(self.loginStatus().loggedIn);	
+			
+			if(self.loggedIn()) {
+				populatePassengerModelsForLogged(self.bookingSelectionHolder(), self.tccBooking);
+			} else {
+				populatePassengerModels(self.bookingSelectionHolder().airTravelers);
+			}
+		}
+
+		
+		self.paymentCurrencies = ["USD", "EUR", "GBP", "IRR", "TRY", "KWD", "SAR", "RUB", "SEK", "NOK", "DKK", "JPY", "CNY", "CAD", "AUD", "CHF"];
+
+		
+		self.pricesVisible = ko.observable(false);
+
+        self.hasRefundableTax = ko.observable(false);
+        self.refundableTaxList = ko.observableArray();
+        self.unrefundableTaxList = ko.observableArray();
+        self.refundableTaxListPrice = ko.observable( 0);
+        
+        self.availableChargeableSeatExists = ko.observable(false);
+        self.chargeableSeatBannerType = ko.observable('');
+		
+		self.availableChargeableSeatCheck = function() {
+
+			if(!self.bookingSelectionHolder().hold) {
+				var availableChargeableSeatQuery ={
+		    		app: 'app.ibs',
+		    		service:'/booking/availableChargeableSeatData',
+		    		disableErrorHandling: true,
+		    		callback:function(response) {
+		    			if(response.data) {
+		    				self.availableChargeableSeatExists(response.data.chargeableSeatSaleAvailable);
+		    				self.chargeableSeatBannerType(response.data.bannerType);
+		    			}
+		    		}
+				};
+
+				etrAjax.get(availableChargeableSeatQuery);
+			}
+		}
+        
+		self.parseBookingSelectionHolder = function(data) {
+			$.each(data.selectedFlights, function(index, value) {
+				self.arrivalDayDifference(value.arrivalDayDifference);
+				value.showItineraryDetails = ko.observable(false);
+				value.showFareRules = ko.observable(false);
+				value.fareRulesData = ko.observable();
+			});
+			
+			self.bookingSelectionHolder(data);
+			self.paxTypeCode = ko.observable(false);
+//			self.sendFlightData.flights(self.bookingSelectionHolder().selectedFlights);
+			
+			self.originalCurrency(self.bookingSelectionHolder().originalCurrency);
+			
+			self.currencyConversionAvailable(self.bookingSelectionHolder().currencyConversionAvailable)
+			
+			self.companionsConvenient(self.bookingSelectionHolder().hasAnyValidCompanions);
+			
+			self.validationProperties(self.bookingSelectionHolder().validationProperties);
+
+			var bookingRequest = self.bookingSelectionHolder().bookingRequest;
+
+			self.subscribeToPromotionsOrigin(bookingRequest.bookings[0].originAirport.city.code);
+			self.subscribeToPromotionsDestination(bookingRequest.bookings[0].destinationAirport.city.code);
+			self.originAirportCode(bookingRequest.bookings[0].originAirport.code);
+			self.destinationAirportCode(bookingRequest.bookings[0].destinationAirport.code);
+
+//			self.hideDecimal = self.bookingSelectionHolder().domestic?'NEVER':'ALWAYS';
+//			self.roundingMode = self.bookingSelectionHolder().domestic?'NONE':'CEILING';
+			self.hideDecimal = 'NEVER';
+			self.roundingMode = 'NONE';
+			
+			if(self.currencyConversionAvailable() && underscore.contains(self.paymentCurrencies, cookieHelper.getCookie("Currency"))){
+				self.preferredCurrency(cookieHelper.getCookie("Currency"));
+			} else if(self.bookingSelectionHolder().paymentCurrency){
+				self.preferredCurrency(self.bookingSelectionHolder().paymentCurrency);
+			} else {
+				self.preferredCurrency('');
+			}
+			
+			if(self.tccBooking) {
+				self.checkLoginStatus();
+			}
+			
+			self.pricesVisible(!(self.bookingSelectionHolder().tripType == 'MULTI_CITY' && self.bookingSelectionHolder().travelType == 'AMADEUS'));
+			
+			self.unaccompaniedMinorsAgreeVisible(self.bookingSelectionHolder().unaccompaniedMinors);
+			self.unaccompaniedMinorsAgree(false);
+			
+			self.disabledPassengersAgreeVisible(self.bookingSelectionHolder().disabledPassengers);
+			self.disabledPassengersAgree(false);
+			
+			for(var i = 0; i < bookingRequest.bookings.length; i++) {
+				var iElem = bookingRequest.bookings[i];
+				for(var j = 0;j < iElem.paxList.length; j++) {
+					var jElem = iElem.paxList[j];
+					if(jElem.code == 'STUDENT') {
+						self.paxTypeCode(jElem.code);
+						break;
+					}
+				}
+			}
+			
+	    	self.bookingSelectionHolder().chargeableSeatSaleEnabled && self.availableChargeableSeatCheck();
+	    	
+	    	gtmUtil.pushProfilePageData(self.bookingSelectionHolder());
+		}
+        
+        var parseProfileData = function(data) {
+        	self.parseBookingSelectionHolder(data.bookingSelectionHolder);
+			
+			self.extraPrices(data.extraPrices);
+			self.loginStatus(data.loginStatus);
+			
+			var domesticCount = 0;
+			data.bookingSelectionHolder.selectedFlights[0].segments.forEach(function(entry) {
+				if(entry.domesticFlight) {
+					domesticCount++;
+				}
+			});
+			if(domesticCount == data.bookingSelectionHolder.selectedFlights[0].segments.length) {
+				self.pureDomestic(true);
+				self.pureInternational(false);
+			} else if(domesticCount == 0) {
+				self.pureInternational(true);
+				self.pureDomestic(false);
+			} else {
+				self.pureInternational(false);
+				self.pureDomestic(false);
+			}
+			
+			self.parseLoginStatus();
+			
+			self.parseTopCountryRegionList(data.topCountryRegions);
+			
+			self.ffpPrograms(data.starAllianceFfpPrograms);
+			
+            var fareBreakdown = data.bookingSelectionHolder.fareBreakdown;
+            
+            self.refundableTaxListPrice(fareBreakdown.refundableTotalTaxPrice || 0);
+            if(self.refundableTaxListPrice()) {
+	            $.each(fareBreakdown.taxes, function(index, value) {
+	            	if(value.isRefundable && value.amount) {
+	            		self.hasRefundableTax(true);
+	            		self.refundableTaxList.push(value);
+	            	}
+	            	if(!value.isRefundable && value.amount) {
+	            		self.unrefundableTaxList.push(value);
+	            	}
+	            });
+            } else {
+            	self.unrefundableTaxList(fareBreakdown.taxes);
+            }
+
+            self.renderReady(true);
+        }
+        
+		self.requestBookingSelectionHolder = function() {
+			
+			if(!self.tccBooking) {
+				if(!initialProfileData) {
+
+					var loadProfilePageGet = {
+							app: 'app.ibs',
+							service:'/booking/loadprofilepage',
+							largeLoader : true,
+							loaderName : 'Passenger Details',
+							callback:function(response) {
+								if(response.data){
+									parseProfileData(response.data);
+								}
+							}
+					};
+
+					etrAjax.get(loadProfilePageGet);
+				} else {
+					parseProfileData(initialProfileData);
+				}
+				
+				var completeFunction = function(){ $('html, body').off("scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove")};
+				scrollToEl($('#contentScroll'), undefined, 0, undefined, 1000, undefined, undefined, undefined, completeFunction);
+
+				var page = $('html, body');
+				page.on("scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove", function(){ page.stop()});
+				
+			} else {
+				
+				//TODO OLD logic for tcc - should be changed later 
+		
+				var bookingSelectionHolderGet = {
+					app: 'app.ibs',
+					service:'/booking/bookingselectionholder',
+					largeLoader : true,
+					loaderName : 'Passenger Details',
+					callback:function(response) {
+						
+						if(response.data){
+							self.parseBookingSelectionHolder(response.data);
+							self.renderReady(true);
+						}
+					}
+				
+				};
+				etrAjax.get(bookingSelectionHolderGet);
+			}
+		}
+		
+		self.requestBookingSelectionHolder();
+		
+		if(self.tccBooking) {
+			self.loadTopRegionCodes();	
+		}
+		
+		
+		self.hasCancelForPayment = ko.observable(true);
+		
+		self.discountCancelForChargableSeat = function() {
+			$('#discountPassengerError').modal("hide");
+			self.bookingSelectionHolder().acceptInvalidDiscount = true;
+			self.completeChargeableSeatRouteSelection();
+		}
+		
+		self.completeChargeableSeatRouteSelection = function() {
+			var validateProfileInfo = self.validateProfileInfo();
+			if(self.isChargeableSeatEligible() && validateProfileInfo) {
+
+				self.updateBookingSelectionHolder();
+
+                var data  = {
+                    tripType : self.bookingSelectionHolder().tripType,
+                    bookingRequest : self.bookingSelectionHolder().bookingRequest,
+                    domestic : self.bookingSelectionHolder().travelType == 'OTA',
+                    currency : self.preferredCurrency(),
+                    eventCallback : function(){
+                        etrAjax.post({
+                            app : 'app.ibs',
+                            service : '/booking/completechargeableseatrouteselection',
+                            data : self.bookingSelectionHolder(),
+                            disableLoaderTimeout : true,
+                            preErrorProperties : profilePagePreErrorProperties,
+        		    		callback:function(response) {
+                            	self.profileCompleted(false);
+                            	self.hasCancelForPayment(false);
+                            	self.discountPassengerList([]);
+                            	
+                            	$.each(response.data,function(key,value){
+                            		if(!value.discountValid) {
+                            			self.discountPassengerList.push(value);
+                            		}
+                            	});
+
+                            	if(self.discountPassengerList().length) {
+                            		$('#discountPassengerError').modal("show");
+                            	}
+        		    		}
+                        });
+
+                    }
+                }
+                gtmUtil.pushSeatSelectCheckout(data);
+			}
+		}
+		
+		self.hideSummaryContent = function(){
+			var $summaryContent = $('#summary_content_id');
+			if(!window.isPhoneOrTablet)
+				$('html, body').stop().animate({ scrollTop: $summaryContent.offset().top + $summaryContent.height(), scrollLeft: 0 }, 2000);
+		}
+		
+		
+
+		//======================= MILES AND SMILES SIGNIN STARTS ============================\\\
+		
+		
+		self.notLoggedIn =	ko.pureComputed({
+		    
+			read: function() {
+				return !self.loggedIn();
+		    },
+		    deferEvaluation: true
+		}).extend({ throttle: 1000 });	
+	
+
+		self.loginType = ko.observable("1");
+
+
+		self.openLogin = function() {
+			if(($('#signinModal').length == 0) ){
+				Eteration.loadStaticFragment({
+					app:'app.ms',
+					module : 'login',
+					el:$('#siginModalContainer'),
+					success : function() {
+						$('#signinModal').modal("show");
+						ko.applyBindings(new loginView.ViewModel(null, true), $("#siginModalContainer")[0]);
+					}
+				});
+			}else{
+				$('#signinModal').modal("show");
+			}
+		};
+
+		self.showMSLoginModal = function(){
+			etrAjax.get({
+		    	app: 'app.ms',
+		    	service:'/login',
+		    	disableLoader : false,
+		    	callback:function(response) {
+		    		if(!response.data.loggedIn){
+			    		Eteration.loadStaticFragment({
+							app:'app.ms',
+							module : 'login',
+							el:$('#siginModalContainer'),
+							success : function() {
+								$('#signinModal').modal("show");
+								var refreshCurrentPage = false;
+								ko.applyBindings(new loginView.ViewModel(self.saveThisFlightAfterLogin , true), $("#siginModalContainer")[0]);
+							}
+						});
+		    		}
+		    	}
+			})	
+		};
+		
+		
+		
+		
+		//======================= MILES AND SMILES SIGNIN       ENDS ============================\\\
+
+		
+		
+		
+		///////////////////////////////////////////////////////////////////////////////////////
+		// SAVE THIS FLIGHT
+		///////////////////////////////////////////////////////////////////////////////////////
+
+		self.saveThisFlight = function (){
+			// TODO Kullannılmayan Method......
+			self.allowPageChangeWithoutClearTerminal();
+			
+			if(self.loggedIn()){
+				
+				var bookingRequest = self.bookingSelectionHolder().bookingRequest;
+				
+				etrAjax.post({
+					app : 'app.ibs',
+					service : '/booking/bookingsavethisflight',
+					data : {
+						'bookingRequest' : bookingRequest
+					},
+					callback : function(response) {						
+						if(response.type=="SUCCESS"){
+							$('#saveflightsuccess').modal("show");							
+						}
+						else {
+							$('#saveflightfail').modal("show");
+						}
+					}					
+			  	});								
+			} else{
+				self.showMSLoginModal();
+			}
+			
+		}; 
+
+		self.saveThisFlightAfterLogin = function (){
+			var bookingRequest = self.bookingSelectionHolder().bookingRequest;
+			etrAjax.post({
+				app : 'app.ibs',
+				service : '/booking/bookingsavethisflight',
+				data : {
+					'bookingRequest' : bookingRequest
+				},
+				callback : function(response) {
+					if(response.type == 'SUCCESS'){
+						$('#saveflightsuccess').modal("show");							
+					} else {
+						$('#saveflightfail').modal("show");
+					}
+				}
+			});			
+		};
+		
+		
+		///////////////////////////////////////////////////////////////////////////////////////
+		//
+		///////////////////////////////////////////////////////////////////////////////////////
+
+		self.validatePromotionBlock = function() {
+
+			//DO PROMOTION VALIDATIONS			
+			if (self.subscribeToPromotionsAccepted() && !self.subscribeToPromotionsValidationContext.Validate().valid) {
+				$('html, body').animate({scrollTop: $('#subscribeToPromotionsValidationContext_id').offset().top - 85}, 1000);
+				self.profileCompleted(false);
+				return false;
+			}
+			return true;
+		} 
+		
+		var addNewCompanionVal = '';
+		$(document).on('blur','.add-new-companion input.form-control', function() {
+			if(addNewCompanionVal == '' || addNewCompanionVal != $(this).val()) {
+				addNewCompanionVal = $(this).val();
+				var invalidPassengerIndex =  self.validatePassangers(self.passengers());
+				if(invalidPassengerIndex >= 0) {
+					$('html, body').animate({scrollTop: $('#passengerInfoValidationContextId_' + invalidPassengerIndex).find(".has-error:first").parent().offset().top - 85}, 1000);
+					self.profileCompleted(false);
+					return false;
+				}
+			}
+		});
+		
+		self.validateProfileInfo = function() {
+			
+			if(self.profileCompleted()) {
+				return false;
+			}
+			var invalidPassengerIndex;
+			self.profileCompleted(true);
+			
+			self.allowPageChangeWithoutClearTerminal();
+			
+			//IF LOGGED IN USER DO COMPANION VALIDATIONS
+			if(self.loggedIn()) {
+				
+				var totalPassengerProfileCount = self.companionPanels().length;
+				var completedPassengerProfileCount = 0;
+
+				for(var i=0; i < totalPassengerProfileCount; i++) {
+					var companionPanel = self.companionPanels()[i];
+					if(companionPanel.companionPanelVisible()) {
+						if(companionPanel.selectedCompanion()) {
+							completedPassengerProfileCount++;
+						} 						
+					} else {
+						invalidPassengerIndex = self.validatePassangers(self.passengers());
+						if (invalidPassengerIndex > -1) {
+							$('html, body').animate({scrollTop: $('#passengerInfoValidationContextId_' + invalidPassengerIndex).find(".has-error:first").parent().offset().top - 85}, 1000);
+							self.profileCompleted(false);
+							return false;
+						}
+						completedPassengerProfileCount++;
+					}
+				}
+				
+				if( (self.passengers().length == self.selectedMSPassengers().length) && self.selectedMSPassengers) {
+					self.passengers(self.selectedMSPassengers());
+				}
+				
+				if(totalPassengerProfileCount != completedPassengerProfileCount) {
+					etrAjax.showWarningModal(new Array("Error-BOS-36001"));
+					self.profileCompleted(false);
+					return false;
+				}
+				
+			}
+			var contactValidated;	
+			//IF NOT LOGGED IN USER DO PASSENGER VALIDATIONS
+			if(self.notLoggedIn()) {
+				invalidPassengerIndex = self.validatePassangers(self.passengers());
+				if (invalidPassengerIndex > -1) {
+					$('html, body').animate({scrollTop: $('#passengerInfoValidationContextId_' + invalidPassengerIndex).find(".has-error:first").parent().offset().top - 85}, 1000);
+					self.profileCompleted(false);
+					return false;
+				}
+			}
+			
+			//DO CONTACT VALIDATIONS
+			contactValidated = self.contactInfoValidationContext.Validate().valid;
+
+			if (!contactValidated) {
+				$('html, body').animate({scrollTop: $('.has-error').offset().top - 185}, 1000);
+				self.profileCompleted(false);
+				return false;
+			}
+
+			var validationResult = true;
+			for(var j=0; j < self.passengers().length; j++) {
+				var passenger = self.passengers()[j];
+				if(passenger.hasValidation) {
+					validationResult = validationResult && passenger.passengerInfoValidationContext.Validate();
+				}
+			}
+			self.profileCompleted(validationResult);
+			return validationResult;
+		}
+		
+		
+		self.isChargeableSeatEligible = function() {
+			
+			//if(self.bookingSelectionHolder().paymentCurrency && 'IRR' == self.bookingSelectionHolder().paymentCurrency) 
+			if(self.preferredCurrency() && 'IRR'==self.preferredCurrency()) { //currency==IRR ise
+				etrAjax.showWarningModal(new Array("Error-OB-89")); // yeni kod ver 
+				self.profileCompleted(false);
+				return false;
+			}
+			return true;
+		}
+		
+		
+		var root = this;
+		root.selectedAllMsCompanions = ko.observableArray();
+		root.isSameCompanion = function(companion1,companion2) {
+			if(companion1 && companion2 &&
+					companion1.name == companion2.name && 
+					companion1.surname == companion2.surname && 
+					companion1.email == companion2.email && 
+					companion1.birtDate == companion2.birtDate) {
+				return true;
+			}
+			return false;
+		}
+		
+		root.isInSelectedMsCompanions = function(companion, selectedAllMsCompanions) {
+			if(companion) {
+				for(var i=0; i < selectedAllMsCompanions.length; i++) {
+					var currentCompanion = selectedAllMsCompanions[i];
+					if(root.isSameCompanion(companion,currentCompanion)) {
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+		
+		root.changeStateOfSelectedCompanionForAllCompanionPanels = function(){
+			var companionPanels = self.companionPanels();
+			for(var i=0; i < companionPanels.length; i++) {
+				var companionPanel = companionPanels[i];
+				var companions = companionPanel.companions();
+				for(var j=0; j < companions.length; j++) {
+					var companion = companions[j];
+
+					if(!root.isSameCompanion(companionPanel.selectedCompanion(), companion)) {
+						var inSelectedMsCompanions = root.isInSelectedMsCompanions(companion, root.selectedAllMsCompanions());
+						companion.clickable(!inSelectedMsCompanions);
+					}
+				}
+			}
+		}
+		
+		function ContactModel(rootVM) {
+			var self =  this;
+			self.passengerIndex = ko.observable();
+			self.firstName = ko.observable();
+			self.lastName = ko.observable();
+			self.textContactLabel = ko.observable();
+			self.email = ko.observable().extend({ email: true });
+			
+			self.countryRegionId = ko.observable();
+
+			self.phoneNumber = ko.observable();
+			self.countryRegionSecondaryId = ko.observable();
+			self.phoneNumberSecondary = ko.observable();
+			self.sms = ko.observable();
+
+			self.initialCountryRegionId = ko.observable();
+		}
+		
+		
+		function Passenger() {
+			
+			var self = this;
+			
+			self.tcIdValidator;
+			self.index = ko.observable();
+			self.code = ko.observable('ADULT');
+		    self.title = ko.observable();
+		    self.email = ko.observable();
+		    self.companionPanelElemId = ko.observable();
+		    self.firstName = ko.observable();
+		    self.lastName = ko.observable();
+		    self.dateOfBirth = ko.observable();		 
+		    self.gender = ko.observable();
+		    
+		    self.discountValid = ko.observable(false);
+		    
+		    self.nationality = ko.observable('');
+		    self.identity = ko.observable('');
+			self.isTurkishCitizen = ko.observable(populateCitizenship(self.nationality, self.identity));
+		    
+		    self.loyaltyMembershipID = ko.observable();
+		    self.loyaltyProgramID = ko.observable('TK');
+		    
+		}
+		
+		
+		function PassengerModel(airTraveler, index, rootVM, airTravelersSize) {
+			
+			var self = this;
+			
+			self.airTraveler = airTraveler;
+			self.airTravelersSize = airTravelersSize;
+			self.passenger = null;
+		    self.discountValid = ko.observable(airTraveler.discount);
+		    self.hasDiscount = ko.observable(airTraveler.discount);
+			
+			self.passengerPanelVisible = ko.observable(false);
+			self.panelVisible = ko.observable(false);
+			self.index = ko.observable(index);
+			self.code = ko.observable(airTraveler.code);
+
+			
+			self.isCodeAdultOrEquivalent = ko.observable((self.code() != 'INFANT' && self.code() != 'CHILD'));
+			self.isCodeChild = ko.observable(self.code() == 'CHILD');
+			self.isCodeInfant = ko.observable(self.code() == 'INFANT');
+
+			self.ageRangeData = airTraveler.ageRangeData;
+			
+			self.fullName = "";
+			self.passIndex = index;
+		    self.title = ko.observable();
+		    self.firstName = ko.observable('');
+		    self.lastName = ko.observable('');
+		    self.email = ko.observable();
+		    self.dateOfBirth = ko.observable("");
+		    
+		    self.gender = ko.observable();
+
+		    self.identity = ko.observable('');
+		    self.nationality = ko.observable('');
+		    self.loyaltyMembershipID = ko.observable();
+		    self.loyaltyProgramID = ko.observable('TK');
+		    
+		    self.isTurkishCitizen = ko.observable(populateCitizenship(self.nationality(), self.identity()));
+
+		    //FOR COMPANION USAGE
+		    self.countryRegionId = ko.observable();
+		    self.phoneNumber = ko.observable();
+		    self.countryRegionOptId = ko.observable();
+		    self.phoneNumberOpt = ko.observable();
+		    
+		    self.isTurkishCitizen.subscribe(function(newValue) {
+	    		if(self.isTurkishCitizen() !=  true){
+					self.identity("");
+				}
+		    });
+		    
+		    function showMsLoginDiv(that) {
+				if(that.attr('checked')) {
+					$('#passengerdetailscroll').removeClass('display-none');
+					$('html, body').animate({scrollTop: $('#passengerdetailscroll').offset().top - 80}, 1000);
+				} else {
+			    	$('#passengerdetailscroll').addClass('display-none');
+					$('html, body').animate({scrollTop: $('#passengerDetailPanelCmp').offset().top - 80}, 1000);
+			    }
+		    }
+		    
+	    	$(document).on('change', '#msSwitch', function() {
+		    	showMsLoginDiv($(this));
+		    });
+
+		    self.loyaltyProgramID.subscribe(function(newValue){
+		    	self.loyaltyMembershipID('');
+		    	$( "#flyernumber_" + self.index()).blur().focus();
+		    });
+			
+		    self.companionDetails = ko.observable();
+		    self.accountOwner = ko.observable();
+		    
+
+		    self.isFFPIDValid = ko.observable(false);
+		    self.hasRequestFFP = ko.observable(false);
+			self.passengerInfoValidationContext = ko.jqValidation({
+				customValidators : {
+                	ffpIdValidator : function(el) {
+                		self.isFFPIDValid(false)
+                		var loyaltyMembershipID = self.loyaltyMembershipID();
+                		var loyaltyProgramID = self.loyaltyProgramID();
+                		if (loyaltyProgramID == 'TK' && loyaltyMembershipID && loyaltyMembershipID.length > 0 && loyaltyMembershipID.length < 9) {
+                			self.isFFPIDValid(false)
+            				return i18n.get("Error-OB-49");								
+						}
+                		
+                		var isDiscountedPax = self.discountValid();
+                		if ( isDiscountedPax && !loyaltyMembershipID){
+							self.isFFPIDValid(false);
+            				return i18n.getWithArgs("DiscountedPax-FFPID-Required",{'paxtypelookup': self.ageRangeData.paxCode});
+						}
+                		
+                		if(loyaltyMembershipID && !self.hasRequestFFP()) {
+	                		var validationResult = undefined; 
+	                		self.isFFPIDValid(true);
+	                		self.hasRequestFFP(true)
+	                		etrAjax.post({
+	        					app : 'app.ms',
+	        					service : '/miles/validateffp',
+	        					data: {loyaltyMembershipID : loyaltyMembershipID,
+	        						   loyaltyProgramID : loyaltyProgramID,
+	        						   name : self.firstName(),
+	        						   surname : self.lastName(),
+	        						   extendedValidation : true,
+	        						   birthDate : moment($('#'+'birthdate_'+self.passIndex).val(),'DD/MM/YYYY').format("YYYY-MM-DD")
+	        				    },
+	        					async:false,
+	        					callback : function(response) {
+	        						self.hasRequestFFP(false);
+	        						if(!response.data){
+	        							validationResult = i18n.get("Error-OB-49");		
+	        						}
+	        					}
+	        			  	});
+	                		
+	                		if(validationResult){
+    							self.isFFPIDValid(false);
+	                		}
+	                		return 	validationResult;
+                		}
+                	},
+                	dateOfBirthValidator : function(el) {
+
+            			var maxDate = new Date(self.ageRangeData.maximumBirthDateAllowed);
+            			var minDate = new Date(self.ageRangeData.minimumBirthDateAllowed);
+            			var actualDate = new Date(moment(self.dateOfBirth(),'DD/MM/YYYY').format('YYYY-MM-DD'));
+            			
+            			if (actualDate <= minDate || actualDate > maxDate) {
+            				return i18n.getWithArgs("Error-OB-46", {'paxtypelookup': self.ageRangeData.paxCode, 'agelowerlimit': self.ageRangeData.minAge, 'ageupperlimit': self.ageRangeData.maxAge});
+						}
+            			if (!(actualDate instanceof Date && !isNaN(actualDate))) {
+            				return i18n.getWithArgs("Error-MS-MS040100MRN01");
+						}
+                	},
+                	fullNameLengthValidator : function(el) {
+                		
+            		    var firstName = self.firstName();
+            		    var lastName = self.lastName();
+
+            		    var firstNameLength = firstName ? firstName.length : 0;
+            		    var lastNameLength = lastName ? lastName.length : 0;
+            		    var fullNameLength = firstNameLength + lastNameLength;
+            		    		
+            			if (fullNameLength > 43) {
+            				//return i18n.get("error.field.maxfullnamelength");
+            				//Error-OB-42
+            				return i18n.get("Error-OB-42");
+						}
+            			            			
+            			if(firstName.length > 41 || lastName.length > 41) {
+            				return i18n.get("Error-OB-40");
+            			}
+            			
+            			return validation.validators["latinAndTurkishChar"](el);
+
+                	}
+                }
+			});
+			
+			
+			self.msCompanion = null;
+			self.addedToMsPassengers = false;
+			self.fillPassengerInfo = function(companionDetails) {
+				
+				if(companionDetails) {
+					
+					var title = ""; 
+					
+					if (companionDetails.bindedPassengerToCompanion.isCodeAdultOrEquivalent()) {
+						title = companionDetails.gender.code == "M" ? "MR" : "MS";
+					} else{
+						title = companionDetails.gender.code == "M" ? "MSTR" : "MISS";
+					}
+					
+					self.fullName = companionDetails.name + " " + companionDetails.surname;
+					
+					self.title(title);
+					self.firstName(companionDetails.name);
+					self.lastName(companionDetails.surname);
+					
+					self.loyaltyProgramID(companionDetails.loyaltyProgramID);
+					self.loyaltyMembershipID(companionDetails.loyaltyMembershipID);
+					self.identity(companionDetails.identityNumber);
+					self.email(companionDetails.email);
+					self.dateOfBirth(moment.utc(companionDetails.birtDate).format('DD/MM/YYYY'));
+					self.accountOwner(companionDetails.accountOwner);
+					self.nationality(companionDetails.nationality);
+					
+					self.countryRegionId(countryRegionUtil.getIdFromCountryRegion(countryRegionUtil.findDefaultCountryByRegion(rootVM.countryRegionCodes(), companionDetails.regionCode)));
+				    self.phoneNumber(companionDetails.phoneNumber);
+
+				    self.countryRegionOptId(countryRegionUtil.getIdFromCountryRegion(countryRegionUtil.findCountryByRegion(rootVM.countryRegionCodes(), companionDetails.regionCodeOpt)));
+				    self.phoneNumberOpt(companionDetails.phoneNumberOpt);
+					
+					self.isTurkishCitizen(populateCitizenship(companionDetails.nationality, companionDetails.identityNumber));
+					
+					if(!self.addedToMsPassengers) {
+						rootVM.selectedMSPassengers.push(self);
+						self.addedToMsPassengers = true;
+					}
+					else {
+						rootVM.selectedMSPassengers.remove(self);
+						rootVM.selectedMSPassengers.push(self);
+					}
+					
+					self.msCompanion = companionDetails;
+				}
+				
+			}
+			
+			self.addToSelectedMSPassengers = function(companionPanel) {
+				if(!self.addedToMsPassengers) {
+					rootVM.selectedMSPassengers.push(self);
+					self.addedToMsPassengers = true;
+				} else {
+					rootVM.selectedMSPassengers.remove(self);
+					rootVM.selectedMSPassengers.push(self);
+				}
+			}
+			
+			self.clearPassengerModel = function() {
+				self.title("");
+				self.email("");
+				self.firstName("");
+				self.lastName("");
+				self.dateOfBirth("");
+				self.loyaltyProgramID("TK");
+				self.loyaltyMembershipID("");
+				self.identity("");
+				self.phoneNumber("");
+			}
+			
+			
+			self.createPassenger = function() {
+				
+				var passenger = new Passenger();
+				
+				passenger.index(self.index());
+				passenger.code(self.code());
+				passenger.title(self.title());
+				passenger.email(self.email());
+				passenger.firstName(self.firstName());
+				passenger.lastName(self.lastName());
+				passenger.dateOfBirth(self.dateOfBirth());		 
+				passenger.isTurkishCitizen(self.isTurkishCitizen());
+				passenger.gender( (self.title() == "MR" || self.title() == "MSTR") ? "M" : "F");
+				passenger.nationality(self.nationality());
+				passenger.identity(self.identity());
+				passenger.loyaltyMembershipID(self.loyaltyMembershipID());
+				passenger.loyaltyProgramID(self.loyaltyProgramID());
+				
+				return passenger;
+			}
+		}
+
+		function CompanionPanelViewModel(index, passengerTypeIndex, airTraveler, companions, tccCompanions, companionByPromocode) {
+			
+			var self = this;
+			
+			self.index = index;
+			self.tccCompanions = tccCompanions;
+			self.companionByPromocode = companionByPromocode;
+			self.companionPanel = ko.observable(new CompanionPanel.ViewModel());
+			self.companions = ko.observableArray(companions);
+			self.newCompanion = ko.observable(undefined);
+			self.companionPanelVisible = ko.observable(true);
+			self.companionPanelElemId = ko.observable();
+			self.companionPanelPassengers = ko.observableArray();
+			self.selectedMSPassengers = ko.observableArray();
+			
+			self.selectedCompanion = ko.observable(undefined);
+			self.passengerType = ko.observable();
+			self.passengerTypeIndex = ko.observable(passengerTypeIndex);
+			
+			self.passengerProfile = null;
+			
+			self.availableAddingNewCompanion = ko.observable();
+			
+			self.addCompanionPanelPassenger = function(passenger) {
+				if(passenger) {
+					if(!self.passengerType()) {
+						self.passengerType(passenger.code());
+					}
+				}
+				self.companionPanelPassengers.push(passenger);
+			}
+			
+			if(self.companions().length == 0) {
+				self.companionPanelVisible(false);
+			}
+			
+			self.back = function(){
+				self.companionPanelPassengers()[0].hasValidation = false;
+				self.selectedMSPassengers.remove(self.companionPanelPassengers()[0]);
+				self.newCompanion(undefined);
+				self.companionPanelVisible(true);
+			}
+			
+			self.getCompanionToAdd = function() {
+				if(self.availableAddingNewCompanion()) {
+					var newCompanion = self.newCompanion();
+					var data = {
+		    			title: newCompanion.title(),
+		    			name: newCompanion.firstName(),
+		    			surname: newCompanion.lastName(),
+		    			birtDate: moment.utc(newCompanion.dateOfBirth(), 'DD/MM/YYYY').valueOf(),
+		    			email: newCompanion.email(),
+		    			identityNumber: newCompanion.identity(),
+		    			nationality: newCompanion.nationality()
+			    	};
+					return data;
+				}
+				return null;
+			}
+			
+			self.selectCompanion = function(selectedCompanion) {
+				self.putCompanionIntoSelectedList(selectedCompanion, self.companionPanelPassengers()[0], 0);
+				selectedCompanion.fillPassengerViaCompanion();
+			}
+			   
+		   self.putCompanionIntoSelectedList = function(selectedCompanion, passenger, index) {
+				var currentPassenger = selectedCompanion.bindedPassengerToCompanion;
+				if(currentPassenger == null) {
+
+					var previousSelectedCompanion = self.selectedCompanion();
+					self.clearCompanionSelection(previousSelectedCompanion);
+
+					selectedCompanion.bindedPassengerToCompanion = passenger;
+					selectedCompanion.selected(true);
+					self.selectedCompanion(selectedCompanion);
+					root.selectedAllMsCompanions.push(selectedCompanion);
+
+					root.changeStateOfSelectedCompanionForAllCompanionPanels();
+					
+					/*var nextIndex = passenger.passIndex + 1
+
+					var $nextCompanion = $('#companionPanelui_companionpanel_tmplt'+ nextIndex +'companion_panel'+ nextIndex)*/
+
+
+				} else if(passenger == selectedCompanion.bindedPassengerToCompanion) {
+
+					self.clearCompanionSelection(selectedCompanion);
+					root.changeStateOfSelectedCompanionForAllCompanionPanels();
+				}
+			}
+			
+			
+			self.clearCompanionSelection = function(selectedCompanion) {
+				if(selectedCompanion) {
+					self.selectedMSPassengers.remove(selectedCompanion.bindedPassengerToCompanion);
+					root.selectedAllMsCompanions.remove(selectedCompanion);
+					selectedCompanion.bindedPassengerToCompanion = null;
+					selectedCompanion.selected(false);
+					self.selectedCompanion(undefined);
+				}
+			}
+
+			self.addCompanion = function() {
+				self.clearCompanionSelection(self.selectedCompanion());
+				
+				var companionPanelPassengers = self.companionPanelPassengers();
+				var companionPanelPassenger = companionPanelPassengers[0];
+				companionPanelPassenger.hasValidation = true;
+				companionPanelPassenger.clearPassengerModel();
+				companionPanelPassenger.addToSelectedMSPassengers(self);
+				
+				self.newCompanion(companionPanelPassenger);
+
+				root.changeStateOfSelectedCompanionForAllCompanionPanels();
+				self.companionPanelVisible(false);
+		    }
+			
+			
+			self.removeFromMSPassengerList = function(companionPanelPassengers) {
+				if(companionPanelPassengers) {
+					for(var i=0; i < companionPanelPassengers.length; i++) {
+						var companionPanelPassenger = companionPanelPassengers[i];
+						companionPanelPassenger.removeFromSelectedMSPassengers();
+					}
+				}
+			}
+			
+			self.addToMSPassengerList = function(companionPanelPassengers) {
+				if(companionPanelPassengers) {
+					for(var i=0; i < companionPanelPassengers.length; i++) {
+						var companionPanelPassenger = companionPanelPassengers[i];
+						companionPanelPassenger.addToSelectedMSPassengers();
+					}
+				}
+			}
+			
+			self.findCompanionByPassengerProfile = function (passengerProfile, companions) {
+				
+				var requestedCompanion = null;
+				
+				if(!passengerProfile) return requestedCompanion;
+				
+				for(var i=0; i < companions.length; i++) {
+					var companion = companions[i];
+					
+					if(!companion) continue;
+					
+					var clause = passengerProfile.name == companion.name && 
+								 passengerProfile.surname == companion.surname &&
+								 passengerProfile.birthday == companion.birtDate;
+					
+					if(clause){
+						requestedCompanion = companion;
+						break;
+					}
+					
+				}
+				
+				return requestedCompanion;
+			}
+			
+			self.abc = 0;
+		    var afterRendered = function() {
+        		if(self.abc < 1) {
+        			contentheight();
+        			self.abc++;
+        		}
+        		
+				var selectedCompanion = self.findCompanionByPassengerProfile(self.passengerProfile, self.companions());
+				
+				if(selectedCompanion != null && !self.selectedCompanion()) {
+					self.selectCompanion(selectedCompanion);
+				}
+        		
+        	}
+			
+		    var addColumnVisibility = false;
+		    if(!(self.tccCompanions || self.companionByPromocode)) {
+		    	addColumnVisibility = true;
+		    }
+		    
+		    var templateName = "ui_companionpanel_tmplt" + index;
+		    self.companionPanelElemId(templateName + "companion_panel" + index);
+		    
+		    self.companionPanel().loadTemplates(templateName);
+		    self.companionPanelViewModel = self.companionPanel().ViewModel({
+				data: self.companions,
+				back: self.back,
+				newCompanion: self.newCompanion,
+				paxTypeCode: airTraveler.code,
+				pageCompanionSize: root.isMobile() ? 3 : 5,
+				templateName: templateName,
+				carouselElemId: ko.observable("carousel" + templateName),
+				selectCompanion: self.selectCompanion,
+	    		addCompanion: self.addCompanion,
+	    		searchPanelVisibility: false,
+	    		addColumnVisibility: addColumnVisibility,
+	    		selectedCompanionInit: false,
+	    		passengerType: self.passengerType,
+	    		passengerTypeIndex: self.passengerTypeIndex,
+	    		afterRendered: afterRendered,
+	    		tccCompanions: self.tccCompanions,
+	    		companionByPromocode: self.companionByPromocode
+			});
+		}
+		
+		function cloneCompanions(companions) {
+
+			var extendedCompanions = [];
+			for(var i=0; i < companions.length; i++) {
+				var extendedCompanion = $.extend({}, companions[i]);
+				extendedCompanion.bindedPassengerToCompanion = null;
+				extendedCompanion.clickable = ko.observable(true);
+				extendedCompanion.selected = ko.observable(false);
+				extendedCompanion.fillPassengerViaCompanion = function() {
+					var passenger = this.bindedPassengerToCompanion;
+					if (passenger) {
+						passenger.fillPassengerInfo(this);
+					}
+				}
+				extendedCompanions[i] = extendedCompanion;
+			}
+			return extendedCompanions;
+		}
+
+		
+		function populatePassengerModelsForLogged(selection, tccBooking) {
+			
+			var airTravelers = selection.airTravelers;
+			var companions = selection.companions;
+			
+			self.contact(new ContactModel(self));
+			
+//			if (self.bookingSelectionHolder().passengerProfiles.length > 1) {
+//				self.bookingSelectionHolder().passengerProfiles = self.bookingSelectionHolder().passengerProfiles.sort(function(a, b){
+//				    return a.passengerTypeCode > b.passengerTypeCode;
+//				});
+//			}
+			
+			var airTravelersSize = 0, airTravelerIndex, airTraveler;
+			for (airTravelerIndex = 0; airTravelerIndex < airTravelers.length; airTravelerIndex++) {
+				airTraveler = airTravelers[airTravelerIndex];
+				if(airTraveler.quantity > 0) {
+					airTravelersSize += parseInt(airTraveler.quantity);
+				}
+			}
+			
+			var passengerProfileIndex = 0;
+			for (airTravelerIndex = 0; airTravelerIndex < airTravelers.length; airTravelerIndex++) {
+				
+				airTraveler = airTravelers[airTravelerIndex];
+				if(airTraveler.quantity > 0) {
+					for(var passengerTypeIndex = 0; passengerTypeIndex < airTraveler.quantity; passengerTypeIndex++){
+						
+						var clonedCompanions = cloneCompanions(companions);
+						
+						var passengerProfile = self.bookingSelectionHolder().passengerProfiles[passengerProfileIndex];
+						var companionByPromocode = self.bookingSelectionHolder().companionByPromocode;
+						var companionPanel = new CompanionPanelViewModel(passengerProfileIndex, passengerTypeIndex, airTraveler, clonedCompanions, tccBooking, companionByPromocode);
+						var passenger = new PassengerModel(airTraveler, passengerProfileIndex, self, airTravelersSize);
+						var selectedCompanion = companionPanel.findCompanionByPassengerProfile(passengerProfile, companions);
+			
+						if (passengerProfile && selectedCompanion == null) {
+						
+							passenger.title(passengerProfile.title);
+							passenger.firstName(passengerProfile.name);
+							passenger.lastName(passengerProfile.surname);
+							passenger.loyaltyProgramID(passengerProfile.loyaltyProgramID);
+							passenger.loyaltyMembershipID(passengerProfile.loyaltyMembershipID);
+							passenger.code(passengerProfile.passengerTypeCode);
+							passenger.gender(passengerProfile.gender.code);
+							passenger.nationality(passengerProfile.nationality);
+							passenger.identity(passengerProfile.identityNumber);
+							passenger.isTurkishCitizen(passengerProfile.isTurkishCitizen == 'true' ? true:false);
+							passenger.dateOfBirth(moment.utc(passengerProfile.birthday).format('DD/MM/YYYY'));
+							companionPanel.newCompanion(passenger);
+							companionPanel.companionPanelVisible(false);
+						}
+						
+						
+					    self.passengers.push(passenger);
+						companionPanel.passengerProfile = passengerProfile;
+						companionPanel.addCompanionPanelPassenger(passenger);
+						companionPanel.selectedMSPassengers = self.selectedMSPassengers;
+						self.companionPanels.push(companionPanel);
+						passenger.ownerCompanionPanel = companionPanel;
+						passengerProfileIndex++;
+						
+					}
+				}
+			}
+	
+			self.contactVisibility(true);
+		}
+		
+		
+		function populatePassengerModels(airTravelers){
+			
+			self.contact(new ContactModel(self));
+
+			var airTravelersSize = 0, airTravelerIndex, airTraveler;
+			for (airTravelerIndex = 0; airTravelerIndex < airTravelers.length; airTravelerIndex++) {
+				airTraveler = airTravelers[airTravelerIndex];
+				if(airTraveler.quantity > 0) {
+					airTravelersSize += parseInt(airTraveler.quantity);
+				}
+			}
+
+			
+			if (self.bookingSelectionHolder().passengerProfiles.length > 1) {
+				self.bookingSelectionHolder().passengerProfiles = self.bookingSelectionHolder().passengerProfiles.sort(function(a, b){
+				    return a.passengerTypeCode > b.passengerTypeCode;
+				});
+			}
+			
+			var passengerProfileIndex = 0;
+			for (airTravelerIndex = 0; airTravelerIndex < airTravelers.length; airTravelerIndex++) {
+				
+				airTraveler = airTravelers[airTravelerIndex];
+				
+				for(var j = 0; j < airTraveler.quantity; j++){
+					
+					var passenger = new PassengerModel(airTraveler, passengerProfileIndex, self, airTravelersSize);
+					
+					if (self.bookingSelectionHolder().passengerProfiles.length) {
+						var passengerProfile = self.bookingSelectionHolder().passengerProfiles[passengerProfileIndex];
+						passenger.title(passengerProfile.title);
+						passenger.firstName(passengerProfile.name);
+						passenger.lastName(passengerProfile.surname);
+						passenger.loyaltyProgramID(passengerProfile.loyaltyProgramID);
+						passenger.loyaltyMembershipID(passengerProfile.loyaltyMembershipID);
+						passenger.code(passengerProfile.passengerTypeCode);
+						passenger.gender(passengerProfile.gender.code);
+						passenger.nationality(passengerProfile.nationality);
+						passenger.identity(passengerProfile.identityNumber);
+						passenger.isTurkishCitizen(passengerProfile.isTurkishCitizen == 'true' ? true:false);
+						passenger.dateOfBirth(moment.utc(passengerProfile.birthday).format('DD/MM/YYYY'));
+					}
+					passengerProfileIndex++;
+					self.passengers.push(passenger);
+				}
+				
+			}
+			
+			if (self.bookingSelectionHolder().bookingSelectionContact) {
+				var bookingSelectionContact = self.bookingSelectionHolder().bookingSelectionContact;
+				self.contact().passengerIndex(bookingSelectionContact.passengerIndex);
+				self.contact().firstName(bookingSelectionContact.firstName);
+				self.contact().lastName(bookingSelectionContact.lastName);
+				self.contact().email(bookingSelectionContact.email);
+				self.contact().phoneNumber(bookingSelectionContact.phoneNumber);
+				self.contact().phoneNumberSecondary(bookingSelectionContact.phoneNumberSecondary);
+				if(bookingSelectionContact.firstName && bookingSelectionContact.lastName)
+					self.textContactLabel(bookingSelectionContact.firstName + ' ' + bookingSelectionContact.lastName);
+				
+				if(bookingSelectionContact.countryRegion)
+                	self.contact().countryRegionId(countryRegionUtil.getId(bookingSelectionContact.countryRegion.code, bookingSelectionContact.countryRegion.region));
+                
+                if(bookingSelectionContact.countryRegionSecondary)
+                	self.contact().countryRegionSecondaryId(countryRegionUtil.getId(bookingSelectionContact.countryRegionSecondary.code, bookingSelectionContact.countryRegionSecondary.region));
+
+				self.contact().sms(bookingSelectionContact.sms);
+				self.contact().initialCountryRegionId(self.contact().countryRegionId());
+				
+				if (self.loggedIn()) {
+					self.selectedContactOption(self.contactOptionsForLoggedInUser()[bookingSelectionContact.passengerIndex-1]);
+				}else{
+					 self.selectedContactOption(self.contactOptionsForNotLoggedInUser()[bookingSelectionContact.passengerIndex-1]);
+				}
+			}		
+			
+			self.contactVisibility(true);
+		}
+				
+		function populateCitizenship(nationality, identityNumber) {
+			var isTurkishCitizen = false;
+
+			if (self.loggedIn && self.loggedIn()) {
+				
+				if(nationality && nationality == 'TR'
+		    		&& identityNumber && identityNumber.length == 11) {
+		    		isTurkishCitizen = true;
+		    	}
+			} else {
+				if (i18n.isUserCountryEqualsToTurkey() || i18n.isUserLocaleEqualsToTurkish()) {
+					isTurkishCitizen = true;
+				} else {
+					etrAjax.get({
+						app : 'app.ibs',
+						async : false,
+			    		disableLoader:true,
+						service : '/booking/turskishcitizendefault/'+ i18n.getMetaDataAttribute("languagecountry"),
+						callback : function(response) {
+							isTurkishCitizen = response.data;
+						}
+					});
+				}
+
+			}
+			return isTurkishCitizen ? true : false;
+		}
+
+		self.validatePassangers = function(passangerList) {
+		   var invalidPassengerIndex = -1;
+		   for (var i = 0; i < passangerList.length; i++) {
+			   if (passangerList[i].ownerCompanionPanel && passangerList[i].ownerCompanionPanel.companionPanelVisible()) {
+				  continue;
+			   }
+			   var validationResult = passangerList[i].passengerInfoValidationContext.Validate();
+			   
+			   if (!validationResult.valid) {
+				   if(invalidPassengerIndex==-1)
+					   invalidPassengerIndex = i;
+			   }
+		   }
+		   return invalidPassengerIndex;
+	   };
+	   
+		self.changeThisFlight = function(data, event) {
+			
+			var context = ko.contextFor(event.target);
+		    var changeFlightActionIndex = context.$index();
+
+			self.changeFlights(changeFlightActionIndex);
+		}
+		
+		self.returnToAvailabilityPage = function() {
+
+			self.changeFlights();
+		}
+
+		self.changeFlights = function(changeFlightActionIndex) {
+			self.allowPageChangeWithoutClearTerminal();
+
+			etrAjax.post({
+				app : 'app.ibs',
+				service : '/booking/returntoavailabilityfromprofile',
+				data : changeFlightActionIndex,
+				largeLoader : true,
+				loaderName : 'Passenger Details'
+			});
+		}
+		
+		self.getCompanionsToAdd = function(companionPanels) {
+	    	var index = 0;
+			var companionsToAdd = [];
+			for(var i=0; i < companionPanels.length; i++) {
+				var companionPanel = companionPanels[i];
+				var companionToAdd = companionPanel.getCompanionToAdd();
+		    	if(companionToAdd) {
+		    		companionToAdd.gender = (companionToAdd.title == "MR" || companionToAdd.title == "MSTR") ? {"code":"M","name":"MALE","data":{}} :  {"code":"F","name":"FEMALE","data":{}};
+		    		companionsToAdd[index++] = companionToAdd;
+		    	}
+			}
+			return companionsToAdd;
+		}
+		
+		self.discountPassengerList = ko.observableArray();
+		
+		var profilePagePreErrorProperties = {
+        	preErrorFunction : function(){
+        		self.profileCompleted(false);
+        	}
+		};
+		
+		function saveFlightFareFamilyDatas() {
+			try {
+				if(self.bookingSelectionHolder().selectedFlights[0].availableFlightFare) {
+					var availabilityFlightFareFamilyList = underscore.map(self.bookingSelectionHolder().selectedFlights, function(flight){ return flight.availableFlightFare.preferedFareBasisCode;});
+					gtmUtil.sessionStorageUtil.persistData("availabilityFlightFareFamily", availabilityFlightFareFamilyList);
+				}
+			} catch (e) {
+				console.error(e);
+			}
+		}
+
+		self.updateBookingSelectionHolder = function() {
+			var passengers = self.passengers();
+
+            if(self.contact()) {
+                console.log(self.contact());
+                var phoneNumber = self.contact().phoneNumber()
+                if(phoneNumber.indexOf('+') > -1) {
+                    self.contact().phoneNumber(phoneNumber.replace('+', ''))
+                }
+            }
+
+			var contact = self.contact();
+
+			if (self.currencyConversionAvailable() && self.preferredCurrency()){
+				self.bookingSelectionHolder().paymentCurrency = self.preferredCurrency();
+			}
+			
+			self.bookingSelectionHolder().passengerProfiles = [];
+			
+			for (var passengerIndex = 0; passengerIndex < passengers.length; passengerIndex++) {
+				
+				 var passenger = passengers[passengerIndex];
+
+				 var longOfDateOfBirth = moment.utc(passenger.dateOfBirth(), 'DD/MM/YYYY').valueOf();
+				 
+				 var passengerProfile = {
+						 "title": passenger.title(),
+						 "name":passenger.firstName(),
+						 "middleName":null,
+						 "surname":passenger.lastName(),
+						 "loyaltyProgramID":passenger.loyaltyProgramID(),
+						 "loyaltyMembershipID":passenger.loyaltyMembershipID(),
+						 "passengerTypeCode": passenger.code() ,
+						 "gender": (passenger.title() == "MR" || passenger.title() == "MSTR") ? {"code":"M","name":"MALE","data":{}} :  {"code":"F","name":"FEMALE","data":{}},
+						 "isTurkishCitizen" : passenger.isTurkishCitizen(),
+						 "identityNumber":passenger.identity(),
+						 "accountOwner":passenger.accountOwner(),
+						 "birthday":longOfDateOfBirth,
+						 "nationality": passenger.nationality()
+				 };
+				 
+				 self.bookingSelectionHolder().passengerProfiles.push(passengerProfile);				 
+				 
+			}
+
+			var contactNameSurnameIndex = self.contactNameSurnameIndex();
+			
+			contact.firstName(contactNameSurnameIndex['firstName']);
+			contact.lastName(contactNameSurnameIndex['lastName']);
+			contact.passengerIndex(contactNameSurnameIndex['passengerIndex']);
+        	
+			self.bookingSelectionHolder().bookingSelectionContact = {"passengerIndex" : contact.passengerIndex(),
+																	 "firstName" : contact.firstName(),
+																	 "lastName" : contact.lastName(),
+																	 "textContactLabel" : contact.textContactLabel(),
+																	 "email" : contact.email(),
+																	 "phoneNumber" : contact.phoneNumber(),
+																	 "countryRegion" : countryRegionUtil.getCountryRegionFromId(contact.countryRegionId()),
+																	 "sms" : contact.sms()
+																	 };
+
+				
+				
+			if (contact.sms() && !self.loggedIn()) {
+				
+				self.bookingSelectionHolder().quickMembershipData = {
+					"firstName" : contact.firstName(),
+					"lastName" : contact.lastName(),
+					"email" : contact.email(),
+					"password":self.quickMembershipPassword()
+//					"passwordConfirm":self.quickMembershipPasswordConfirm(),
+				};
+						
+				function PasswordData(quickMembershipPassword,quickMembershipPasswordConfirm){
+				    this.password=quickMembershipPassword;
+				    this.repassword=quickMembershipPasswordConfirm;
+				    this.currentPassword=quickMembershipPassword;			    			
+				}
+				
+				var passwordData = ko.observable(new PasswordData(self.quickMembershipPassword,self.quickMembershipPassword));
+				
+				var jsonObj = ko.toJSON(passwordData);
+				
+				var uiMap = {
+						'passwordData.password' : 'quickMembershipPassword',
+						'passwordData.repassword' : 'quickMembershipPasswordConfirm'
+				};
+				
+				etrAjax.post({
+					app: 'app.ms',
+					service:'/miles/checkpasswordforsms',
+					data :JSON.parse(jsonObj),
+					callback:function(response) {
+						
+					},
+					preErrorProperties : profilePagePreErrorProperties,
+					uiMap:uiMap
+				});
+			}
+
+			var companionsToAdd = [];
+			if(self.loggedIn()) {
+				var companionPanels = self.companionPanels();
+				if(companionPanels.length) {
+					companionsToAdd = self.getCompanionsToAdd(companionPanels);
+				}
+			}
+			
+			var bookingSelectionHolder =  self.bookingSelectionHolder();
+			bookingSelectionHolder.companionsToAdd = companionsToAdd;
+			
+			bookingSelectionHolder.promotionData = {
+					"departurePortCode":self.bookingSelectionHolder().bookingRequest.bookings[0].originAirport.code,
+					"arrivalPortCode":self.bookingSelectionHolder().bookingRequest.bookings[0].destinationAirport.code,
+					"subscribe":self.subscribeToPromotionsAccepted(),
+					"name":self.subscribeToPromotionsFirstName(),
+					"surname":self.subscribeToPromotionsSurname(),
+					"email":self.subscribeToPromotionsEmail()
+			};
+			
+			if(self.tccBooking)  {
+				bookingSelectionHolder.tccBookingSelectionHolder = true;
+			}
+			
+			saveFlightFareFamilyDatas();
+		}
+
+        var sendSeatSelectOnCheckoutOption  = function(callback){
+            gtmUtil.seatSelectOnCheckoutOption({action : {step : 1 , option:""},eventCallback : callback})
+        }
+        
+        $(document).on('focus','#passengerDetailPanelCmp input.form-control',function() {
+    		$(this).parents('.label-selector').find('.float-label').addClass('active');
+    		$(this).addClass('pb-0');
+    	});
+        
+        $(document).on('focus','#ms-login-tab input.form-control',function() {
+    		$(this).parents('.label-selector').find('.float-label').addClass('active');
+    		$(this).addClass('pb-0');
+    	});
+        
+        $(document).on('focus','#contactDetails input.form-control',function() {
+    		$(this).parents('.label-selector').find('.float-label').addClass('active');
+    		$(this).addClass('pb-0');
+    	});
+        
+        $(document).on('focusout','#passengerDetailPanelCmp input.form-control',function() {
+    		var elem = $(this).parents('.label-selector').find('.float-label');
+    		var nameInput = elem.attr('id') == 'nameInput';
+    		var surnameInput = elem.attr('id') == 'surnameInput';
+    		var tcInput = elem.attr('id') == 'tcInput';
+    		var emailInput = elem.attr('id') == 'emailInput';
+    		var phoneInput = elem.attr('id') == 'phonenumberLabel';
+    		var mainContactInput = elem.attr('id') == 'maincontactLabel';
+    		
+    		if($(this).val() == '' && (nameInput || surnameInput || tcInput || emailInput || phoneInput || mainContactInput) ){
+    			elem.removeClass('active');
+    			$(this).removeClass('pb-0');
+    		}
+    	});
+        
+        $(document).on('focusout','#ms-login-tab input.form-control',function() {
+    		var elem = $(this).parents('.label-selector').find('.float-label');
+    		var membershipNumber = elem.attr('id') == 'membershipNumber';
+    		var emailAddress = elem.attr('id') == 'emailAddress';
+    		var mobileNumber = elem.attr('id') == 'mobileNumber';
+    		var tcLabel = elem.attr('id') == 'tcLabel';
+    		var msloginbannerPassword = elem.attr('id') == 'msloginbanner-password';
+    		
+    		if($(this).val() == '' && (membershipNumber || emailAddress || mobileNumber || tcLabel || msloginbannerPassword) ){
+    			elem.removeClass('active');
+    			$(this).removeClass('pb-0');
+    		}
+    	});
+
+        self.openMsLoginForm = function(){
+        	self.msLoginDivIsOpen(true);
+        }
+            
+		self.completeProfilePage = function() {
+			var validateProfileInfo = self.validateProfileInfo();
+			if(validateProfileInfo && self.validatePromotionBlock()) {
+				var hasSpaFlight = false;
+				if(self.bookingSelectionHolder() && self.bookingSelectionHolder().selectedFlights.length>0){
+					$.each(self.bookingSelectionHolder().selectedFlights, function(index,value){
+						$.each(value.segments,function(inIndex,inValue){
+							if(inValue.spa === true){
+								hasSpaFlight = true;
+							}
+						});
+					});
+				}
+				self.updateBookingSelectionHolder();
+
+				var spaLoaderTemplate = '<div id="allLoaderContainer" class="spaLoader">'+
+					'  <div class="preloader-mask" style="display: none;">'+
+					'    <div class="animation-area">'+
+					'      <div class="animation-border"></div>'+
+					'      <img src="/theme/img/LoadingGif/animation.gif" alt="animation gif">'+
+					'    </div>'+
+					'  </div>'+
+					'  <div class="modal loading in" id="Select_FlightsLoaderTemplate" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="loadingLabel" aria-hidden="false" style="display: block;">'+
+					'    <div class="modal-dialog" style="top: 0;">'+
+					'      <div class="modal-content">'+
+					'   <div class="modal-body nopadding text-center">'+
+					'     <img src="//uat.turkishairlines.com/website_images/thy/logo-top-white-smalltest.png" class="loading-logo" alt="Alt logo-top-white-small" title="Title logo-top-white-small" style="z-index: 1050;">'+
+					'     <br>'+
+					'     <h4 class="bold">'+
+					'         <span>'+i18n.get('PassengerRegistration.Information.SpaInfoWaiting')+'</span>'+
+					'     </h4>'+
+					'     <div class="prgrss">'+
+					'       <div class="prc"></div>'+
+					'     </div>'+
+					'     <div class="loading-bg middle-wrapper" style="height: 180px;">'+
+					'         <span><img src="https://turkishairlines.ssl.cdn.sdlmedia.com/636214437555329318WH.jpg" alt="turkish airlines" class="single-bg" style="z-index: 1;"></span>'+
+					'     </div>'+
+					'      </div>'+
+					'      </div>'+
+					'    </div>'+
+					'  </div>'+
+					'</div>'+
+					'<div class="spaLoader modal-backdrop in"></div>';
+				if(hasSpaFlight){
+					$('body').append(spaLoaderTemplate);
+				}
+				
+                sendSeatSelectOnCheckoutOption(function(){
+                    etrAjax.post({
+                        app : 'app.ibs',
+                        service : '/booking/completeinternetbookingprofilepage',
+                        data : self.bookingSelectionHolder(),
+						disableLoader: true,
+                        preErrorProperties : profilePagePreErrorProperties,
+                        callback : function(response) {
+							$('.spaLoader').remove();
+                        	self.profileCompleted(false);
+                        	self.hasCancelForPayment(true);
+                        	self.discountPassengerList([]);
+                        	
+                        	$.each(response.data,function(key,value){
+                        		if(!value.discountValid) {
+                        			self.discountPassengerList.push(value);
+                        		}
+                        	});
+
+                        	if(self.discountPassengerList().length) {
+                        		$('#discountPassengerError').modal("show");
+                        	}
+                        },
+						error: function(jqXHR, error, errorThrown) {
+							$('.spaLoader').remove();
+						},
+						complete: function(data, status) {
+							$('.spaLoader').remove();
+						}
+                    });
+                });
+			}
+		};
+		
+		self.discountCancelForPayment = function() {
+			$('#discountPassengerError').modal("hide");
+			self.bookingSelectionHolder().acceptInvalidDiscount = true;
+			self.completeProfilePage();
+		}
+		
+		self.discountReTryForPassenger = function() {
+    		$('#discountPassengerError').modal("hide");
+			var code = self.discountPassengerList()[0].passengerTypeCode;
+			var top = $('[data-code=' + code + '].form-asterisk').first().offset().top;
+			$('html, body').stop().animate({ scrollTop: top - 110 }, 250);
+		}
+
+		self.loadBookingFareRule = function(index) {
+			
+			var flight = self.bookingSelectionHolder().selectedFlights[index];
+
+			if(flight.fareRulesData()){
+				flight.showFareRules(!flight.showFareRules());
+				return;
+			}
+
+			var passengers = self.bookingSelectionHolder().airTravelers;
+			var domestic = self.bookingSelectionHolder().domestic;
+			var loyaltyData = self.bookingSelectionHolder().loyaltyData;
+			var amadeusSessionData = self.bookingSelectionHolder().amadeusSessionData;
+			var tripType = self.bookingSelectionHolder().tripType;
+			var travelType = self.bookingSelectionHolder().travelType;
+            var tccBookingSelectionHolder = self.bookingSelectionHolder().tccBookingSelectionHolder;
+			
+			var data = {
+                'passengers' : passengers,
+                'loyaltyData' : loyaltyData,
+                'amadeusSessionData' : amadeusSessionData,
+				 'tripType' : tripType,
+				 'travelType' : travelType,
+				'tccBookingSelectionHolder' : tccBookingSelectionHolder
+            };
+			
+			if(self.bookingSelectionHolder().tripType != 'ONE_WAY' && !domestic) {
+				
+				var flights = [];
+				
+				for(var fareRuleIndex=0; fareRuleIndex < self.bookingSelectionHolder().selectedFlights.length; fareRuleIndex++) {
+					
+					var selectedFlightForBSH = self.bookingSelectionHolder().selectedFlights[fareRuleIndex];
+					flights.push(selectedFlightForBSH);
+				}
+				
+				data['flights'] = flights;
+			}
+			else {
+				data['flights'] = [ flight ];
+			}
+				
+			
+
+			etrAjax.post({
+				app : 'app.ibs',
+				service : '/booking/bookingfarerule',
+				disableLoader : false,
+				data :data,
+				callback : function(response) {
+
+					if (response.data.length == 1) {
+						flight.fareRulesData(response.data[0]);
+					} else if (response.data.length > 1) {
+						for (var fareRuleIndex = 0; fareRuleIndex < response.data.length; fareRuleIndex++) {
+							self.bookingSelectionHolder().selectedFlights[fareRuleIndex].fareRulesData(response.data[fareRuleIndex])
+						}
+					}
+					
+					flight.showFareRules(!flight.showFareRules());
+					scrollToEl($(".farerules-btn:eq("+ index +")"));
+					$(".farerules-btn").addClass("scroll-to-element");
+
+				}
+			});
+				
+		};
+	}
+	
+	
+	
+	$(document).ready(function () {
+		$('#passengerDetailPanelCmp input.form-control').each(function(){
+	    	$(this).parents('.label-selector').find('.float-label').addClass('active');
+			$(this).addClass('pb-0');
+	    });
+    });
+	
+	ko.components.register( 'passenger-registration-record', {
+		viewModel : function(params) {
+			var self = this;
+			self.passenger = typeof params.passenger == 'function' ? params.passenger() : params.passenger;
+			self.isCompanion = params.isCompanion || false;
+			if(self.passenger.firstName()){
+				setTimeout(function(){
+					$('#passengerDetailPanelCmp input.form-control').each(function(){
+	                	$(this).parents('.label-selector').find('.float-label').addClass('active');
+	            		$(this).addClass('pb-0');
+		            });
+				},1000);
+				
+			}
+		},
+		template : { require : "text!eteration/widgets/booking/components/passengerregistrationrecord/passengerregistrationrecord.html"}
+	});
+
+	return {
+		ViewModel : PassengerRegistirationViewModel
+	};
+
+});

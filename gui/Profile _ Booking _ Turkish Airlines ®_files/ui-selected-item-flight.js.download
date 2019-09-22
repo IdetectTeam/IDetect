@@ -1,0 +1,222 @@
+define([
+	'jquery',
+	'knockout',
+    'eteration/eteration-i18n',
+	'eteration/widgets/widget-util',
+	'text!eteration/widgets/template/template-selected-item-flight.html',
+	'text!eteration/widgets/template/template-selected-item-flight-domestic.html',
+	'text!eteration/widgets/template/template-selected-item-flight-mobile-domestic.html',
+	'eteration/widgets/ui-price-selector-domestic'
+],
+function($,ko, i18n, widgetUtil, template, tempDomestic, tempMobileDomestic) {
+
+	widgetUtil.setupStringBasedTemplate(ko);
+	
+    function getDayChangeCount(flightData) {
+		var segments = flightData.segments;
+		var count = 0;
+		if (flightData.firstSegment.departureDateTimeISO) {
+			count = flightData.lastSegment.arrivalDateTimeISO.epochDaysLocal - flightData.firstSegment.departureDateTimeISO.epochDaysLocal;
+		} else {
+			count = Math.floor((segments[segments.length - 1].arrivalDateTime + segments[segments.length - 1].arrivalDateTimeTimeZoneRawOffset) / 8.64e7) - Math.floor((segments[0].departureDateTime + segments[0].departureDateTimeTimeZoneRawOffset) / 8.64e7);
+		}
+		return count;
+	}
+	
+	function getDayChangeText(count) {
+		if (count === 0)
+			return '';
+		else if (count === 1)
+			return i18n.get('TextField-OB-165.nextday');
+		else if (count === 2)
+			return '+ ' + i18n.get('TextField-OB-165.2days');
+		else if (count === 3)
+			return '+ ' + i18n.get('TextField-OB-165.3days');
+	}
+
+	ko.templates["selected-item-flight"] = template;
+	
+	ko.bindingHandlers['selected-item-flight'] = {
+
+		makeTemplateValueAccessor : function(valueAccessor, allBindings, element) {
+			var self = {};
+			self.links = valueAccessor().links;
+			self.flight = valueAccessor().flight;
+			self.flightIndex = valueAccessor().flightIndex;
+
+            self.hasDetailBar = valueAccessor().hasDetailBar || true;
+            self.isAwardTicket = valueAccessor().isAwardTicket || false;
+            self.isChangeFlight = valueAccessor().isChangeFlight || false;
+            self.isShowPriceColumn = valueAccessor().isShowPriceColumn || true;
+            self.dayChangeCount = ko.observable(0);
+            
+			self.showHideDetail = function(event,e) {
+				$(e.target).parents('.canvas-table-wrapper').toggleClass('show-detail');
+			}
+			
+			if(valueAccessor().isShowDetail) {
+				$('.canvas-table-wrapper').addClass('show-detail');
+			}
+			
+			self.isDayChanged = function (flightData) {
+				self.dayChangeCount(getDayChangeCount(flightData));
+				return getDayChangeText(self.dayChangeCount() || 0);
+			}
+
+			return function() { return { name : 'selected-item-flight', data : self } };
+		},
+		
+		init : function(element, valueAccessor, allBindings) {
+			return ko.bindingHandlers.template.init(element, ko.bindingHandlers['selected-item-flight'].makeTemplateValueAccessor(valueAccessor, allBindings, element), allBindings);
+		},
+		
+		update : function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+			return ko.bindingHandlers.template.update(element, ko.bindingHandlers['selected-item-flight'].makeTemplateValueAccessor(valueAccessor, allBindings, element), allBindings, viewModel, bindingContext);
+		}
+		
+	};
+	
+	ko.virtualElements.allowedBindings['selected-item-flight'] = true;
+
+	/* YUS DOMESTIC WEB BEGIN  */////////////////////////////////////////////////////////////////////////
+
+    var cabinClassFunc = function(flight) {
+        var cabinObj = {
+            type: '',
+            detail: {
+                brandCode: '',
+                classList: []
+            }
+        };
+
+        if (flight.availabilityData) {
+        	cabinObj.type = i18n.get('noclasscabintypelookup.' + flight.availabilityData.selectedFareInfo.cabinClass.toLowerCase());
+            cabinObj.detail.brandCode = i18n.get('brandnamelookup.' + flight.availabilityData.selectedFareInfo.brandCode);
+            var selectedBrandCode = flight.availabilityData.selectedFareInfo.brandCode;
+            
+            flight.availabilityData.fareCategories[flight.availabilityData.selectedFareInfo.cabinClass].subcategories.forEach(function (item) {
+            	
+            	if(item.brandCode == selectedBrandCode && item.fareClasses)
+            		cabinObj.detail.classList.push(item.fareClasses);
+            })
+        } else {
+            if(flight.brandCode) {
+            	cabinObj.detail.brandCode = i18n.get('brandnamelookup.' + flight.brandCode);
+            }
+            
+            if(flight.cabinClass) {
+            	cabinObj.type = i18n.get('noclasscabintypelookup.' + flight.cabinClass.toLowerCase());
+            }
+
+            if(flight.segments) {
+            	flight.segments.forEach(function (item) {
+            		if(item.fareBase && item.fareBase.code)
+            			cabinObj.detail.classList.push(item.fareBase.code)
+                })
+            }
+
+        }
+        return cabinObj;
+    }
+    
+    ko.templates["selected-item-flight-domestic"] = tempDomestic;
+
+    ko.bindingHandlers['selected-item-flight-domestic'] = {
+
+        makeTemplateValueAccessor : function(valueAccessor, allBindings, element) {
+            var self = {};
+            self.flight = valueAccessor().flight;
+            self.links = valueAccessor().links;
+            self.flightIndex = valueAccessor().flightIndex;
+
+            self.hasDetailBar = valueAccessor().hasDetailBar || true;
+            self.isAwardTicket = valueAccessor().isAwardTicket || false;
+            self.isChangeFlight = valueAccessor().isChangeFlight || false;
+            self.isShowPriceColumn = valueAccessor().isShowPriceColumn || true;
+            self.dayChangeCount = ko.observable(0);
+            self.cabinClassObj = ko.observable();
+            
+            var cabinType = cabinClassFunc(self.flight);
+            self.cabinClassObj(cabinType);
+            
+            self.showHideDetail = function(event,e) {
+                $(e.target).parents('.canvas-table-wrapper').toggleClass('show-detail');
+            }
+
+            if(valueAccessor().isShowDetail) {
+                $('.canvas-table-wrapper').addClass('show-detail');
+            }
+            
+            self.isDayChanged = function (flightData) {
+				self.dayChangeCount(getDayChangeCount(flightData));
+				return getDayChangeText(self.dayChangeCount() || 0);
+			}
+
+            return function() { return { name : 'selected-item-flight-domestic', data : self } };
+        },
+
+        init : function(element, valueAccessor, allBindings) {
+            return ko.bindingHandlers.template.init(element, ko.bindingHandlers['selected-item-flight-domestic'].makeTemplateValueAccessor(valueAccessor, allBindings, element), allBindings);
+        },
+
+        update : function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+            return ko.bindingHandlers.template.update(element, ko.bindingHandlers['selected-item-flight-domestic'].makeTemplateValueAccessor(valueAccessor, allBindings, element), allBindings, viewModel, bindingContext);
+        }
+
+    };
+
+    ko.virtualElements.allowedBindings['selected-item-flight-domestic'] = true;
+
+    /* YUS DOMESTIC WEB END  */
+    
+
+	/* YUS DOMESTIC MOBILE BEGIN  */////////////////////////////////////////////////////////////////////////
+
+    ko.templates["selected-item-flight-mobile-domestic"] = tempMobileDomestic;
+
+    ko.bindingHandlers['selected-item-flight-mobile-domestic'] = {
+
+        makeTemplateValueAccessor : function(valueAccessor, allBindings, element) {
+            var self = valueAccessor();
+            self.hasDetailBar = valueAccessor().hasDetailBar || true;
+            self.isAwardTicket = valueAccessor().isAwardTicket || false;
+            self.isChangeFlight = valueAccessor().isChangeFlight || false;
+            self.isShowPriceColumn = valueAccessor().isShowPriceColumn || true;
+            self.dayChangeCount = ko.observable(0);
+			self.flightIndex = valueAccessor().flightIndex;
+            self.cabinClassObj = ko.observable();
+            
+            var cabinType = cabinClassFunc(self.flight);
+            self.cabinClassObj(cabinType);
+            
+            self.showHideDetail = function(event,e) {
+                $(e.target).parents('.canvas-table-wrapper').toggleClass('show-detail');
+            }
+
+            if(valueAccessor().isShowDetail) {
+                $('.canvas-table-wrapper').addClass('show-detail');
+            }
+
+            self.isDayChanged = function (flightData) {
+				self.dayChangeCount(getDayChangeCount(flightData));
+				return getDayChangeText(self.dayChangeCount() || 0);
+			}
+
+            return function() { return { name : 'selected-item-flight-mobile-domestic', data : self } };
+        },
+
+        init : function(element, valueAccessor, allBindings) {
+            return ko.bindingHandlers.template.init(element, ko.bindingHandlers['selected-item-flight-mobile-domestic'].makeTemplateValueAccessor(valueAccessor, allBindings, element), allBindings);
+        },
+
+        update : function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+            return ko.bindingHandlers.template.update(element, ko.bindingHandlers['selected-item-flight-mobile-domestic'].makeTemplateValueAccessor(valueAccessor, allBindings, element), allBindings, viewModel, bindingContext);
+        }
+
+    };
+
+    ko.virtualElements.allowedBindings['selected-item-flight-mobile-domestic'] = true;
+
+    /* YUS DOMESTIC MOBILE END  */
+
+});

@@ -82,8 +82,10 @@ def addConfig():
 def hasConfig():
     if request.method == "GET":
         site = request.args['user']
-        return connect_to_datastoresql.check_sql(site)
-    return "false"
+        if connect_to_datastoresql.check_sql(site) == 'true':
+            return 'true'
+    with open('pasport_card_config.json') as config_file:
+        return (json.loads(config_file.read()))
 
 
 # @app.route('/api/hasConfig', methods=["GET", "POST"])#for prodaction
@@ -92,8 +94,10 @@ def hasConfig():
 #         cors_enabled_function_auth(request)
 #     if request.method == "GET":
 #         site = request.args['user']
-#         return connect_to_datastoresql.check_sql(site), 200, get_headers()
-#     return "false", 200, get_headers()
+#         if connect_to_datastoresql.check_sql(site) == 'true':
+#           return 'true', 200, get_headers()
+#     with open('pasport_card_config.json') as config_file:
+#         return json.loads(config_file.read()), 200, get_headers()
 
 
 def cors_enabled_function_auth(request):

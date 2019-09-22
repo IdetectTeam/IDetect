@@ -114,7 +114,11 @@ function sendImage(imageToSend) {
     setFieldsToEmpty();
     var dict = {"fields": {"Passpord Card no":"id","Surname":"first_name","Given Names":"last_name","Sex":"sex","Date of Birth":"dateOfBirth"}, "result":{"Passpord Card no": "C00003594","Surname":"TRAVELER","Given Names":"HAPPY", "Date of Birth": "01 JAN 1981","Sex":"M"}};
     putDataIntoFields(dict['fields'], dict['result']);
-        
+    try {
+        var wn = document.getElementById('idetectiframe').contentWindow;
+        wn.postMessage('', '*');
+    }
+    catch{ }
 }
 
 function convertToDate(value) {

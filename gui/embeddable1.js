@@ -57,7 +57,7 @@ function sendMessage($event) {
     catch{ }
 }
 PrepareIframe();
-function PrepareIframe(){
+function PrepareIframe() {
     $.ajax({
         url: "http://127.0.0.1:5000/api/hasConfig",
         //  url: "https://europe-west1-idetect-252605.cloudfunctions.net/hasConfig/api/hasConfig",
@@ -66,7 +66,7 @@ function PrepareIframe(){
             user: document.URL
         },
         // important POST method !
-        type: "get",
+        type: "GET",
         success: function (data) {
             //  iframe.style = "position:fixed;right:50px;bottom:200px;height:500px;width:400px;border-radius:50px;width:300px;border: 4px solid black;";
             //open iframe
@@ -78,6 +78,9 @@ function PrepareIframe(){
                 iframe.src = "https://storage.cloud.google.com/idetect-252605.appspot.com/choose%20image.html";
             else {
                 iframe.src = "https://storage.cloud.google.com/idetect-252605.appspot.com/install.html";
+                var wn = document.getElementById('idetectiframe').contentWindow;
+                wn.postMessage(data, '*');
+
             }
         }
     });

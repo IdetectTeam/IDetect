@@ -27,7 +27,7 @@ def detectImg():
         if user is None:
             return {"error": "no user"}, 400, get_headers()
         fields = connect_to_datastoresql.get_config(user)
-        result = detect_id.detect_id(image, 'https://storage.cloud.google.com/idetect-252605.appspot.com/pasport_card_config.json?folder&organizationId')
+        result = detect_id.detect_id(image, 'pasport_card_config.json')
         response = {'result': result, 'fields': fields}
         return response, 200, get_headers()
 
@@ -82,8 +82,10 @@ def addConfig():
 def hasConfig():
     if request.method == "GET":
         site = request.args['user']
-        return connect_to_datastoresql.check_sql(site)
-    return "false"
+        if connect_to_datastoresql.check_sql(site) == 'true':
+            return 'true'
+    with open('pasport_card_config.json') as config_file:
+        return (json.loads(config_file.read()))
 
 
 # @app.route('/api/hasConfig', methods=["GET", "POST"])#for prodaction
@@ -92,8 +94,10 @@ def hasConfig():
 #         cors_enabled_function_auth(request)
 #     if request.method == "GET":
 #         site = request.args['user']
-#         return connect_to_datastoresql.check_sql(site), 200, get_headers()
-#     return "false", 200, get_headers()
+#         if connect_to_datastoresql.check_sql(site) == 'true':
+#           return 'true', 200, get_headers()
+#     with open('pasport_card_config.json') as config_file:
+#         return json.loads(config_file.read()), 200, get_headers()
 
 
 def cors_enabled_function_auth(request):

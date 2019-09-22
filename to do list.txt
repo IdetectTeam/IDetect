@@ -1,10 +1,10 @@
 add to embeddable full name and age -sari, have done!
-capital letter
-Cancel upload
-add in open iframe waiting
-fix remove child
-fix register to tryIt
-add upload to open iframe
+capital letter -done
+Cancel upload -done
+add in open iframe waiting 
+fix remove child -done
+fix register to tryIt -cancel
+add upload to open iframe 
 smaller upload 
 finish landin
 remove classes and icons when close iframe

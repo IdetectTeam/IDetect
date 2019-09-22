@@ -27,7 +27,7 @@ def detectImg():
         if user is None:
             return {"error": "no user"}, 400, get_headers()
         fields = connect_to_datastoresql.get_config(user)
-        result = detect_id.detect_id(image, 'pasport_card_config.json')
+        result = detect_id.detect_id(image, 'https://storage.cloud.google.com/idetect-252605.appspot.com/pasport_card_config.json?folder&organizationId')
         response = {'result': result, 'fields': fields}
         return response, 200, get_headers()
 

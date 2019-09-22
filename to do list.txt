@@ -1,6 +1,5 @@
 add to embeddable full name and age
 add to installation full name and age
-fix register to tryIt
 finish landing
 add css file to javascript
 use in embeddable with json file

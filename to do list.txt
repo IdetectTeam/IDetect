@@ -1,4 +1,4 @@
-add to embeddable full name and age
+add to embeddable full name and age -sari, have done!
 capital letter
 Cancel upload
 add in open iframe waiting

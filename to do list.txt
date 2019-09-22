@@ -1,13 +1,11 @@
-add to embeddable full name and age -sari, have done!
-capital letter -done
-Cancel upload -done
-add in open iframe waiting 
-fix remove child -done
-fix register to tryIt -cancel
-add upload to open iframe 
+add to embeddable full name and age
+capital letter
+Cancel upload
+fix register to tryIt
 smaller upload 
 finish landin
 remove classes and icons when close iframe
 add css file to javascript
 use in embeddable with json file
 upload all files to storage 
+add to installation full name and age

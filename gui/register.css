@@ -1,3 +1,4 @@
+
 body {
     font-family: Verdana, Geneva, sans-serif;
     font-size: 14px;
@@ -387,6 +388,13 @@ body {
     }
   }
   @media (max-width: 600px) {
+    .container {
+      max-width: 600px;
+      margin: auto;
+    }
+    .card{
+      background-color: #000000;
+    }
     .form_wrapper .col_half {
       width: 100%;
       float: none;
@@ -545,13 +553,7 @@ body {
     line-height: 44px;
   }
   
-  /* Container */
-  .container {
-    position: relative;
-    max-width: 460px;
-    width: 100%;
-    margin: 0 auto 100px;
-  }
+ 
   .container.active .card:first-child {
     background: #f2f2f2;
     margin: 0 15px;
@@ -609,20 +611,7 @@ body {
   }
   
   /* Card */
-  .card {
-    position: relative;
-    background: #ffffff;
-    border-radius: 5px;
-    padding: 60px 0 40px 0;
-    box-sizing: border-box;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-    transition: 0.3s ease;
-    /* Title */
-    /* Inputs */
-    /* Button */
-    /* Footer */
-    /* Alt Card */
-  }
+
   .card:first-child {
     background: #fafafa;
     height: 10px;
@@ -971,13 +960,13 @@ body {
     line-height: 44px;
   }
   
-  /* Container */
-  .container {
-    position: relative;
-    max-width: 460px;
-    width: 100%;
-    margin: 0 auto 100px;
-  }
+ /* Container */
+ .container {
+  position: relative;
+  max-width: 460px;
+  width: 100%;
+  margin: auto;
+}
   .container.active .card:first-child {
     background: #f2f2f2;
     margin: 0 15px;

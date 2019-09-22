@@ -78,15 +78,22 @@ def addConfig():
 #         connect_to_datastoresql.connect_to_sql(site, con)
 #         return '', 200, get_headers()
 
-
-@app.route('/api/hasConfig', methods=["GET", "POST"])
-def hasConfig(request):
-    if request.method == 'OPTIONS':
-        cors_enabled_function_auth(request)
+@app.route('/api/hasConfig', methods=["GET", "POST"])  # for local
+def hasConfig():
     if request.method == "GET":
         site = request.args['user']
-        return connect_to_datastoresql.check_sql(site), 200, get_headers()
-    return "false", 200, get_headers()
+        return connect_to_datastoresql.check_sql(site)
+    return "false"
+
+
+# @app.route('/api/hasConfig', methods=["GET", "POST"])#for prodaction
+# def hasConfig(request):
+#     if request.method == 'OPTIONS':
+#         cors_enabled_function_auth(request)
+#     if request.method == "GET":
+#         site = request.args['user']
+#         return connect_to_datastoresql.check_sql(site), 200, get_headers()
+#     return "false", 200, get_headers()
 
 
 def cors_enabled_function_auth(request):

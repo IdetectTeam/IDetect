@@ -1,0 +1,106 @@
+define([ 'jquery',
+	'knockout',
+	'eteration/eteration-ajax',
+	'eteration/widgets/widget-util',
+	'eteration/eteration-i18n',
+	'eteration/widgets/ui-common',
+	'eteration/widgets/ui-i18n',
+	'eteration/widgets/ui-frontend-controls'
+], function($,ko,etrAjax,widgetUtil,i18n,fec){
+	
+	
+	 $(document).ready(function() {
+		   if(fec){
+				fec.frontEndControls.setActivePageNumber(4);	
+				fec.frontEndControls.applyPageLogic();	
+		   }
+	});	
+	 
+	ko.components.register( 'available-chargeable-seat', {
+				viewModel : function(params) {
+					var self = this;
+
+					/* Constractor Parameter of The Component */
+					self.completeChargeableSeatSelection = params.completeChargeableSeatSelection;
+					self.seatSelectionInfoLink = ko.unwrap(params.seatSelectionInfoLink);
+					self.hasInfantPass = ko.unwrap(params.hasInfantPass);
+					self.pureDomestic = ko.unwrap(params.pureDomestic);
+					self.pureInternational = ko.unwrap(params.pureInternational);
+					self.bannerType = params.bannerType ;
+					/* Constractor Parameter of The Component End */
+
+					/* Private Variable of The Component */
+					self.bannerBody = ko.observable();
+					self.bannerTitle = ko.observable();
+					self.bannerImgSource = ko.observable();
+					self.bannerButtonText = ko.observable();
+					/* Private Variable of The Component End */
+
+					/*
+					*
+					* CMS Seat Banner Request
+					*
+					* "bannerType" is a parameter that is a set at back-end as a static variable.
+					* The parameter get from parent component.
+					*
+					* Parameter is used to create request body that will be send on next ajax call.
+					* The ajax call is needed a "bannerType" parameter, a schema variable as string like "Seat Banner"
+					*
+					* */
+
+					// TODO Schema variable should be get from parent component.
+					var requestBody = {
+						"schema": "Seat Banner",
+						"template":"Generic JSON CT",
+						"maxItems":1,
+						"keyword":[
+							{
+								"Application Metadata": self.bannerType()
+							}
+						]
+					};
+
+					var seat_banner = {
+						app : 'app.cms',
+						service : '/content/query' ,
+						data: requestBody,
+						disableLoader: true,
+						disableErrorHandling: true,
+						global: false,
+						callback: function(response) {
+							if(response.data){
+								var components = response.data.components;
+								if( components && components.length > 0) {
+									var banner = response.data.components[0];
+									if(banner.json && banner.json.content) {
+										var bannerContent = banner.json.content;
+										if(bannerContent.banner_image && bannerContent.banner_image.Url) {
+											self.bannerImgSource('url(' + bannerContent.banner_image.Url +')');
+										}
+										self.bannerBody(bannerContent.body);
+										self.bannerButtonText(bannerContent.button_text);
+										self.bannerTitle(bannerContent.title);
+									}
+								}
+							}
+						}
+					};
+
+					etrAjax.post(seat_banner);
+
+					/* CMS Seat Banner Request End */
+
+					$('.available-chargable-seat').each(function(){
+						var section = $(this);
+						var item = section.find('.cover');
+						if (section) {
+							var dataUrl = item.attr('data-url');
+							if(dataUrl){				
+								section.css({'background-image':'url("'+ dataUrl +'")','min-height':'400px'}).addClass('cover-bg');
+							}
+						}
+					});
+				},
+				template : { require : "text!eteration/widgets/booking/components/availablechargeableseat/availablechargeableseat.html"}
+		});
+});

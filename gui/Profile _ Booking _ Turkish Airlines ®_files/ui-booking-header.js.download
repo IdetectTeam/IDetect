@@ -1,0 +1,48 @@
+define([
+        'knockout',
+        'eteration/eteration-i18n'
+    ],
+    function (ko, i18n) {
+        ko.components.register('booking-header', {
+            viewModel: function (vm) {
+                var self = this;
+                self.imgTitle = i18n.get('Label-Genel-542');
+                self.menuList = vm.menuList.length ? vm.menuList : [];
+                self.returnToHomepageWarning = vm.returnToHomepageWarning;
+                self.convertibleCurrencySelect = vm.convertibleCurrencySelect;
+                self.isTicketingOrAwardTicket = vm.pageType == 'payment' ? (vm.isTicketingOrAwardTicket || false) : true;
+                self.currencyConversionAvailable = vm.currencyConversionAvailable;
+                self.isDisabled = function (param1, param2 ) {
+                    return (param1 || param2)
+                }
+            },
+            template: '<div class="navbar navbar-inverse navbar-fixed-top navbar-breadcrumb" role="navigation">\
+                          <div class="container-fluid">\
+                              <div id="errorContent"></div>\
+                              <div class="navbar-header">\
+                                  <a class="navbar-brand" data-bind="click: returnToHomepageWarning">\
+                                      <img class="navbar-img-small" data-bind="img:{src:\'/theme/img/logo-top-white-small-2d.png\'}, i18n-attr: { key: \'Label-Genel-541\', attr: \'alt\'}, attr: {title: imgTitle}"/>\
+                                  </a>\
+                              </div>\
+                              <div class="navbar-breadcrumb hidden-xs hidden-sm">\
+            				  	  <!-- ko if: isTicketingOrAwardTicket -->\
+	                                  <!-- ko foreach: menuList -->\
+	                                  <a role="button" tabindex="0" data-bind="css: { \'active\' : $data.active, \'link-disabled\' : !($data.func || $data.attr) }, click: $data.func, attr: { href: $data.attr }">\
+	                                      <i class="header-select-icons" data-bind="css: $data.icon"></i>\
+	                                      <span data-bind="i18n-text: { key: $data.title }"></span>\
+	                                  </a>\
+	                                  <!-- /ko -->\
+            					  <!-- /ko -->\
+                              </div>\
+                              <!-- ko if: currencyConversionAvailable -->\
+                              <convertible-currency-select params="\
+                                  originalCurrency: convertibleCurrencySelect.originalCurrency,\
+                                  preferredCurrency: convertibleCurrencySelect.preferredCurrency,\
+                                  callback : convertibleCurrencySelect.callback,\
+                                  hideWarning: convertibleCurrencySelect.hideWarning"></convertible-currency-select>\
+                              <!-- /ko -->\
+                          </div>\
+                      </div>\
+                      <div data-bind="component: {name:\'accessibility-component\', params:{targetQuery:\'header\'}}"></div>'
+        });
+    });

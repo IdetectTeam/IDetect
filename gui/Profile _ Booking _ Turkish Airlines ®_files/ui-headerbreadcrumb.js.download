@@ -1,0 +1,30 @@
+define([
+	'knockout',
+	'eteration/widgets/widget-util',
+	 'eteration/eteration-i18n',
+	], 
+
+function(ko,widgetUtil,i18n){
+		
+	ko.components.register('header-breadcrumb', {
+	    viewModel: function(vm) {
+	    	var self = this;
+	    	self.menuList = vm.menuList.length ? vm.menuList : [];
+	    	self.homePage = vm.homePage;
+	    },
+	    template:
+	    	'<!-- if foreach: menuList.length -->\
+	    		<div class="header-breadcrumb">\
+			    	<a class="homepage" data-bind="css: homePage.func ? \'actived\' : \'passive\', click: homePage.func">\
+	    				<span><i class="fa fa-home"></i></span>\
+	    			</a>\
+			    	<!-- ko foreach: menuList -->\
+				    	<a data-bind="css: $data.func ? \'actived\' : \'passive\', click: $data.func">\
+	    					<span data-bind="i18n-text: { key: $data.title }"></span>\
+	    				</a>\
+			    	<!-- /ko -->\
+		    	</div>\
+	    	<!-- /ko -->'
+	});
+	
+});

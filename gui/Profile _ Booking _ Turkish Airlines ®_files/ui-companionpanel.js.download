@@ -1,0 +1,182 @@
+
+define(['jquery', 
+        'knockout',
+        'text!eteration/widgets/template/template-companionpanel.html',
+        'eteration/widgets/ui-searchbar',
+        'eteration/eteration-i18n',
+        'eteration/eteration-ajax'
+        ], function($, ko, newTemplate, Searchbar, i18n, etrAjax){
+	
+	
+	function CompanionPanel() {
+		
+		var self = this;
+		self.templateName = "ui_companionpanel_tmplt";
+		
+	    self.companionpanel = {
+	        viewModel: function (configuration) {
+	        	var self = this;
+	        	var data = ko.unwrap(configuration.data) || [];
+	        	self.results = ko.observableArray(data);
+	        	self.pageCompanionSize = configuration.pageCompanionSize;
+	        	self.searchPanelVisibility = configuration.searchPanelVisibility;
+	        	self.addColumnVisibility = configuration.addColumnVisibility ?  configuration.addColumnVisibility : (configuration.addColumnVisibility != null ? configuration.addColumnVisibility : false);
+	        	self.visibility = ko.observable(true);
+	        	self.afterRendered = configuration.afterRendered || ko.observable();
+	        	self.selectedCompanionInit = configuration.selectedCompanionInit || true;
+	        	self.passengerType = configuration.passengerType;
+	        	self.passengerTypeIndex = configuration.passengerTypeIndex;
+	        	self.carouselElemId = configuration.carouselElemId;
+	        	self.paxTypeCode = configuration.paxTypeCode;
+	        	self.tccCompanions = configuration.tccCompanions;
+	        	self.newCompanion = configuration.newCompanion;
+	        	self.back = configuration.back;
+	        	self.isCompanion = configuration.isCompanion;
+	        	
+	        	self.addCompanion = function() {
+	        		configuration.addCompanion();
+	        	}
+	        	
+	        	self.selectCompanion = function(selectedCompanion, element) {
+	        		if(selectedCompanion.clickable() && selectedCompanion.eligibilityOfPaxTypeCode[configuration.paxTypeCode]) {
+		        		if(self.selectedCompanionInit) {
+		        			selectedCompanion.selected(!selectedCompanion.selected);
+		        		}
+		        		configuration.selectCompanion(selectedCompanion);
+	        		}
+	        	}
+	        	
+	        	self.addBirthDateForSameRecords = function(companionsArr) {
+	        		if(companionsArr.length == 1) {
+	        			companionsArr[0].showYear = false;
+	        			return companionsArr;
+	        		}
+	        		
+	        		var myFirstCompanion = companionsArr[0] ? companionsArr[0] : null;
+	        		var myNewCompanionsArray = [];
+	        		
+	        		for(var n=1;n<companionsArr.length;n++) {
+	        			if(companionsArr[n-1].name==companionsArr[n].name &&
+	        					companionsArr[n-1].surname==companionsArr[n].surname) {
+	        				companionsArr[n-1].showYear = true;
+	        				companionsArr[n].showYear = true;
+	        			} else {
+	        				if(companionsArr[n-1].showYear != true) {
+	        					companionsArr[n-1].showYear = false;
+	        				}
+	        				
+		        			if( companionsArr[n].showYear != true ) {
+		        					companionsArr[n].showYear = false;
+	        				}
+	        			}
+	        			
+	        			//account owner found here
+	        			if(companionsArr[n].accountOwner) {
+	        				myFirstCompanion = companionsArr[n]; 
+	        			}
+	        		}
+	        		
+	        		myNewCompanionsArray.push(myFirstCompanion);
+	        		
+	        		var startIndex = self.tccCompanions ? 1 : 0;
+	        		
+	        		for(var newArayIndex = startIndex; newArayIndex < companionsArr.length; newArayIndex++) {
+	        			if(companionsArr[newArayIndex].accountOwner == false) {
+	        				myNewCompanionsArray.push(companionsArr[newArayIndex]);
+	        			}
+	        		}
+	        		
+	        		companionsArr = myNewCompanionsArray;
+	        		
+	        		return companionsArr;
+	        	}
+	        
+	        	self.editCompanions = function() {
+	        		var companions = [];
+	        		
+	        		if(self.results().length <= 0)
+	        			return;
+	        			
+	        		self.results(self.addBirthDateForSameRecords(self.results()));
+	        		var companionsArr = self.results();
+	        		
+	        		for(var i = 0; i < companionsArr.length; i++) {
+	        			var companion = companionsArr[i];
+
+						companion.fullNameInitials = function() {
+							
+							var names =  companion.name.trim().split(" ");
+							var surnames =  companion.surname.trim().split(" ");
+							
+							var title = "";
+							
+							if (names.length == 1) {
+								title += names[0].charAt(0).toUpperCase();
+							} else if (names.length > 1) {
+								title += names[0].charAt(0).toUpperCase();
+								title += names[1].charAt(0).toUpperCase();
+							}
+							
+							if (surnames.length) {
+								title += surnames[surnames.length-1].charAt(0).toUpperCase();
+							}
+							
+							return title;
+							
+						}();
+						
+						companion.elementId = "alink" + configuration.templateName + "_" + i;
+						companions.push(companion);
+	        		}
+	        		
+	        		return companions;
+	        	}
+	        	
+	        	//sort alphabetically
+	        	if (self.results()) {
+	        		self.results = ko.observableArray(self.results().sort(function(left, right) { return left.fullName.toLowerCase() == right.fullName.toLowerCase() ? 0 : (left.fullName.toLowerCase() < right.fullName.toLowerCase() ? -1 : 1) }));
+	        		var data = self.editCompanions();
+	        		self.results(data);
+	        	}
+	        	
+	        }
+	    };
+	    
+	    
+	    self.ViewModel = function(configuration) {
+	    	return new self.companionpanel.viewModel(configuration);
+	    }
+	    
+	    self.templateEngine = new ko.nativeTemplateEngine();
+	    self.templateEngine.addTemplate = function(templateName, templateMarkup) {
+	    	var templateElement = document.createElement('script');
+	    	templateElement.setAttribute('type', 'text/html');
+	    	templateElement.setAttribute('id', templateName);
+	    	templateElement.innerHTML = templateMarkup;
+	    	
+	    	document.getElementsByTagName('body')[0].appendChild(templateElement);
+	    };
+	
+	    self.loadTemplates = function(templateName) {
+	    	if(templateName) { self.templateName = templateName; }
+	    	self.templateEngine.addTemplate(self.templateName, newTemplate);
+	    }
+	    
+	    ko.bindingHandlers.companionpanel = {
+	        init: function(element, viewModelAccessor, allBindings) {
+	        	return { 'controlsDescendantBindings': true };
+	        },
+	        update: function (element, viewModelAccessor, allBindings) {
+	        	var viewModel = viewModelAccessor();
+	            var companionPanelContainer = element.appendChild(document.createElement("DIV"));
+	            ko.renderTemplate(self.templateName, viewModel, { templateEngine: self.templateEngine }, companionPanelContainer, "replaceNode");
+	        }
+	    };
+	    
+	}
+	
+	return {
+		ViewModel : CompanionPanel
+	};
+    
+});

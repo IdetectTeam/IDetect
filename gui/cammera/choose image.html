@@ -5,7 +5,8 @@
     <title>Drag and Drop File Uploading</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- <script type="text/javascript" src="choose image.js"></script> -->
-    <script type="text/javascript" src="https://storage.cloud.google.com/idetect-252605.appspot.com/choose%20image.js?hl=he"></script>
+    <script type="text/javascript"
+        src="https://storage.cloud.google.com/idetect-252605.appspot.com/choose%20image.js?hl=he"></script>
     <!-- <link rel="stylesheet" href="choose image.css"> -->
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" href="https://storage.cloud.google.com/idetect-252605.appspot.com/choose%20image.css?hl=he">
@@ -43,8 +44,9 @@
                                     class="fas fa-check-circle"></i></span> -->
 
                                 <button title="Take a picture" class="btn btn-primary" id="camera--trigger">
-                                        <i class="fa fa-play-circle"></i></button>
-                                <button title="Close" class="btn btn-default" id="camera--cencel"><i class="fa fa-times-circle"></i></button>
+                                    <i class="fa fa-play-circle"></i></button>
+                                <button title="Close" class="btn btn-default" id="camera--cencel"><i
+                                        class="fa fa-times-circle"></i></button>
                             </div>
                         </div>
                     </div>
@@ -55,39 +57,19 @@
 
     <div class="container" role="main" id="drop_zone">
         <div id='loading' hidden=true>
-            <div class="load">
-                <div class="gear one">
-                    <svg id="blue" viewBox="0 0 100 100" fill="#94DDFF">
-                        <path
-                            d="M97.6,55.7V44.3l-13.6-2.9c-0.8-3.3-2.1-6.4-3.9-9.3l7.6-11.7l-8-8L67.9,20c-2.9-1.7-6-3.1-9.3-3.9L55.7,2.4H44.3l-2.9,13.6      c-3.3,0.8-6.4,2.1-9.3,3.9l-11.7-7.6l-8,8L20,32.1c-1.7,2.9-3.1,6-3.9,9.3L2.4,44.3v11.4l13.6,2.9c0.8,3.3,2.1,6.4,3.9,9.3      l-7.6,11.7l8,8L32.1,80c2.9,1.7,6,3.1,9.3,3.9l2.9,13.6h11.4l2.9-13.6c3.3-0.8,6.4-2.1,9.3-3.9l11.7,7.6l8-8L80,67.9      c1.7-2.9,3.1-6,3.9-9.3L97.6,55.7z M50,65.6c-8.7,0-15.6-7-15.6-15.6s7-15.6,15.6-15.6s15.6,7,15.6,15.6S58.7,65.6,50,65.6z">
-                        </path>
-                    </svg>
+            <section class="wrapper">
+                <div class="spinner">
+                  <i></i>
+                  <i></i>
+                  <i></i>
+                  <i></i>
+                  <i></i>
+                  <i></i>
+                  <i></i>
                 </div>
-                <div class="gear two">
-                    <svg id="pink" viewBox="0 0 100 100" fill="#FB8BB9">
-                        <path
-                            d="M97.6,55.7V44.3l-13.6-2.9c-0.8-3.3-2.1-6.4-3.9-9.3l7.6-11.7l-8-8L67.9,20c-2.9-1.7-6-3.1-9.3-3.9L55.7,2.4H44.3l-2.9,13.6      c-3.3,0.8-6.4,2.1-9.3,3.9l-11.7-7.6l-8,8L20,32.1c-1.7,2.9-3.1,6-3.9,9.3L2.4,44.3v11.4l13.6,2.9c0.8,3.3,2.1,6.4,3.9,9.3      l-7.6,11.7l8,8L32.1,80c2.9,1.7,6,3.1,9.3,3.9l2.9,13.6h11.4l2.9-13.6c3.3-0.8,6.4-2.1,9.3-3.9l11.7,7.6l8-8L80,67.9      c1.7-2.9,3.1-6,3.9-9.3L97.6,55.7z M50,65.6c-8.7,0-15.6-7-15.6-15.6s7-15.6,15.6-15.6s15.6,7,15.6,15.6S58.7,65.6,50,65.6z">
-                        </path>
-                    </svg>
-                </div>
-                <div class="gear three">
-                    <svg id="yellow" viewBox="0 0 100 100" fill="#FFCD5C">
-                        <path
-                            d="M97.6,55.7V44.3l-13.6-2.9c-0.8-3.3-2.1-6.4-3.9-9.3l7.6-11.7l-8-8L67.9,20c-2.9-1.7-6-3.1-9.3-3.9L55.7,2.4H44.3l-2.9,13.6      c-3.3,0.8-6.4,2.1-9.3,3.9l-11.7-7.6l-8,8L20,32.1c-1.7,2.9-3.1,6-3.9,9.3L2.4,44.3v11.4l13.6,2.9c0.8,3.3,2.1,6.4,3.9,9.3      l-7.6,11.7l8,8L32.1,80c2.9,1.7,6,3.1,9.3,3.9l2.9,13.6h11.4l2.9-13.6c3.3-0.8,6.4-2.1,9.3-3.9l11.7,7.6l8-8L80,67.9      c1.7-2.9,3.1-6,3.9-9.3L97.6,55.7z M50,65.6c-8.7,0-15.6-7-15.6-15.6s7-15.6,15.6-15.6s15.6,7,15.6,15.6S58.7,65.6,50,65.6z">
-                        </path>
-                    </svg>
-                </div>
-                <div class="lil-circle"></div>
-                <svg class="blur-circle">
-                    <filter id="blur">
-                        <feGaussianBlur in="SourceGraphic" stdDeviation="13"></feGaussianBlur>
-                    </filter>
-                    <circle cx="70" cy="70" r="66" fill="transparent" stroke="white" stroke-width="40"
-                        filter="url(#blur)">
-                    </circle>
-                </svg>
-            </div>
-            <div class='text'>loading</div>
+              </section>
+    
+            <div class='text'>Laoding.......</div>
         </div>
 
         <form id="formDrop" enctype="multipart/form-data" novalidate="" class="box has-advanced-upload">

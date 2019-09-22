@@ -1,5 +1,6 @@
+
 //add script files and sources
-document.write(`<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">‏`)
+document.write(`<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">â€`)
 var script = document.createElement('script');
 script.src = 'https://code.jquery.com/jquery-1.11.0.min.js';
 script.type = 'text/javascript';
@@ -15,7 +16,9 @@ var fieldsFilledAutomatically = [];
 //create install_icon
 var install_icon = document.createElement("i");
 install_icon.style="position:absolute;color:red;zIndex:100000;width:15px;height:14px";
-install_icon.className='fas fa-id-card'
+install_icon.className='fa fa-id-card'
+
+
 //create buttonOpenIframe
 var IForButton = document.createElement("i");   
 var buttonOpenIframe = document.createElement("button");   
@@ -43,7 +46,8 @@ function sendMessage($event) {
             debugger;
             if (inConfiguration) {
                 var positionCurrentElement = event.target.getBoundingClientRect()
-                install_icon.style.top = (positionCurrentElement.top + 8) + "px"
+               
+                install_icon.style.top = (event.target.getBoundingClientRect().top+document.getElementById('idetectiframe').contentWindow.parent.scrollY)+"px";
                 install_icon.style.left = positionCurrentElement.left - 20 + "px";
             }
         wn.postMessage(event.target.id, '*');
@@ -61,14 +65,14 @@ function openOrCloseForm() {
 function openForm() {
     // button.classList.add('rotate');
     $.ajax({
-        url: "http://127.0.0.1:5000/api/hasConfig",
-        // url: "https://europe-west1-idetect-252605.cloudfunctions.net/hasConfig/api/hasConfig",
+        //url: "http://127.0.0.1:5000/api/hasConfig",
+         url: "https://europe-west1-idetect-252605.cloudfunctions.net/hasConfig/api/hasConfig",
         // send the base64 post parameter
         data: {
             user: document.URL
         },
         // important POST method !
-        type: "GET",
+        type: "get",
         success: function (data) {
         //  iframe.style = "position:fixed;right:50px;bottom:200px;height:500px;width:400px;border-radius:50px;width:300px;border: 4px solid black;";
         //open iframe
@@ -126,8 +130,8 @@ function sendConfig(configSite) {
     json_response = `${configSite}`;
     alert(json_response);
     $.ajax({
-        url: "http://127.0.0.1:5000/api/addConfig", 
-        // url: "https://europe-west1-idetect-252605.cloudfunctions.net/addConfig/api/addConfig",        
+       // url: "http://127.0.0.1:5000/api/addConfig", 
+         url: "https://europe-west1-idetect-252605.cloudfunctions.net/addConfig/api/addConfig",     
         data: {
             adress: document.URL.split("?")[0],
             configurationsite: json_response
@@ -150,8 +154,8 @@ function sendConfig(configSite) {
 function sendImage(imageToSend) {
     setFieldsToEmpty();
     $.ajax({
-        url: "http://127.0.0.1:5000/api/args",
-        // url: "https://europe-west1-idetect-252605.cloudfunctions.net/detectImg/api/args",
+        //url: "http://127.0.0.1:5000/api/args",
+         url: "https://europe-west1-idetect-252605.cloudfunctions.net/detectImg/api/args",
         // send the base64 post parameter
         data: {
             user: document.URL.split("?")[0],
@@ -230,7 +234,8 @@ function markField(currentElement) {
     var icon = document.createElement("i");   
     icon.style.position="absolute";
     //var win = document.getElementById('idetectiframe').contentWindow;
-    icon.style.bottom = (-1*currentElement.getBoundingClientRect().bottom)+"px";
+    icon.style.top = (currentElement.getBoundingClientRect().top+document.getElementById('idetectiframe').contentWindow.parent.scrollY)+"px";
+    console.log("curr"+currentElement.getBoundingClientRect().bottom+"??"+document.getElementById('idetectiframe').contentWindow.parent.scrollY);
     //(positionCurrentElement.bottom-8)+"px";//-win.parent.scrollY -1*
     icon.style.color ="red";
     icon.style.left=icon.style.left =currentElement.getBoundingClientRect().left+"px"//positionCurrentElement.left-20+"px";//+win.parent.scrollX
@@ -285,4 +290,10 @@ function putDataIntoFields(idFields, textFields) {
                 markField(currentElement);
             }
     }
+    var title1 = new TimelineMax();
+    title1.staggerFromTo("input", 0.5, 
+    {ease: Back.easeOut.config(1.7), opacity: 0, bottom: -80},
+    {ease: Back.easeOut.config(1.7), opacity: 1, bottom: 0}, 0.05);
+
+    
 }

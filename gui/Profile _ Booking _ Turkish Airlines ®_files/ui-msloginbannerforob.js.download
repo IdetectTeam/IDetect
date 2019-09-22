@@ -1,0 +1,437 @@
+define(['jquery', 
+        'knockout', 
+        'moment', 
+        'eteration/eteration-ajax', 
+        'humanize-duration', 
+        'eteration/eteration-i18n' ,
+        'constants/countryregion-constants',
+        'eteration/widgets/ui-etrselect',
+        'eteration/widgets/ui-dropdownselect',
+        'eteration/widgets/ui-selectpicker',
+        'eteration/widgets/ui-moment'], 
+
+function($, ko, moment,etrAjax, humanize,  i18n, countryRegionUtil) {
+
+	ko.components.register('msloginbannerforob', {
+		
+	    viewModel: function(vm) {
+	    	
+	    	var self = this;
+
+	    	self.countryRegionCodes = vm.countryRegionCodes;
+
+	    	function RecaptchaInfo(){
+	    		var self = this;
+	    	    self.privateKey = ko.observable();
+	    	    self.remoteIp = ko.observable();
+	    	    self.challenge = ko.observable();
+	    	    self.response = ko.observable();
+	    	};
+	    	 
+			
+			self.recaptchaInfo = ko.observable(new RecaptchaInfo());
+			self.validationContextForSignin = ko.jqValidation({});
+			self.validationContext = ko.jqValidation({});
+			self.webServiceMessageCode = ko.observable();
+
+			self.showWebServiceErrorMessage = ko.observable(false);
+
+			self.loggedIn = ko.observable(false);
+			
+			self.notLoggedIn =	ko.computed(function() {
+				return !self.loggedIn();
+			});	
+			
+
+			self.isCaptchaRequired = ko.observable(false);
+			self.webServiceMessageCode = ko.observable();
+			self.username = ko.observable();
+			self.password = ko.observable();
+			self.loginType = ko.observable("1");
+			
+			self.mobilePhoneCountryRegionId = ko.observable();
+			self.mobilePhoneCountryCode = ko.observable();
+			self.mobilePhoneNumber = ko.observable();
+			
+			self.mobilePhoneCountryRegionId.subscribe(function(newValue){
+				if(newValue){
+            	   var countryRegion = countryRegionUtil.getCountryRegionFromId(newValue);
+            	   self.mobilePhoneCountryCode(countryRegion == null? null : countryRegion.region);
+                } else {
+                	self.mobilePhoneCountryCode(null);
+                }
+            });
+			
+			self.allowedEmailLogin = ko.observable();
+			self.allowedTcIdLogin = ko.observable();
+			self.allowedMobilePhoneLogin = ko.observable();
+			
+			var allowedLoginTypes = $.jStorage.get("app.miles/miles/allowedlogintypesfromadmin");
+
+			if(!allowedLoginTypes){
+				etrAjax.get({
+						app: 'app.ms',
+						service:'/miles/allowedlogintypesfromadmin',
+						callback:function(response) {
+	                        self.allowedEmailLogin(response.data.allowLoginWithEmail);
+	                        self.allowedMobilePhoneLogin(response.data.allowLoginWithMobilePhone);
+	                        self.allowedTcIdLogin(response.data.allowLoginWithTCId);
+							
+							$.jStorage.set("app.miles/miles/allowedlogintypesfromadmin", response.data, {TTL: 3600000});
+							
+						}
+				});
+			}else{
+				self.allowedEmailLogin(allowedLoginTypes.allowLoginWithEmail);
+				self.allowedMobilePhoneLogin(allowedLoginTypes.allowLoginWithMobilePhone);
+				self.allowedTcIdLogin(allowedLoginTypes.allowLoginWithTCId);
+			}	
+			
+			
+			self.captchaRequiredControl = function(){
+				
+				$.ajax({
+					url: "/com.thy.web.online.miles/ms/login/iscaptcharequired",
+			        type: "GET",
+					contentType : "application/json; charset=utf-8",
+			        dataType : "json",
+			        data: { "loginType" : $('#ob-logintype').val() },
+			        cache:false,
+			        success: function(response) {
+			        	self.isCaptchaRequired(response.data);
+			        }
+			    });
+			};
+			
+			
+			self.doLogin = function(){
+
+				
+				var validationResult = self.validationContextForBanner.Validate();
+				if (validationResult.valid) {
+					
+					
+					var usernameVal = null;
+					
+					if(self.loginType() == '3') {
+						usernameVal = self.mobilePhoneCountryCode() + $('#msloginbanner-username3').val();
+					} else {
+						usernameVal = $('#msloginbanner-username' + self.loginType()).val();
+					}
+	            	  
+					var loginPost = {
+  			    		app: 'app.ms',
+  			    		disableLoader: false,
+  			    		service:'/login/signin',
+  			    		disableErrorHandling : true,
+  			    		disableLoaderTimeout : true,
+  			    		uiMap: {
+  			    				'username':'username',
+  			    				'password' : 'password'
+  			    		},
+  			    		
+  			    		// Login Text, Channel Code, Pin Number
+  			    		data : {
+  			    			'username' : usernameVal,  
+  			    			'password' : self.password(),
+  			    			'loginType': self.loginType(),
+  			    			'recaptchaInfo' : JSON.parse(ko.toJSON(self.recaptchaInfo()))
+  			    			},
+//	  			    		uiMap:uiMap,
+  			    		callback:function(response) {
+  			    			
+	  			    			 $('#msloginbanner-errorusername' + self.loginType()).html('');
+							     $('#msloginbanner-errorpassword').html('');
+							     $('#msloginbanner-errorpassword').html('');
+	  			    			
+	  			    			
+	  			    			if(response.type=="SUCCESS" && response.data && response.data.loggedIn) {
+	  			    					window.location.reload();
+	  			    			} else{
+	  			    				
+
+	                				var messages = response.error.validationMessages;
+
+									if (messages.length) {
+									
+										if(self.loginType() == "2" || self.loginType() == "3"){
+											self.showSecurityQuestionModal();
+										}
+										
+										for(var i=0;i<messages.length;i++){
+										var msg = messages[i].msg;
+											$('#msloginbanner-errorpassword').html('<small><i class="fa fa-warning red"></i>'+i18n.get(msg)+'</small>');
+										}
+										
+
+										
+										
+										var code = messages[0].code;
+										var msg = messages[0].msg;
+										
+										// there is no security question for this user.
+										// so only will show information light box
+										if(code == "MS00201221" || msg === "Error-MS-MS00201221"){
+											self.webServiceMessageCode(code);
+											self.showForgotPasswordInfoModal();
+										}
+										
+										// 3 times wrong login attempt
+										if(code === "MS00201225" || msg === "Error-MS-MS00201225" || code === "MS00201212" || msg === "Error-MS-MS00201212" || code === "MS00201211" || msg === "Error-MS-MS00201211") {
+											self.webServiceMessageCode(code);
+											self.showSecurityQuestionModal();
+										}
+										
+										// pending member
+										if(code == "MS00201205" || msg === "Error-MS-MS00201205"){
+											self.webServiceMessageCode(code);
+//													self.showSecurityQuestionModal();
+										}
+										
+									}
+	  			    			}
+  			    		}
+					};
+					
+  					etrAjax.post(loginPost);
+	              }
+				
+			}
+			
+			self.forgotPasswordUIMSLoginBanner = function(){
+				self.showWebServiceErrorMessage(false);
+				var validationResult = self.validationContextForForgotPassword.Validate();
+                if (validationResult.valid) {
+					etrAjax.get({
+						app : 'app.ms',
+						service : '/miles/resetpinwithemail',
+						disableErrorHandling : true,
+//								largeLoader : true,
+//								loaderName : 'Select Flights',
+						data: { 
+				        	'ffid' : $('#msloginbanner-forgotPasswordFfid').val(),
+				        	'email' : $('#msloginbanner-forgotPasswordEmail').val()
+			        		},
+						callback : function(response) {
+							self.webServiceMessageCode(response.data.code);
+							if(response.data.code != "MS00301400"){
+				        		self.showWebServiceErrorMessage(true);
+				        	} else {
+				        		self.defillInputByGivenId('#msloginbanner-forgotPasswordFfid');
+				        		self.defillInputByGivenId('#msloginbanner-forgotPasswordEmail');
+				        		
+				        		$("#msloginbanner-forgotPasswordModal").modal("hide");
+				        		if(!$('#msloginbanner-forgotPasswordInfoModal').is(':visible')){
+				        			$("#msloginbanner-forgotPasswordInfoModal").appendTo('body').modal("show");
+				        		}
+				        	}
+						}
+					});
+                }
+			}
+			
+
+			
+			self.openForgotPasswordModal = function(data, e){
+				$("#msloginbanner-forgotPasswordModal").appendTo('body').modal("toggle");
+				e.preventDefault();
+				e.stopPropagation();
+			};
+
+			
+			self.msSignInCallback = function() {
+				 $('#mssigninbackground').find('img:first').addClass("single-bg single-bg-height");
+			};
+			
+			
+			
+			//////***********
+			
+			self.validationContextForBanner = ko.jqValidation({postValidators:[]});
+			self.validationContextForForgotPassword = ko.jqValidation({postValidators:[]});
+			self.validationContextForQuestionAnswer = ko.jqValidation({postValidators:[]});
+			
+			
+			self.defillUsernameAndPasswordInputs = function(){
+				$('#msloginbanner-errorusername' + self.loginType()).val("");
+				$('#msloginbanner-password').val("");
+			}
+			
+			self.defillInputByGivenId = function(elementId){
+				$(elementId).val("");
+			}
+			
+			self.showSecurityQuestionModal = function(){
+				self.username("");
+				self.password("");
+				$("#msloginbanner-errorpassword").html("")
+				$("#securityQuestionAnswerModal").appendTo('body').modal("show");
+			}
+			
+			self.showForgotPasswordInfoModal = function(){
+				self.username("");
+				self.password("");
+				$("#msloginbanner-errorpassword").html("")
+				$("#msloginbanner-forgotPasswordInfoModal").appendTo('body').modal("show");
+			}
+			
+			
+
+	    },
+	    
+	    
+	    template:
+	    		"	<div data-bind=\"jqValidation: validationContextForBanner\">\n" + 
+	    		"		<div class=\"row\">\n" + 
+	    		"\n" +
+	    		"<label id=\"member-pref\" class=\"sr-only\" for=\"msloginbanner-logintype\" data-bind=\"i18n-text: { key: 'Label-MS-LOGIN-1001\'}\"></label>" +			
+	    		"			<div class=\"col-sm-4\">\n" + 
+	    		"				<div class=\"form-group has-feedback-lg\">\n" + 
+	    		"					<label id=\"member-pref\" class=\"sticky-label z-index-3 absolute fs-13 fw300 blue\" data-bind=\"i18n-text: { key: 'Label-MS-LOGIN-1001'}\"></label>\n" +
+	    		"					<select id=\"msloginbanner-logintype\" class=\"dropdownselect\" data-bind=\"valueAllowUnset:true,dropdownselect,value:loginType\" data-style=\"btn-default btn-lg red-caret border-right\" data-width=\"100%\">\n" + 
+	    		"						<option value=\"1\" data-bind=\"i18n-text: { key: \'Label-MS-LOGIN-04\'}\"></option>\n" + 
+	    		"						<!-- ko if: allowedEmailLogin() -->\n" + 
+	    		"						<option value=\"2\" data-bind=\"i18n-text: { key: \'Label-MS-LOGIN-03\'}\"></option>\n" + 
+	    		"						<!-- /ko -->\n" + 
+	    		"\n" + 
+	    		"						<!-- ko if: allowedTcIdLogin() -->\n" + 
+	    		"						<option value=\"4\" data-bind=\"i18n-text: { key: \'Label-MS-LOGIN-01\'}\"></option>\n" + 
+	    		"						<!-- /ko -->\n" + 
+	    		"\n" + 
+	    		"						<!-- ko if: allowedMobilePhoneLogin() -->\n" + 
+	    		"						<option value=\"3\" data-bind=\"i18n-text: { key: \'Label-MS-LOGIN-02\'}\"></option>\n" + 
+	    		"						<!-- /ko -->\n" + 
+	    		"					</select>\n" + 
+	    		"				</div>\n" + 
+	    		"			</div>\n" + 
+	    		"\n" + 
+	    		"			<div class=\"col-sm-4 label-selector\">\n" + 
+	    		"\n" + 
+	    		"				<!-- ko if: loginType() == \'1\' -->\n" + 
+	    		"				<!-- tk number -->\n" + 
+	    		"				<label id=\"membershipNumber\" class=\"sr-only float-label blue\" data-bind=\"i18n-text: { key: 'Label-MS-LOGIN-04'}\"></label>\n" + 
+	    		"				<input aria-labelledby=\"member-pref\" type=\"tel\" class=\"form-control input-lg passenger-input fw500 gray fs-normal\" id=\"msloginbanner-username1\" name=\"username1\" maxlength=\"9\" data-bind=\"value : username, i18n-placeholder: { key: \'Label-MS-LOGIN-04\'}\" data-validation=\'{\"required\":true}\' />\n" + 
+	    		"				<p for=\"username1\" id=\"msloginbanner-errorusername1\"></p>\n" + 
+	    		"				<!-- /ko -->\n" + 
+	    		"\n" + 
+	    		"				<!-- ko if: loginType() == \'2\' -->\n" + 
+	    		"				<!-- email -->\n" + 
+	    		"				<label id=\"emailAddress\" class=\"sr-only float-label blue\" data-bind=\"i18n-text: { key: 'Label-MS-LOGIN-03'}\"></label>\n" + 
+	    		"				<input aria-labelledby=\"member-pref\" type=\"email\" class=\"form-control input-lg passenger-input fw500 gray fs-normal\" id=\"msloginbanner-username2\" name=\"username2\" maxlength=\"50\" data-bind=\"i18n-placeholder: { key: \'Label-MS-LOGIN-03\'}\" data-validation=\'{\"required\":true,\"validator\": \"email\"}\' />\n" + 
+	    		"				<p for=\"username2\" id=\"msloginbanner-errorusername2\"></p>\n" + 
+	    		"				<!-- /ko -->\n" + 
+	    		"\n" + 
+	    		"				<!-- ko if: loginType() == \'3\' -->\n" + 
+	    		"				<!-- mobile phone number -->\n" + 
+	    		"				<div class=\"row\">\n" + 
+	    		"					<div class=\"col-xs-5\">\n" + 
+	    		"					<label id=\"regionCodes\" class=\"sticky-label z-index-3 absolute fs-12 fw300 blue\" data-bind=\"i18n-text: { key: 'Label-REZ-DASH-50013.areacode'}\"></label>\n" + 
+	    		"					<!-- ko if: $component.countryRegionCodes -->\n" +
+	    		"						<select aria-labelledby=\"member-pref\" class=\"form-control input-lg dropdownselect regionCodesSelect\" data-width=\"100%\" data-style=\"btn-default btn-lg\" data-validation=\'{\"required\":true}\' data-bind=\"dropdowncountryregioncodes : {optionsData: $component.countryRegionCodes}, value: mobilePhoneCountryRegionId\" >\n" +
+	    		"						</select>\n" + 
+	    		"					<!-- /ko -->\n" + 
+	    		"					<!-- ko if: $root.regionCodes && !$component.countryRegionCodes -->\n" +
+	    		"						<select aria-labelledby=\"member-pref\" class=\"form-control input-lg dropdownselect regionCodesSelect\" data-width=\"100%\" data-style=\"btn-default btn-lg\" data-validation=\'{\"required\":true}\' data-bind=\"dropdownregioncodes:{optionsData:$root.regionCodes}, value: mobilePhoneCountryCode\">\n" + 
+	    		"						</select>\n" +
+	    		"					<!-- /ko -->\n" +
+	    		"					</div>\n" + 
+	    		"\n" + 
+	    		"					<div class=\"col-xs-7 label-selector\">\n" + 
+	    		"					<label id=\"mobileNumber\" class=\"sr-only float-label blue\" data-bind=\"i18n-text: { key: 'Label-MS-LOGIN-02'}\"></label>\n" + 
+	    		"						<input id=\"msloginbanner-username3\" name=\"username3\" type=\"tel\" class=\"form-control input-lg passenger-input fw500 gray fs-normal\" data-bind=\"value : mobilePhoneNumber , numeric-input:{maxDigits:12}, i18n-placeholder: { key: \'Label-MS-LOGIN-02\'}, number-only\" data-validation=\'{\"required\":true}\'>\n" + 
+	    		"					</div>\n" + 
+	    		"				</div>\n" + 
+	    		"				<p for=\"username3\" id=\"msloginbanner-errorusername3\"></p>\n" + 
+	    		"				<!-- /ko -->\n" + 
+	    		"\n" + 
+	    		"				<!-- ko if: loginType() == \'4\' -->\n" + 
+	    		"				<!-- tckn -->\n" + 
+	    		"				<label id=\"tcLabel\" class=\"sr-only float-label blue\" data-bind=\"i18n-text: { key: 'Label-MS-LOGIN-01'}\"></label>\n" + 
+	    		"				<input aria-labelledby=\"member-pref\" type=\"tel\" class=\"form-control input-lg passenger-input fw500 gray fs-normal\" id=\"msloginbanner-username4\" name=\"username4\" maxlength=\"11\" data-bind=\"i18n-placeholder: { key: \'Label-MS-LOGIN-01\'}, number-only\" data-validation=\'{\"required\":true}\' />\n" + 
+	    		"				<p for=\"username4\" id=\"msloginbanner-errorusername4\"></p>\n" + 
+	    		"				<!-- /ko -->\n" + 
+	    		"\n" + 
+	    		"			</div>\n" + 
+	    		"\n" + 
+	    		"			<div class=\"col-sm-2 label-selector\">\n" +
+	    		"				<label id=\"msloginbanner-password\" class=\"sr-only float-label blue\" data-bind=\"i18n-text: { key: 'Label-MS-LOGIN-05'}\"></label>\n" +
+	    		"				<input class=\"form-control input-lg passenger-input fw500 gray fs-normal\" type=\"password\" autocomplete=\"off\" id=\"msloginbanner-password\" maxlength=\"6\" data-validation=\'{\"required\":true,\"validator\":\"minlength\",\"minlength\":\"4\" ,\"minlengthMsg\":\"Error-OB-61\"}\' data-bind=\"value : password ,  keyboard-input-filter : { allowed : ['numbers' , 'default-keys'] }, i18n-placeholder: { key: \'Label-MS-LOGIN-05\'}\" />\n" + 
+	    		"				<p for=\"msloginbanner-password\" id=\"msloginbanner-errorpassword\"></p>\n" + 
+	    		"				<a class=\"blue absolute fs-13 fw500\" role=\"button\" tabindex=\"0\" data-bind=\"click : openForgotPasswordModal, i18n-text: { key: 'Label-MS-LOGIN-55'}\"></a>\n" +
+	    		"			</div>\n" + 
+	    		"			<div class=\"col-sm-2\">\n" + 
+	    		"				<a class=\"btn btn-danger btn-block btn-lg\" role=\"button\" tabindex=\"0\" data-bind=\"click : doLogin , i18n-text: {key: \'Label-MS-LOGIN-06\'}\"></a>\n" + 
+	    		"			</div>\n" + 
+	    		"		</div>\n" + 
+	    		"\n" + 
+	    		"\n" + 
+	    		"\n" + 
+	    		"	</div>\n" + 
+	    		"</div>\n" + 
+	    		"\n" + 
+	    		"\n" + 
+	    		"<div class=\"modal fade\" id=\"msloginbanner-forgotPasswordModal\" tabindex=\"-1\" role=\"dialog\" data-backdrop=\"static\" data-keyboard=\"false\" aria-hidden=\"true\">\n" + 
+	    		"	<div class=\"modal-dialog\">\n" + 
+	    		"		<div class=\"modal-content\" data-bind=\"jqValidation: validationContextForForgotPassword\">\n" + 
+	    		"			<div class=\"modal-header\">\n" + 
+	    		"				<button data-dismiss=\"modal\" type=\"button\" class=\"modal-close\">\n" + 
+	    		"					<i class=\"fa fa-times\"></i>\n" + 
+	    		"				</button>\n" + 
+	    		"				<div class=\"h3 text-center\" data-bind=\"i18n-text:{key:\'Label-MS-LOGIN-55\'}\"></div>\n" + 
+	    		"			</div>\n" + 
+	    		"			<div class=\"modal-body\">\n" + 
+	    		"				<div class=\"row grid\">\n" + 
+	    		"					<div class=\"col-xs-12\">\n" + 
+	    		"						<label class=\"normal gray\" data-bind=\"i18n-text: { key: \'Label-MS-INFO-767879\'}\"></label>\n" + 
+	    		"					</div>\n" + 
+	    		"				</div>\n" + 
+	    		"				<div class=\"row grid\">\n" + 
+	    		"					<div class=\"col-xs-12\">\n" + 
+	    		"						<div class=\"form-group\">\n" + 
+	    		"							<label class=\"normal gray block\" data-bind=\"i18n-text: { key: \'Label-MS-MILES-11999\'}\"></label>\n" + 
+	    		"							<span class=\"input-lg pull-left border-label col-xs-2 col-sm-1\" data-bind=\"i18n-text: { key: \'Label-MS-6500\'}\"></span>\n" + 
+	    		"							<div class=\"col-xs-10 col-sm-11 nopadding\">\n" + 
+	    		"								<input id=\"msloginbanner-forgotPasswordFfid\" type=\"text\" class=\"form-control input-lg\" maxlength=\"9\" data-bind=\"value : username , numeric-input:{minDigits: 0}\" data-validation=\'{\"required\":true}\'>\n" + 
+	    		"							</div>\n" + 
+	    		"						</div>\n" + 
+	    		"					</div>\n" + 
+	    		"				</div>\n" + 
+	    		"				<div class=\"row\">\n" + 
+	    		"					<div class=\"col-xs-12 col-md-12\">\n" + 
+	    		"						<div class=\"form-group has-feedback has-feedback-lg\">\n" + 
+	    		"							<label class=\"normal gray block\" data-bind=\"i18n-text: { key: \'Label-MS-LOGIN-03\'}\"></label>\n" + 
+	    		"							<input id=\"msloginbanner-forgotPasswordEmail\" type=\"text\" class=\"form-control input-lg\" maxlength=\"50\" data-bind=\"value : $root.email , i18n-placeholder: { key: \'Label-MS-LOGIN-03\'}\" data-validation=\'{\"required\":true,\"validator\": \"email\"}\'>\n" + 
+	    		"						</div>\n" + 
+	    		"					</div>\n" + 
+	    		"				</div>\n" + 
+	    		"				<!-- ko if : showWebServiceErrorMessage -->\n" + 
+	    		"				<div class=\"row\">\n" + 
+	    		"					<div class=\"col-xs-12\">\n" + 
+	    		"						<div class=\"alert alert-attention noborder\">\n" + 
+	    		"							<i class=\"fa fa-exclamation-triangle red fa-3x pull-left\"></i>\n" + 
+	    		"							<div class=\"h4\" data-bind=\"i18n-text: { key: \'Error-MS-\'+webServiceMessageCode()}\"></div>\n" + 
+	    		"						</div>\n" + 
+	    		"					</div>\n" + 
+	    		"				</div>\n" + 
+	    		"				<!-- /ko -->\n" + 
+	    		"			</div>\n" + 
+	    		"			<div class=\"modal-footer\">\n" + 
+	    		"				<div class=\"row\">\n" + 
+	    		"					<div class=\"col-xs-12 col-sm-4 pull-right mb-10-mbl\">\n" + 
+	    		"						<a class=\"btn btn-danger btn-block btn-lg bold\" data-bind=\"click : forgotPasswordUIMSLoginBanner , i18n-text: {key: \'Label-MS-LOGIN-1002\'}\"></a>\n" + 
+	    		"					</div>\n" + 
+	    		"					<div class=\"col-xs-12 col-sm-4 pull-left\" data-dismiss=\"modal\">\n" + 
+	    		"						<a class=\"btn btn-danger btn-block btn-lg\" data-bind=\"i18n-text: {key: \'Label-MS-INFO-71\'}\"></a>\n" + 
+	    		"					</div>\n" + 
+	    		"				</div>\n" + 
+	    		"			</div>\n" + 
+	    		"		</div>\n" + 
+	    		"	</div>\n" + 
+	    		"<div data-bind=\"component: {name:\'accessibility-component\', params:{targetQuery:\'msloginbanner\'}}\"></div>\n" + 
+	    		""
+	});
+		//Destek-RW3002 added labels to ms login banner,
+		//see lines: 353 and 295
+	
+
+});

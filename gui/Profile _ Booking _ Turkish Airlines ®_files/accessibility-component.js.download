@@ -1,0 +1,67 @@
+define([
+    'jquery',
+    'knockout'
+], function($, ko, accessibility) {
+
+    ko.components.register('accessibility-component', {
+        viewModel: function(params) {
+            var self = this;
+            self.targetQuery = ko.observable(params.targetQuery);
+            var targetQuery = null;
+            if (params.targetQuery !== null) {
+                targetQuery = params.targetQuery;
+            } else {
+                targetQuery = 'body';
+            }
+            var fixAAriaLabel = function(target) {
+
+                var links = $(target).find('a');
+
+                links.each(function() {
+                    var link = $(this);
+                    if (!link.attr( "aria-label")&&!link.attr( "aria-labelledby")&&!link.attr( "title")) {
+                        if (link.not('[aria-label]').length > 0) {
+                            if (link.children().length == 0) {
+                                link.attr('aria-label', link.text());
+                                
+                            } else {
+                            	var tempAText='';
+                                link.find("span:not(.visible-xs)").each(function(index, el) {
+                                	if($(this).find('span').length == 0){
+	                                	if ($(this).text()|| ($(this).text().trim() != '')) {
+	                                		if(tempAText==''){
+	                                			tempAText=$(this).text().trim();
+	                                		}else{
+	                                			tempAText=tempAText+' '+$(this).text().trim();
+	                                		}
+	                                    }
+                                	}
+                                });
+                                if(tempAText!=''){
+                                	link.attr('aria-label', tempAText);
+                                }else{
+                                	link.attr('aria-label', link.text().trim());
+                                }
+                            }
+                        }
+                    }
+
+                });
+            };
+            var metroRadioLabelFor= function(){
+	            $("label.radio.small-metro.metro-radio").attr("for", function() {
+	                return $(this).children("input:radio").attr("id");
+	            });
+            };
+            
+            setTimeout(function(){
+            	
+            	fixAAriaLabel(targetQuery);
+            },100);
+            metroRadioLabelFor();
+        },
+        template: "<div>\n" +
+            "\n" +
+            "</div>"
+    });
+});

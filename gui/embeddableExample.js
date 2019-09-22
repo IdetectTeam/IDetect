@@ -1,3 +1,4 @@
+
 //add script files and sources
 document.write(`<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">‏`)
 var script = document.createElement('script');
@@ -15,7 +16,9 @@ var fieldsFilledAutomatically = [];
 //create install_icon
 var install_icon = document.createElement("i");
 install_icon.style="position:absolute;color:red;zIndex:100000;width:15px;height:14px";
-install_icon.className='fas fa-id-card'
+install_icon.className='fa fa-id-card'
+
+
 //create buttonOpenIframe
 var IForButton = document.createElement("i");   
 var buttonOpenIframe = document.createElement("button");   
@@ -43,8 +46,9 @@ function sendMessage($event) {
             debugger;
             if (inConfiguration) {
                 var positionCurrentElement = event.target.getBoundingClientRect()
-                install_icon.style.top = (positionCurrentElement.top + 8) + "px"
-                install_icon.style.left = positionCurrentElement.left - 20 + "px";
+               
+                install_icon.style.top = (event.target.getBoundingClientRect().top+document.getElementById('idetectiframe').contentWindow.parent.scrollY)+"px";
+                install_icon.style.left =(event.target.getBoundingClientRect().left -document.getElementById('idetectiframe').contentWindow.parent.scrollY)- 20 + "px";
             }
         wn.postMessage(event.target.id, '*');
         }
@@ -60,28 +64,11 @@ function openOrCloseForm() {
 //open add image form in iframe
 function openForm() {
     // button.classList.add('rotate');
-    $.ajax({
-        url: "http://127.0.0.1:5000/api/hasConfig",
-        // url: "https://europe-west1-idetect-252605.cloudfunctions.net/hasConfig/api/hasConfig",
-        // send the base64 post parameter
-        data: {
-            user: document.URL
-        },
-        // important POST method !
-        type: "GET",
-        success: function (data) {
-        //  iframe.style = "position:fixed;right:50px;bottom:200px;height:500px;width:400px;border-radius:50px;width:300px;border: 4px solid black;";
-        //open iframe
+   
         iframe.style = "z-index:10000000;bottom:110px;right:20px;position:fixed;height:450px;;border-radius:20px;border: 1px solid aliceblue";
         document.body.appendChild(divIframe);
         divIframe.appendChild(iframe);
-            if (data == "true")
-                iframe.src = "https://storage.cloud.google.com/idetect-252605.appspot.com/choose%20image.html";
-            else {
-                iframe.src = "https://storage.cloud.google.com/idetect-252605.appspot.com/install.html";
-            }
-        }
-    });     
+        iframe.src = "https://storage.cloud.google.com/idetect-252605.appspot.com/choose%20image.html";  
     isIframeOpen = true;
 }
 
@@ -121,64 +108,15 @@ function onMessage(event) {
 function color_the_field(idField, status) {
     document.getElementById(idField).style.boxShadow = "5px yellow"
 }
-function sendConfig(configSite) {
-    configSite = JSON.stringify(configSite);
-    json_response = `${configSite}`;
-    alert(json_response);
-    $.ajax({
-        url: "http://127.0.0.1:5000/api/addConfig", 
-        // url: "https://europe-west1-idetect-252605.cloudfunctions.net/addConfig/api/addConfig",        
-        data: {
-            adress: document.URL.split("?")[0],
-            configurationsite: json_response
-        },
-        type: "POST", //request type,
-        success: function (result) {
-            console.log(result);
-            alert(result);
-            config_fields = {};
-            json_response = ``;
-            //open the idetect after install was succsessfully
-            //need to be some fitures of uploading
-            iframe.src = "https://storage.cloud.google.com/idetect-252605.appspot.com/choose%20image.html";
-            //location.href= "https://storage.googleapis.com/idetect-252605.appspot.com/choose%20image.html"+ location.search;
-        }
-    });
 
-}
 
 function sendImage(imageToSend) {
     setFieldsToEmpty();
-    $.ajax({
-        url: "http://127.0.0.1:5000/api/args",
-        // url: "https://europe-west1-idetect-252605.cloudfunctions.net/detectImg/api/args",
-        // send the base64 post parameter
-        data: {
-            user: document.URL.split("?")[0],
-            image: imageToSend
-        },
-        // important POST method !
-        type: "POST",
-        complete: function () {
-            try {
-                var wn = document.getElementById('idetectiframe').contentWindow;
-                wn.postMessage('', '*');
-            }
-            catch{ }
-            imageToSend = "";
-        },
-        success: function (data) {
-          
-            alert('fields====='+data['fields']+'   '+'result============'+data['result']);
-
-            putDataIntoFields(JSON.parse(data['fields']), JSON.parse(data['result']));
-        }
-    });
+    var dict = {"fields": {"Passpord Card no":"id","Surname":"first_name","Given Names":"last_name","Sex":"sex","Date of Birth":"dateOfBirth"}, "result":{"Passpord Card no": "C00003594","Surname":"TRAVELER","Given Names":"HAPPY", "Date of Birth": "01 JAN 1981","Sex":"M"}};
+    putDataIntoFields(dict['fields'], dict['result']);
+        
 }
-// // Function to be called from iframe
-// function parentFunc(message) {
-//     alert(message);
-// }
+
 function convertToDate(value) {
 
     date = new Date(value);
@@ -230,7 +168,8 @@ function markField(currentElement) {
     var icon = document.createElement("i");   
     icon.style.position="absolute";
     //var win = document.getElementById('idetectiframe').contentWindow;
-    icon.style.bottom = (-1*currentElement.getBoundingClientRect().bottom)+"px";
+    icon.style.top = (currentElement.getBoundingClientRect().top+document.getElementById('idetectiframe').contentWindow.parent.scrollY)+"px";
+    console.log("curr"+currentElement.getBoundingClientRect().bottom+"??"+document.getElementById('idetectiframe').contentWindow.parent.scrollY);
     //(positionCurrentElement.bottom-8)+"px";//-win.parent.scrollY -1*
     icon.style.color ="red";
     icon.style.left=icon.style.left =currentElement.getBoundingClientRect().left+"px"//positionCurrentElement.left-20+"px";//+win.parent.scrollX

@@ -1,6 +1,6 @@
 
 //add script files and sources
-document.write(`<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">â€`)
+document.write(`<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">`)
 var script = document.createElement('script');
 script.src = 'https://code.jquery.com/jquery-1.11.0.min.js';
 script.type = 'text/javascript';

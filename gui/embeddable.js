@@ -14,20 +14,20 @@ var fieldsFilledAutomatically = [];
 
 //create install_icon
 var install_icon = document.createElement("i");
-install_icon.style="position:absolute;color:red;zIndex:100000;width:15px;height:14px";
-install_icon.className='fas fa-id-card'
+install_icon.style = "position:absolute;color:red;zIndex:100000;width:15px;height:14px";
+install_icon.className = 'fas fa-id-card'
 //create buttonOpenIframe
-var IForButton = document.createElement("i");   
-var buttonOpenIframe = document.createElement("button");   
-IForButton.className ="fa fa-id-card";
-IForButton.style.fontSize="40px";
+var IForButton = document.createElement("i");
+var buttonOpenIframe = document.createElement("button");
+IForButton.className = "fa fa-id-card";
+IForButton.style.fontSize = "40px";
 buttonOpenIframe.appendChild(IForButton);
-buttonOpenIframe.style="border-radius: 50%;background-color:rgb(245, 242, 229);bottom: 30px;right: 30px;position: fixed;z-index: 10000000;width: 80px;height: 80px;border: aliceblue;"
+buttonOpenIframe.style = "border-radius: 50%;background-color:rgb(245, 242, 229);bottom: 30px;right: 30px;position: fixed;z-index: 10000000;width: 80px;height: 80px;border: aliceblue;"
 buttonOpenIframe.onclick = openOrCloseForm;
 buttonOpenIframe.onfocus = function () {
-    buttonOpenIframe.style="outline:0;border-radius: 50%;background-color:rgb(245, 242, 229);bottom: 30px;right: 30px;position: fixed;z-index: 10000000;width: 80px;height: 80px;border: aliceblue;"
- }
- document.body.appendChild(buttonOpenIframe);
+    buttonOpenIframe.style = "outline:0;border-radius: 50%;background-color:rgb(245, 242, 229);bottom: 30px;right: 30px;position: fixed;z-index: 10000000;width: 80px;height: 80px;border: aliceblue;"
+}
+document.body.appendChild(buttonOpenIframe);
 
 //create iframe to add image
 var divIframe = document.createElement("div");
@@ -39,27 +39,27 @@ document.addEventListener('click', sendMessage, false);
 function sendMessage($event) {
     try {
         var wn = document.getElementById('idetectiframe').contentWindow;
-        if (event.target.id!=null && event.target.nodeName=="INPUT") {
+        if (event.target.id != null && event.target.nodeName == "INPUT") {
             debugger;
             if (inConfiguration) {
                 var positionCurrentElement = event.target.getBoundingClientRect()
                 install_icon.style.top = (positionCurrentElement.top + 8) + "px"
                 install_icon.style.left = positionCurrentElement.left - 20 + "px";
             }
-        wn.postMessage(event.target.id, '*');
+            wn.postMessage(event.target.id, '*');
         }
     }
     catch{ }
 }
 function openOrCloseForm() {
-    if (isIframeOpen==true)
+    if (isIframeOpen == true)
         closeForm();
     else
         openForm();
 }
 //open add image form in iframe
 function openForm() {
-    // button.classList.add('rotate');
+    button.classList.add('rotate');
     $.ajax({
         url: "http://127.0.0.1:5000/api/hasConfig",
         // url: "https://europe-west1-idetect-252605.cloudfunctions.net/hasConfig/api/hasConfig",
@@ -70,18 +70,18 @@ function openForm() {
         // important POST method !
         type: "GET",
         success: function (data) {
-        //  iframe.style = "position:fixed;right:50px;bottom:200px;height:500px;width:400px;border-radius:50px;width:300px;border: 4px solid black;";
-        //open iframe
-        iframe.style = "z-index:10000000;bottom:110px;right:20px;position:fixed;height:450px;;border-radius:20px;border: 1px solid aliceblue";
-        document.body.appendChild(divIframe);
-        divIframe.appendChild(iframe);
+            //  iframe.style = "position:fixed;right:50px;bottom:200px;height:500px;width:400px;border-radius:50px;width:300px;border: 4px solid black;";
+            //open iframe
+            iframe.style = "z-index:10000000;bottom:110px;right:20px;position:fixed;height:450px;;border-radius:20px;border: 1px solid aliceblue";
+            document.body.appendChild(divIframe);
+            divIframe.appendChild(iframe);
             if (data == "true")
                 iframe.src = "https://storage.cloud.google.com/idetect-252605.appspot.com/choose%20image.html";
             else {
-                iframe.src = "https://storage.cloud.google.com/idetect-252605.appspot.com/install.html";
+                iframe.src = "installation/install.html";
             }
         }
-    });     
+    });
     isIframeOpen = true;
 }
 
@@ -126,7 +126,7 @@ function sendConfig(configSite) {
     json_response = `${configSite}`;
     alert(json_response);
     $.ajax({
-        url: "http://127.0.0.1:5000/api/addConfig", 
+        url: "http://127.0.0.1:5000/api/addConfig",
         // url: "https://europe-west1-idetect-252605.cloudfunctions.net/addConfig/api/addConfig",        
         data: {
             adress: document.URL.split("?")[0],
@@ -168,8 +168,8 @@ function sendImage(imageToSend) {
             imageToSend = "";
         },
         success: function (data) {
-          
-            alert('fields====='+data['fields']+'   '+'result============'+data['result']);
+
+            alert('fields=====' + data['fields'] + '   ' + 'result============' + data['result']);
 
             putDataIntoFields(JSON.parse(data['fields']), JSON.parse(data['result']));
         }
@@ -222,25 +222,25 @@ function tryConvert(value, type) {
     }
     return value;
 }
-var count=9999;
+var count = 9999;
 function markField(currentElement) {
 
     currentElement.style = "font-weight: bold;font-style: italic;"
     var positionCurrentElement = currentElement.getBoundingClientRect()
-    var icon = document.createElement("i");   
-    icon.style.position="absolute";
+    var icon = document.createElement("i");
+    icon.style.position = "absolute";
     //var win = document.getElementById('idetectiframe').contentWindow;
-    icon.style.bottom = (-1*currentElement.getBoundingClientRect().bottom)+"px";
+    icon.style.bottom = (-1 * currentElement.getBoundingClientRect().bottom) + "px";
     //(positionCurrentElement.bottom-8)+"px";//-win.parent.scrollY -1*
-    icon.style.color ="red";
-    icon.style.left=icon.style.left =currentElement.getBoundingClientRect().left+"px"//positionCurrentElement.left-20+"px";//+win.parent.scrollX
-    console.log(icon.style.bottom,icon.style.left);
-    icon.className ="fa fa-id-card";
-    icon.aria_hidden="true";
+    icon.style.color = "red";
+    icon.style.left = icon.style.left = currentElement.getBoundingClientRect().left + "px"//positionCurrentElement.left-20+"px";//+win.parent.scrollX
+    console.log(icon.style.bottom, icon.style.left);
+    icon.className = "fa fa-id-card";
+    icon.aria_hidden = "true";
     icon.style.zIndex = count;
-    count+=1;
+    count += 1;
     document.body.appendChild(icon);
-     
+
 }
 function setFieldsToEmpty() {
 

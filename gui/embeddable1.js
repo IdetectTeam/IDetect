@@ -30,7 +30,7 @@ buttonOpenIframe.onfocus = function () {
     buttonOpenIframe.style = "outline:0;border-radius: 50%;background-color:rgb(245, 242, 229);bottom: 30px;right: 30px;position: fixed;z-index: 10000000;width: 80px;height: 80px;border: aliceblue;"
 }
 document.body.appendChild(buttonOpenIframe);
-buttonOpenIframe.hidden=false;
+buttonOpenIframe.hidden = false;
 //create iframe to add image
 var divIframe = document.createElement("div");
 var iframe = document.createElement("iframe");
@@ -72,8 +72,8 @@ function PrepareIframe() {
             iframe.style = "z-index:10000000;bottom:110px;right:20px;position:fixed;height:450px;;border-radius:20px;border: 1px solid aliceblue";
             document.body.appendChild(divIframe);
             divIframe.appendChild(iframe);
-            divIframe.hidden = true;   
-            dataToInstallation=data;
+            divIframe.hidden = true;
+            dataToInstallation = data;
 
             if (data == "true")
                 iframe.src = "https://storage.cloud.google.com/idetect-252605.appspot.com/choose%20image.html";
@@ -90,13 +90,13 @@ function PrepareIframe() {
 var flagToOpenIframe = true;
 function openOrCloseForm() {
     if (flagToOpenIframe) {
-        flagToOpenIframe=false;
+        flagToOpenIframe = false;
         var wn = document.getElementById('idetectiframe').contentWindow;
         wn.postMessage(dataToInstallation, '*');
         divIframe.hidden = !divIframe.hidden;
 
     }
-    else{
+    else {
         divIframe.hidden = !divIframe.hidden;
     }
 }
@@ -228,7 +228,7 @@ function tryConvert(value, type) {
     return value;
 }
 var count = 9999;
-var marked=[];
+var marked = [];
 function markField(currentElement) {
 
     currentElement.style = "font-weight: bold;font-style: italic;"

@@ -18,7 +18,6 @@ var install_icon = document.createElement("i");
 install_icon.style = "position:absolute;color:red;zIndex:100000;width:15px;height:14px";
 install_icon.className = 'fa fa-id-card'
 
-
 //create buttonOpenIframe
 var IForButton = document.createElement("i");
 var buttonOpenIframe = document.createElement("button");
@@ -89,6 +88,13 @@ function PrepareIframe() {
 
 function openOrCloseForm() {
     divIframe.hidden = !divIframe.hidden;
+    if(divIframe.hidden==true)
+    {
+        for (var icon of marked) {
+            document.removeChild(icon);
+        }
+        marked=[];
+    }
 }
 
 //listening to messege from iframe- choosen an image
@@ -223,6 +229,7 @@ function tryConvert(value, type) {
     return value;
 }
 var count = 9999;
+var marked=[];
 function markField(currentElement) {
 
     currentElement.style = "font-weight: bold;font-style: italic;"
@@ -240,11 +247,11 @@ function markField(currentElement) {
     icon.aria_hidden = "true";
     icon.style.zIndex = count;
     count += 1;
+    marked.push(icon);
     document.body.appendChild(icon);
 
 }
 function setFieldsToEmpty() {
-
     for (field in fieldsFilledAutomatically) {
         fieldsFilledAutomatically[field].value = "";
     }

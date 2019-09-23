@@ -285,6 +285,7 @@ function putDataIntoFields(idFields, textFields) {
             }
             //if the field on type radio- for sex
             else if ((idFields[k]).type == "dict" && k == 'Sex') {
+                debugger;
                 if (textFields[k] == "m" || textFields[k] == "male")
                     document.getElementById(idFields[k]["male"]).checked = true;
                 else

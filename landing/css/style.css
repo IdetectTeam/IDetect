@@ -19,7 +19,7 @@ body {
 }
 
 a {
-  color: #703f61;
+  color: #007bff;
   transition: 0.5s;
 }
 
@@ -54,7 +54,7 @@ h6 {
 .back-to-top {
   position: fixed;
   display: none;
-  background: #703f61;
+  background: #007bff;
   color: #fff;
   width: 44px;
   height: 44px;
@@ -92,7 +92,7 @@ h6 {
   top: calc(50% - 30px);
   left: calc(50% - 30px);
   border: 6px solid #f2f2f2;
-  border-top: 6px solid #703f61;
+  border-top: 6px solid #007bff;
   border-radius: 50%;
   width: 60px;
   height: 60px;
@@ -178,7 +178,7 @@ h6 {
 #intro {
   width: 100%;
   position: relative;
-  background: url("https://storage.cloud.google.com/idetect-252605.appspot.com/landing/img/back-ground.png") center bottom no-repeat;
+  background: url("https://storage.cloud.google.com/idetect-252605.appspot.com/landing/img/intro-bg.png") center bottom no-repeat;
   background-size: cover;
   padding: 200px 0 120px 0;
   text-align: center;
@@ -229,8 +229,8 @@ h6 {
 }
 
 #intro .intro-info .btn-get-started {
-  background: #703f61;
-  border: 2px solid #703f61;
+  background: #007bff;
+  border: 2px solid #007bff;
   color: #fff;
 }
 
@@ -245,8 +245,8 @@ h6 {
 }
 
 #intro .intro-info .btn-services:hover {
-  background: #703f61;
-  border-color: #703f61;
+  background: #007bff;
+  border-color: #007bff;
   color: #fff;
 }
 
@@ -288,7 +288,7 @@ h6 {
 .main-nav a:hover,
 .main-nav .active > a,
 .main-nav li:hover > a {
-  color: #5d0852;
+  color: #007bff;
   text-decoration: none;
 }
 
@@ -326,7 +326,7 @@ h6 {
 .main-nav .drop-down ul a:hover,
 .main-nav .drop-down ul .active > a,
 .main-nav .drop-down ul li:hover > a {
-  color: #703f61;
+  color: #007bff;
 }
 
 .main-nav .drop-down > a:after {
@@ -552,17 +552,17 @@ h6 {
   flex-direction: column;
   text-align: center;
   border-radius: 50%;
-  border: 2px solid #703f61;
+  border: 2px solid #007bff;
   transition: all 0.3s ease-in-out;
 }
 
 #about .about-container .icon-box .icon i {
-  color: #703f61;
+  color: #007bff;
   font-size: 24px;
 }
 
 #about .about-container .icon-box:hover .icon {
-  background: #703f61;
+  background: #007bff;
 }
 
 #about .about-container .icon-box:hover .icon i {
@@ -643,7 +643,7 @@ h6 {
 }
 
 #services .box:hover .title a {
-  color: #703f61;
+  color: #007bff;
 }
 
 #services .description {
@@ -750,7 +750,7 @@ h6 {
   padding: 6px 20px;
   font-size: 12px;
   line-height: 20px;
-  color: #703f61;
+  color: #007bff;
   border-radius: 50px;
   text-transform: uppercase;
   background: #ecf5ff;
@@ -760,7 +760,7 @@ h6 {
 
 #portfolio #portfolio-flters li:hover,
 #portfolio #portfolio-flters li.filter-active {
-  background: #703f61;
+  background: #007bff;
   color: #fff;
 }
 
@@ -827,7 +827,7 @@ h6 {
 }
 
 #portfolio .portfolio-item .portfolio-wrap .portfolio-info h4 a:hover {
-  color: #703f61;
+  color: #007bff;
 }
 
 #portfolio .portfolio-item .portfolio-wrap .portfolio-info p {
@@ -846,7 +846,7 @@ h6 {
   text-align: center;
   width: 36px;
   height: 36px;
-  background: #703f61;
+  background: #007bff;
   border-radius: 50%;
   margin: 10px 4px 0 4px;
 }
@@ -931,7 +931,7 @@ h6 {
 }
 
 #testimonials .owl-dot.active {
-  background-color: #703f61;
+  background-color: #007bff;
 }
 
 /* Team Section
@@ -1013,7 +1013,7 @@ h6 {
 }
 
 #team .member .social a:hover {
-  color: #703f61;
+  color: #007bff;
 }
 
 #team .member .social i {
@@ -1087,7 +1087,7 @@ h6 {
   font-weight: 300;
   letter-spacing: 3px;
   text-transform: uppercase;
-  color: #703f61;
+  color: #007bff;
 }
 
 #contact .contact-about p {
@@ -1105,7 +1105,7 @@ h6 {
   font-size: 18px;
   display: inline-block;
   background: #fff;
-  color: #703f61;
+  color: #007bff;
   line-height: 1;
   padding: 8px 0;
   margin-right: 4px;
@@ -1114,11 +1114,11 @@ h6 {
   width: 36px;
   height: 36px;
   transition: 0.3s;
-  border: 1px solid #703f61;
+  border: 1px solid #007bff;
 }
 
 #contact .social-links a:hover {
-  background: #703f61;
+  background: #007bff;
   color: #fff;
 }
 
@@ -1128,7 +1128,7 @@ h6 {
 
 #contact .info i {
   font-size: 32px;
-  color: #703f61;
+  color: #007bff;
   float: inherit;
   line-height: 1;
 }
@@ -1140,8 +1140,8 @@ h6 {
 }
 
 #contact .form #sendmessage {
-  color: #703f61;
-  border: 1px solid #703f61;
+  color: #007bff;
+  border: 1px solid #007bff;
   display: none;
   text-align: center;
   padding: 15px;
@@ -1181,7 +1181,7 @@ h6 {
 }
 
 #contact .form button[type="submit"] {
-  background: #703f61;
+  background: #007bff;
   border: 0;
   border-radius: 20px;
   padding: 8px 30px;
@@ -1237,7 +1237,7 @@ h6 {
 #footer .footer-top .social-links a {
   font-size: 18px;
   display: inline-block;
-  background: #703f61;
+  background: #007bff;
   color: #fff;
   line-height: 1;
   padding: 8px 0;
@@ -1308,7 +1308,7 @@ h6 {
 }
 
 #footer .footer-top .footer-newsletter input[type="submit"] {
-  background: #703f61;
+  background: #007bff;
   border: 0;
   width: 35%;
   padding: 6px 0;

@@ -1,10 +1,12 @@
 
-var index = -1;
+var index = -2;
 var config_fields = {};
-var passport_usa = new Array('Passpord Card no', 'Nationality', 'Surname', 'Given Names', 'Sex', 'Date of Birth','Expires on'
-    ,'Place of Birth');
-var length = passport_usa.length;
+// var passport_usa = new Array('Passpord Card no', 'Nationality', 'Surname', 'Given Names', 'Sex', 'Date of Birth','Expires on'
+//     ,'Place of Birth');
+var passport_usa;
+var length ;
 var elm = new Object();
+elm='';
 var dict = {};
 var sex = {};
 var json_response;
@@ -26,13 +28,17 @@ window.addEventListener('message', receiveMessage, false);
 
 
 function receiveMessage($event) {
-    if(index==-1)
-    passport_usa=Object.keys($event.data) ;
 
+    if(index==-2){
+        passport_usa=Object.keys($event.data) ;
+        length== passport_usa.length;
+    index=-1;
+    }
+    else
     elm = $event.data;
     // if (index == 0) {
     // json_response = `site{${$event.origin}`;
-    originsite = `${$event.origin}`;
+    //originsite = `${$event.origin}`;
     // }
 
 }
@@ -50,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
     })
     $("#myModal").modal('show');
     document.getElementById("manual").innerHTML = "please follow the instructions!";
-    index = -1;
+    index = -2;
     // $(".modal-dialog").draggable({
     //     handle: ".modal-header"
     // });
@@ -58,6 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
  
 
     document.getElementById("nextbtn").addEventListener('click', function () {
+       
         if (index < passport_usa.length - 1) {
             index++;
             if (index == 0) 
@@ -101,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     } else{ if ("Surname" == passport_usa[index] ){
                         config_fields[passport_usa[index - 1]] = elm;
                         Swal.fire({
-                            title: 'full name or 2 fields?',
+                            title: 'full name ?',
                             text: "Do you have full name field?",
                             type: 'question',
                             showCancelButton: true,
@@ -111,8 +118,8 @@ document.addEventListener('DOMContentLoaded', function () {
                             cancelButtonText: 'No'
                         }).then((result) => {
                             if (result.value) {
-                                passport_usa.splice(index, 1, "full name");
-                                passport_usa.slice(index+1, 1, "full name");
+                                passport_usa.splice(index, 0, "full name");
+                                // passport_usa.slice(index+1, 1, "full name");
                                 document.getElementById("manual").innerHTML = `click on field <b>${passport_usa[index]}</b>`;
                             }
                             else {
@@ -123,17 +130,17 @@ document.addEventListener('DOMContentLoaded', function () {
                     }else{if(passport_usa[index]=='Date of Birth'){
                         config_fields[passport_usa[index - 1]] = elm;
                         Swal.fire({
-                            title: 'age or date',
-                            text: "Do you have age field or date of birth field?",
+                            title: 'age',
+                            text: "Do you have age field ?",
                             type: 'question',
                             showCancelButton: true,
                             confirmButtonColor: 'rgb(118, 65, 101)',
                             cancelButtonColor: 'rgb(224, 145, 200)',
-                            confirmButtonText: 'age',
-                            cancelButtonText: 'date'
+                            confirmButtonText: 'Yes',
+                            cancelButtonText: 'No'
                         }).then((result) => {
                             if (result.value) {
-                                passport_usa.splice(index, 1, "age");
+                                passport_usa.splice(index, 0, "age");
                                 document.getElementById("manual").innerHTML = `click on field <b>${passport_usa[index]}</b>`;
                             }
                             else {
@@ -175,6 +182,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     
     document.getElementById("loadpage").addEventListener('click', function () {
+        if(elm!='')
         config_fields[passport_usa[index]] = elm;
         const html = document.createElement('div');
         html.style = "font-size: 20px;";
@@ -212,7 +220,6 @@ document.addEventListener('DOMContentLoaded', function () {
             html: html
         }).then((result) => {
             if (result.value) {
-                alert(config_fields[passport_usa[index]]);
                 window.parent.postMessage({
                     'config': config_fields
                 }, "*")

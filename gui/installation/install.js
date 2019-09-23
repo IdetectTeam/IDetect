@@ -12,7 +12,7 @@ var sex = {};
 var json_response;
 var originsite;
 var about = 0;
- 
+
 // var request = new XMLHttpRequest();
 // var requestURL='https://storage.cloud.google.com/idetect-252605.appspot.com/pasport_card_config.json?folder&organizationId&supportedpurview=project'
 // request.open('GET', requestURL);
@@ -105,67 +105,80 @@ document.addEventListener('DOMContentLoaded', function () {
                             config_fields['gender'] = sex;
 
                         }
-                    } else{ if ("Surname" == passport_usa[index] ){
+                    } else
+
+                    if (index > 0)
                         config_fields[passport_usa[index - 1]] = elm;
-                        Swal.fire({
-                            title: 'full name ?',
-                            text: "Do you have full name field?",
-                            type: 'question',
-                            showCancelButton: true,
-                            confirmButtonColor: 'rgb(118, 65, 101)',
-                            cancelButtonColor: 'rgb(224, 145, 200)',
-                            confirmButtonText: 'Yes',
-                            cancelButtonText: 'No'
-                        }).then((result) => {
-                            if (result.value) {
-                                passport_usa.splice(index, 0, "full name");
-                                // passport_usa.slice(index+1, 1, "full name");
-                                document.getElementById("manual").innerHTML = `click on field <b>${passport_usa[index]}</b>`;
-                            }
-                            else {
-                                document.getElementById("manual").innerHTML = `click on field <b>${passport_usa[index]}</b>`;
-                            }
+                document.getElementById("manual").innerHTML = `click on field <b>${passport_usa[index]}</b>`;
+            }
+        }
+        else {
+            // document.getElementById("nextbtn").style.display=this.hidden;
+        }
+        elm = '';
+    }
+});
+    //                 } else{ if ("Surname" == passport_usa[index] ){
+    //                     config_fields[passport_usa[index - 1]] = elm;
+    //                     Swal.fire({
+    //                         title: 'full name ?',
+    //                         text: "Do you have full name field?",
+    //                         type: 'question',
+    //                         showCancelButton: true,
+    //                         confirmButtonColor: 'rgb(118, 65, 101)',
+    //                         cancelButtonColor: 'rgb(224, 145, 200)',
+    //                         confirmButtonText: 'Yes',
+    //                         cancelButtonText: 'No'
+    //                     }).then((result) => {
+    //                         if (result.value) {
+    //                             passport_usa.splice(index, 0, "full name");
+    //                             // passport_usa.slice(index+1, 1, "full name");
+    //                             document.getElementById("manual").innerHTML = `click on field <b>${passport_usa[index]}</b>`;
+    //                         }
+    //                         else {
+    //                             document.getElementById("manual").innerHTML = `click on field <b>${passport_usa[index]}</b>`;
+    //                         }
     
-                        })
-                    }else{if(passport_usa[index]=='Date of Birth'){
-                        config_fields[passport_usa[index - 1]] = elm;
-                        Swal.fire({
-                            title: 'age',
-                            text: "Do you have age field ?",
-                            type: 'question',
-                            showCancelButton: true,
-                            confirmButtonColor: 'rgb(118, 65, 101)',
-                            cancelButtonColor: 'rgb(224, 145, 200)',
-                            confirmButtonText: 'Yes',
-                            cancelButtonText: 'No'
-                        }).then((result) => {
-                            if (result.value) {
-                                passport_usa.splice(index, 0, "age");
-                                document.getElementById("manual").innerHTML = `click on field <b>${passport_usa[index]}</b>`;
-                            }
-                            else {
-                                document.getElementById("manual").innerHTML = `click on field <b>${passport_usa[index]}</b>`;
-                            }
+    //                     })
+    //                 }else{if(passport_usa[index]=='Date of Birth'){
+    //                     config_fields[passport_usa[index - 1]] = elm;
+    //                     Swal.fire({
+    //                         title: 'age',
+    //                         text: "Do you have age field ?",
+    //                         type: 'question',
+    //                         showCancelButton: true,
+    //                         confirmButtonColor: 'rgb(118, 65, 101)',
+    //                         cancelButtonColor: 'rgb(224, 145, 200)',
+    //                         confirmButtonText: 'Yes',
+    //                         cancelButtonText: 'No'
+    //                     }).then((result) => {
+    //                         if (result.value) {
+    //                             passport_usa.splice(index, 0, "age");
+    //                             document.getElementById("manual").innerHTML = `click on field <b>${passport_usa[index]}</b>`;
+    //                         }
+    //                         else {
+    //                             document.getElementById("manual").innerHTML = `click on field <b>${passport_usa[index]}</b>`;
+    //                         }
     
-                        })
-                    }
-                    else
-                        if (index > 0)
-                            config_fields[passport_usa[index - 1]] = elm;
-                    document.getElementById("manual").innerHTML = `click on field <b>${passport_usa[index]}</b>`;
-                }
+    //                     })
+    //                 }
+    //                 else
+    //                     if (index > 0)
+    //                         config_fields[passport_usa[index - 1]] = elm;
+    //                 document.getElementById("manual").innerHTML = `click on field <b>${passport_usa[index]}</b>`;
+    //             }
                         
 
-                    }
+    //                 }
 
-                }
-            }
-            else {
-                // document.getElementById("nextbtn").style.display=this.hidden;
-            }
-            elm = '';
-        }
-    });
+    //             }
+    //         }
+    //         else {
+    //             // document.getElementById("nextbtn").style.display=this.hidden;
+    //         }
+    //         elm = '';
+    //     }
+    // });
     document.getElementById("prevbtn").addEventListener('click', function () {
 
         if (index > 0) {

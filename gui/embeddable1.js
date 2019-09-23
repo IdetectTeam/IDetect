@@ -12,12 +12,14 @@ document.head.appendChild(ajaxScript);
 var inConfiguration = false;
 var isIframeOpen = false;
 var fieldsFilledAutomatically = [];
+var dataToInstallation;
+var flagToOpenIframe = true;
+var fieldMarked=[]
 
 //create install_icon
 var install_icon = document.createElement("i");
 install_icon.style = "position:absolute;color:red;zIndex:100000;width:15px;height:14px";
 install_icon.className = 'fa fa-id-card'
-
 
 //create buttonOpenIframe
 var IForButton = document.createElement("i");
@@ -31,36 +33,40 @@ buttonOpenIframe.onfocus = function () {
     buttonOpenIframe.style = "outline:0;border-radius: 50%;background-color:rgb(245, 242, 229);bottom: 30px;right: 30px;position: fixed;z-index: 10000000;width: 80px;height: 80px;border: aliceblue;"
 }
 document.body.appendChild(buttonOpenIframe);
-buttonOpenIframe.hidden=false;
-//create iframe to add image
+buttonOpenIframe.hidden=true;
+
+//create iframe to add image or installation
 var divIframe = document.createElement("div");
 var iframe = document.createElement("iframe");
 iframe.id = "idetectiframe";
 iframe.allow = "camera *";
 
+PrepareIframe();
 
-document.addEventListener('click', sendMessage, false);
-function sendMessage($event) {
+document.addEventListener('click', sendInputId, false);
+//send id of input field that installer choose
+function sendInputId($event) {
     try {
         var wn = document.getElementById('idetectiframe').contentWindow;
         if (event.target.id != null && event.target.nodeName == "INPUT") {
             if (inConfiguration) {
                 var positionCurrentElement = event.target.getBoundingClientRect()
-
                 install_icon.style.top = (event.target.getBoundingClientRect().top + document.getElementById('idetectiframe').contentWindow.parent.scrollY) + "px";
                 install_icon.style.left = positionCurrentElement.left - 20 + "px";
             }
             wn.postMessage(event.target.id, '*');
         }
     }
-    catch{ }
+    catch(error){
+        console.log("error to send message "+error);
+     }
 }
-PrepareIframe();
-var dataToInstallation;
+
+//laud page to iframe (install or add image)
 function PrepareIframe() {
     $.ajax({
-        url: "http://127.0.0.1:5000/api/hasConfig",
-        //  url: "https://europe-west1-idetect-252605.cloudfunctions.net/hasConfig/api/hasConfig",
+        // url: "http://127.0.0.1:5000/api/hasConfig",
+         url: "https://europe-west1-idetect-252605.cloudfunctions.net/hasConfig/api/hasConfig",
         // send the base64 post parameter
         data: {
             user: document.URL
@@ -75,30 +81,32 @@ function PrepareIframe() {
             divIframe.appendChild(iframe);
             divIframe.hidden = true;   
             dataToInstallation=data;
-
+            buttonOpenIframe.hidden=false;
             if (data == "true")
                 iframe.src = "https://storage.cloud.google.com/idetect-252605.appspot.com/choose%20image.html";
             else {
                 iframe.src = "https://storage.cloud.google.com/idetect-252605.appspot.com/install.html";
-                // var wn = document.getElementById('idetectiframe').contentWindow;
-                // wn.postMessage(data, '*');
-
             }
         }
     });
 }
 
-var flagToOpenIframe = true;
+
 function openOrCloseForm() {
+
     if (flagToOpenIframe) {
         flagToOpenIframe=false;
+        if(dataToInstallation != "false"){//if open installation
         var wn = document.getElementById('idetectiframe').contentWindow;
         wn.postMessage(dataToInstallation, '*');
+        }
         divIframe.hidden = !divIframe.hidden;
-
     }
-    else{
+    else {
         divIframe.hidden = !divIframe.hidden;
+        for (var icon of fieldMarked) {
+            document.removeChild(icon);
+       
     }
 }
 
@@ -136,8 +144,8 @@ function sendConfig(configSite) {
     configSite = JSON.stringify(configSite);
     json_response = `${configSite}`;
     $.ajax({
-        url: "http://127.0.0.1:5000/api/addConfig",
-        //  url: "https://europe-west1-idetect-252605.cloudfunctions.net/addConfig/api/addConfig",     
+        //url: "http://127.0.0.1:5000/api/addConfig",
+          url: "https://europe-west1-idetect-252605.cloudfunctions.net/addConfig/api/addConfig",     
         data: {
             adress: document.URL.split("?")[0],
             configurationsite: json_response
@@ -159,8 +167,8 @@ function sendConfig(configSite) {
 function sendImage(imageToSend) {
     setFieldsToEmpty();
     $.ajax({
-        url: "http://127.0.0.1:5000/api/args",
-        //  url: "https://europe-west1-idetect-252605.cloudfunctions.net/detectImg/api/args",
+        //url: "http://127.0.0.1:5000/api/args",
+          url: "https://europe-west1-idetect-252605.cloudfunctions.net/detectImg/api/args",
         // send the base64 post parameter
         data: {
             user: document.URL.split("?")[0],
@@ -229,6 +237,7 @@ function tryConvert(value, type) {
     return value;
 }
 var count = 9999;
+var marked = [];
 function markField(currentElement) {
 
     currentElement.style = "font-weight: bold;font-style: italic;"
@@ -246,11 +255,11 @@ function markField(currentElement) {
     icon.aria_hidden = "true";
     icon.style.zIndex = count;
     count += 1;
+    marked.push(icon);
     document.body.appendChild(icon);
-
+    marked.push(icon);
 }
 function setFieldsToEmpty() {
-
     for (field in fieldsFilledAutomatically) {
         fieldsFilledAutomatically[field].value = "";
     }
@@ -298,5 +307,5 @@ function putDataIntoFields(idFields, textFields) {
                 currentElement.value = textFields[k];
                 markField(currentElement);
             }
-    }
+    }}
 }

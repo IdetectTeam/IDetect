@@ -264,6 +264,7 @@ function putDataIntoFields(idFields, textFields) {
         return;
     }
     for (k in idFields) {
+        debugger;
         var currentElement = document.getElementById(idFields[k]);
         //if there is match field 
         if (currentElement != undefined && textFields[k] != undefined && currentElement != null && textFields[k] != null)
@@ -274,7 +275,7 @@ function putDataIntoFields(idFields, textFields) {
                 markField(currentElement);
             }
             //if the field on type radio- for sex
-            else if ((idFields[k]).type == "dict" && k == 'gender') {
+            else if ((idFields[k]).type == "dict" && k == 'Sex') {
                 if (textFields[k] == "m" || textFields[k] == "male")
                     document.getElementById(idFields[k]["male"]).checked = true;
                 else
@@ -286,6 +287,12 @@ function putDataIntoFields(idFields, textFields) {
                 numberVal = tryConvert(textFields[k], 'number');
                 currentElement.value = numberVal;
                 markField(currentElement);
+            }
+            else if(k=="Age"){
+                currentElement.value =new Date().getFullYear -  new Date(textFields["Date of Birth"]).getFullYear;
+            }
+            else if(k=="FullName"){
+                currentElement.value =textFields["Surname"]+ " "+ textFields["Given Names"];
             }
             else {
                 currentElement.value = textFields[k];

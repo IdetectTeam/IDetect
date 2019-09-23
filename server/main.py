@@ -32,7 +32,7 @@ def detectImg():
         return response, 200, get_headers()
 
 
-# @app.route('/api/args', methods=["GET", "POST"])  # for prodaction
+# # @app.route('/api/args', methods=["GET", "POST"])  # for prodaction
 # def detectImg(request):
 #     if request.method == 'OPTIONS':
 #         print('in options')

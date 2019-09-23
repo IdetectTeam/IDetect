@@ -33,14 +33,9 @@ buttonOpenIframe.onfocus = function () {
     buttonOpenIframe.style = "outline:0;border-radius: 50%;background-color:rgb(245, 242, 229);bottom: 30px;right: 30px;position: fixed;z-index: 10000000;width: 80px;height: 80px;border: aliceblue;"
 }
 document.body.appendChild(buttonOpenIframe);
-<<<<<<< HEAD
-buttonOpenIframe.hidden = false;
-//create iframe to add image
-=======
 buttonOpenIframe.hidden=true;
 
 //create iframe to add image or installation
->>>>>>> e66668e98c71ec3cf92d5ae034e34606931e5d11
 var divIframe = document.createElement("div");
 var iframe = document.createElement("iframe");
 iframe.id = "idetectiframe";
@@ -84,15 +79,9 @@ function PrepareIframe() {
             iframe.style = "z-index:10000000;bottom:110px;right:20px;position:fixed;height:450px;;border-radius:20px;border: 1px solid aliceblue";
             document.body.appendChild(divIframe);
             divIframe.appendChild(iframe);
-<<<<<<< HEAD
-            divIframe.hidden = true;
-            dataToInstallation = data;
-
-=======
             divIframe.hidden = true;   
             dataToInstallation=data;
             buttonOpenIframe.hidden=false;
->>>>>>> e66668e98c71ec3cf92d5ae034e34606931e5d11
             if (data == "true")
                 iframe.src = "https://storage.cloud.google.com/idetect-252605.appspot.com/choose%20image.html";
             else {
@@ -106,12 +95,8 @@ function PrepareIframe() {
 function openOrCloseForm() {
 
     if (flagToOpenIframe) {
-<<<<<<< HEAD
-        flagToOpenIframe = false;
-=======
         flagToOpenIframe=false;
         if(dataToInstallation != "false"){//if open installation
->>>>>>> e66668e98c71ec3cf92d5ae034e34606931e5d11
         var wn = document.getElementById('idetectiframe').contentWindow;
         wn.postMessage(dataToInstallation, '*');
         }

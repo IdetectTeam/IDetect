@@ -75,6 +75,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             
             if (index > -1) {
+                alert("passport_usa[index] "+passport_usa[index])
+                debugger;
                 if ("gender" == passport_usa[index] || "Sex" == passport_usa[index]) {
                     config_fields[passport_usa[index - 1]] = elm;
                     Swal.fire({

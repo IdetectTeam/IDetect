@@ -1,4 +1,19 @@
-
+input[type=date]::-webkit-datetime-edit-text {
+  -webkit-appearance: none;
+  display: none;
+}
+input[type=date]::-webkit-datetime-edit-month-field{
+  -webkit-appearance: none;
+  display: none;
+}
+input[type=date]::-webkit-datetime-edit-day-field {
+  -webkit-appearance: none;
+  display: none;
+}
+input[type=date]::-webkit-datetime-edit-year-field {
+  -webkit-appearance: none;
+  display: none;
+}
 body {
     font-family: Verdana, Geneva, sans-serif;
     font-size: 14px;
@@ -624,7 +639,7 @@ body {
     z-index: 1;
     border-left: 5px solid #ed2553;
     margin: 0 0 35px;
-    padding: 10px 0 10px 50px;
+    padding: 10px 10px 10px 50px;
     color: #ed2553;
     font-size: 32px;
     font-weight: 600;

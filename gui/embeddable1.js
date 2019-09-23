@@ -22,7 +22,6 @@ var install_icon = document.createElement("i");
 install_icon.style = "position:absolute;color:red;zIndex:100000;width:15px;height:14px";
 install_icon.className = 'fa fa-id-card'
 
-
 //create buttonOpenIframe
 var IForButton = document.createElement("i");
 var buttonOpenIframe = document.createElement("button");
@@ -112,7 +111,7 @@ function openOrCloseForm() {
         }
          if(dataToInstallation !="false" && divIframe.hidden==true)//close instalation
           {
-              install_icon.hidden=true;
+              install_icon.hidden="true";
           }
     }
 

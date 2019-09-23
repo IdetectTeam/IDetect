@@ -1,4 +1,5 @@
 {
-  "Passpord Card no":, "bottom", "Nationality": "bottom", "Surname": "bottom", "Given Names": "bottom", "Sex": "bottom", "Date of Birth": "bottom",
-  "Expires on":"bottom","Place of Birth": "bottom"
+  "Passpord Card no":"bottom", "bottom": "bottom", "Nationality": "bottom", "Surname": "bottom", "Given Names": "bottom", "Sex": "bottom", "Date of Birth": "bottom",
+  "Expires on":"bottom","Place of Birth": "bottom","Age": "bottom","FullName": "bottom"
 }
+

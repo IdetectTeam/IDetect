@@ -21,7 +21,6 @@ var install_icon = document.createElement("i");
 install_icon.style = "position:absolute;color:red;zIndex:100000;width:15px;height:14px";
 install_icon.className = 'fa fa-id-card'
 
-
 //create buttonOpenIframe
 var IForButton = document.createElement("i");
 var buttonOpenIframe = document.createElement("button");
@@ -103,7 +102,7 @@ function openOrCloseForm() {
         }
         divIframe.hidden = !divIframe.hidden;
     }
-    else{
+    else {
         divIframe.hidden = !divIframe.hidden;
         for (var icon of fieldMarked) {
             document.removeChild(icon);
@@ -238,6 +237,7 @@ function tryConvert(value, type) {
     return value;
 }
 var count = 9999;
+var marked = [];
 function markField(currentElement) {
 
     currentElement.style = "font-weight: bold;font-style: italic;"
@@ -255,11 +255,11 @@ function markField(currentElement) {
     icon.aria_hidden = "true";
     icon.style.zIndex = count;
     count += 1;
+    marked.push(icon);
     document.body.appendChild(icon);
     marked.push(icon);
 }
 function setFieldsToEmpty() {
-
     for (field in fieldsFilledAutomatically) {
         fieldsFilledAutomatically[field].value = "";
     }
@@ -273,6 +273,7 @@ function putDataIntoFields(idFields, textFields) {
         return;
     }
     for (k in idFields) {
+        debugger;
         var currentElement = document.getElementById(idFields[k]);
         //if there is match field 
         if (currentElement != undefined && textFields[k] != undefined && currentElement != null && textFields[k] != null)
@@ -283,7 +284,7 @@ function putDataIntoFields(idFields, textFields) {
                 markField(currentElement);
             }
             //if the field on type radio- for sex
-            else if ((idFields[k]).type == "dict" && k == 'gender') {
+            else if ((idFields[k]).type == "dict" && k == 'Sex') {
                 if (textFields[k] == "m" || textFields[k] == "male")
                     document.getElementById(idFields[k]["male"]).checked = true;
                 else
@@ -295,6 +296,12 @@ function putDataIntoFields(idFields, textFields) {
                 numberVal = tryConvert(textFields[k], 'number');
                 currentElement.value = numberVal;
                 markField(currentElement);
+            }
+            else if(k=="Age"){
+                currentElement.value =new Date().getFullYear -  new Date(textFields["Date of Birth"]).getFullYear;
+            }
+            else if(k=="FullName"){
+                currentElement.value =textFields["Surname"]+ " "+ textFields["Given Names"];
             }
             else {
                 currentElement.value = textFields[k];

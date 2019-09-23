@@ -12,7 +12,7 @@ var sex = {};
 var json_response;
 var originsite;
 var about = 0;
- 
+
 // var request = new XMLHttpRequest();
 // var requestURL='https://storage.cloud.google.com/idetect-252605.appspot.com/pasport_card_config.json?folder&organizationId&supportedpurview=project'
 // request.open('GET', requestURL);

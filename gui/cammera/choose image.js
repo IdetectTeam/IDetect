@@ -143,8 +143,8 @@
     dropZone.addEventListener('dragleave', handleDragLeave, false);
     dropZone.addEventListener("dragenter", handleDragEnter, false);
     dropZone.addEventListener('drop', handleFileSelectD, false);
-
-    var constraints = { video: { facingMode: "user" }, audio: false };
+    var constraints = { video: { facingMode: "environment" }, audio: false };
+    
     // Define constants
     const cameraView = document.querySelector("#camera--view"),
         cameraOutput = document.querySelector("#camera--output"),

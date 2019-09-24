@@ -111,7 +111,7 @@ function openOrCloseForm() {
 
         }
          if(dataToInstallation !="false" && divIframe.hidden==true)//close instalation
-          {
+          {debugger;
             install_icon.hidden = true;
         }
     }

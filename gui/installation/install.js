@@ -64,7 +64,8 @@ document.addEventListener('DOMContentLoaded', function () {
  
 
     document.getElementById("nextbtn").addEventListener('click', function () {
-       
+       if(passport_usa == undefined)
+            return;
         if (index < passport_usa.length - 1) {
             index++;
             if (index == 0) 
@@ -75,6 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             
             if (index > -1) {
+                debugger;
                 if ("gender" == passport_usa[index] || "Sex" == passport_usa[index]) {
                     config_fields[passport_usa[index - 1]] = elm;
                     Swal.fire({

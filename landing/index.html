@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <title>IDetect</title>
@@ -17,23 +18,33 @@
     rel="stylesheet">
 
   <!-- Bootstrap CSS File -->
-  
-  <link href="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+  <link href="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/bootstrap/css/bootstrap.css"
+    rel="stylesheet">
 
   <!-- Libraries CSS Files -->
-  <link href="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  <link href="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/animate/animate.min.css" rel="stylesheet">
-  <link href="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/ionicons/css/ionicons.min.css" rel="stylesheet">
-  <link href="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-  <link href="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+  <link
+    href="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/font-awesome/css/font-awesome.min.css"
+    rel="stylesheet">
+  <link href="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/animate/animate.min.css"
+    rel="stylesheet">
+  <link href="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/ionicons/css/ionicons.min.css"
+    rel="stylesheet">
+  <link
+    href="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/owlcarousel/assets/owl.carousel.min.css"
+    rel="stylesheet">
+  <link href="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/lightbox/css/lightbox.min.css"
+    rel="stylesheet">
   <!-- <link rel="stylesheet" type="text/css" href="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/css/font-awesome.min.css"> -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
   <!-- Main Stylesheet File -->
   <link href="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/css/style.css" rel="stylesheet">
+  <!-- <link href="css/style.css" rel="stylesheet"> -->
   <script src="https://smtpjs.com/v2/smtp.js">
   </script>
 </head>
+
 <body>
 
   <!--==========================
@@ -54,7 +65,6 @@
         <ul>
           <li class="active"><a href="#intro">Home</a></li>
           <li><a href="#about">How To Use</a></li>
-          <li><a href="#services">Installation</a></li>
           <!-- <li><a href="#portfolio">Portfolio</a></li> -->
           <!-- <li><a href="#team">Team</a></li> -->
           <!-- <li class="drop-down"><a href="">Drop Down</a> </li> -->
@@ -77,9 +87,8 @@
         <h4>Fill fields Automatically by an Id image!</h4>
         <div>
           <a href="#about" class="btn-get-started scrollto">Get Started</a>
-          <a href="#services" class="btn-services scrollto">Install It!</a>
         </div>
-        <br> <br><br>
+        <br>
         <a href="https://storage.cloud.google.com/idetect-252605.appspot.com/register.html?hl=he" class="try scrollto">
           <!-- <a href="https://storage.cloud.google.com/idetect-252605.appspot.com/registerToEx.html" class="try scrollto"> -->
           Try It! <i class="fa fa-arrow-right faa-horizontal animated"></i>
@@ -88,161 +97,83 @@
     </div>
   </section><!-- #intro -->
   <main id="main">
+    <div id="video">
+      <iframe width="560" height="315"
+        src="https://www.youtube.com/embed/S0vTMAiJ8Q0?autoplay=1&loop=1&rel=0&showinfo=0&color=white&iv_load_policy=3"
+        frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture;"
+        allowfullscreen>
+      </iframe>‏
+    </div>
+
     <!--==========================
       About Us Section
     ============================-->
     <section id="about">
       <div class="container">
         <header class="section-header">
-          <h3>How To Use</h3>
-          <p>IDetect is Website Extention that can get your Id image, and fill your fields with your details automatically.</p>
+          <h3>How To Use?</h3>
+          <p>IDetect is Website Extention that can get your Id image, and fill your fields with your details
+            automatically.</p>
         </header>
         <div class="row about-container">
           <div class="col-lg-6 content order-lg-1 order-2">
             <p>
               So, If you want to add a script to your website and get our amazing functionality- feel free to join us.
-            <br><b>How to use</b>
             </p>
             <div class="icon-box wow fadeInUp">
-              <div class="icon"><i class="fa fa-shopping-bag"></i></div>
-              <h4 class="title"><a>Get a script</a></h4>
+              <div class="icon"><i class="fa fa-copy"></i></div><br>
+              <h4 class="title"><a>Add a script</a></h4>
+              <div class="input-group">
+                <input type="text" class="form-control input-monospace input-sm" data-autoselect=""
+                  value='<script src="https://storage.cloud.google.com/idetect-252605.appspot.com/embeddable1.js"></script>'
+                  id="copyScript" aria-label="Clone this repository at https://github.com/IdetectTeam/IDetect.git"
+                  readonly="">
+                <div class="input-group-button">
+                  <clipboard-copy
+                    onclick='  var copyText = document.getElementById("copyScript");copyText.select();copyText.setSelectionRange(0, 99999);document.execCommand("copy");'
+                    value="https://github.com/IdetectTeam/IDetect.git" aria-label="Copy to clipboard" class="btn btn-sm"
+                    tabindex="0" role="button"><svg class="octicon octicon-clippy" viewBox="0 0 14 16" version="1.1"
+                      width="14" height="16" aria-hidden="true">
+                      <path fill-rule="evenodd"
+                        d="M2 13h4v1H2v-1zm5-6H2v1h5V7zm2 3V8l-3 3 3 3v-2h5v-2H9zM4.5 9H2v1h2.5V9zM2 12h2.5v-1H2v1zm9 1h1v2c-.02.28-.11.52-.3.7-.19.18-.42.28-.7.3H1c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1h3c0-1.11.89-2 2-2 1.11 0 2 .89 2 2h3c.55 0 1 .45 1 1v5h-1V6H1v9h10v-2zM2 5h8c0-.55-.45-1-1-1H8c-.55 0-1-.45-1-1s-.45-1-1-1-1 .45-1 1-.45 1-1 1H3c-.55 0-1 .45-1 1z">
+                      </path>
+                    </svg></clipboard-copy>
+                </div>
+              </div>
               <p class="description">
-                Get link to our script file, add it to your site.
+                Copy this code to require page in your site.
                 You will find that your site has a button added.
               </p>
             </div>
             <div class="icon-box wow fadeInUp" data-wow-delay="0.2s">
-              <div class="icon"><i class="fa fa-download"></i></div>
+              <div class="icon"><i class="fa fa-plus-circle"></i></div><br>
               <h4 class="title"><a>Installation</a></h4>
               <p class="description">
-                In the first click on the button, will open install page.
-                You have been click on every field in your site Respectively the card fields.                
+                After adding the script, the first time the button is pressed, the installation process begins.<br>
+                In order to avoid errors later, it is important that you perform it accurately.<br>
+                You will need to match the existing passport fields with the corresponding fields on your page.<br>
+                When you click a field you will see a sign so you can keep track of configuration,<br>
+                If you don't have a parallel field, just click on next button.<br>
+                At the end of the process, you can see the fields you have selected,<br>
+                Check it carefully, after it you won't be able to change again!
               </p>
             </div>
 
             <div class="icon-box wow fadeInUp" data-wow-delay="0.4s">
-              <div class="icon"><i class="fa fa-photo"></i></div>
+              <div class="icon"><i class="fa fa-photo"></i></div><br>
               <h4 class="title"><a>Use</a></h4>
-              <p class="description"> 
-                Then, every time you will open the button- you will be able to include card image, 
-                and all the fields will fill by the card.
+              <p class="description">
+                Then, every time you or your users will open the button it will be able to upload an image or take a
+                picture,<br>
+                and all the fields in your page will fill automatically.
               </p>
             </div>
           </div>
-
-          <div class="col-lg-6 background order-lg-2 order-1 wow fadeInUp">
-            <img class="img-fluid" alt="">
-          </div>
-        </div>
-
-        <!-- <div class="row about-extra">
-          <div class="col-lg-6 wow fadeInUp">
-            <img src="img/about-extra-1.svg" class="img-fluid" alt="">
-          </div>
-          <div class="col-lg-6 wow fadeInUp pt-5 pt-lg-0">
-            <h4>Voluptatem dignissimos provident quasi corporis voluptates sit assumenda.</h4>
-            <p>
-              Ipsum in aspernatur ut possimus sint. Quia omnis est occaecati possimus ea. Quas molestiae perspiciatis
-              occaecati qui rerum. Deleniti quod porro sed quisquam saepe. Numquam mollitia recusandae non ad at et a.
-            </p>
-            <p>
-              Ad vitae recusandae odit possimus. Quaerat cum ipsum corrupti. Odit qui asperiores ea corporis deserunt
-              veritatis quidem expedita perferendis. Qui rerum eligendi ex doloribus quia sit. Porro rerum eum eum.
-            </p>
-          </div>
-        </div>
-
-        <div class="row about-extra">
-          <div class="col-lg-6 wow fadeInUp order-1 order-lg-2">
-            <img src="img/about-extra-2.svg" class="img-fluid" alt="">
-          </div>
-
-          <div class="col-lg-6 wow fadeInUp pt-4 pt-lg-0 order-2 order-lg-1">
-            <h4>Neque saepe temporibus repellat ea ipsum et. Id vel et quia tempora facere reprehenderit.</h4>
-            <p>
-              Delectus alias ut incidunt delectus nam placeat in consequatur. Sed cupiditate quia ea quis. Voluptas nemo
-              qui aut distinctio. Cumque fugit earum est quam officiis numquam. Ducimus corporis autem at blanditiis
-              beatae incidunt sunt.
-            </p>
-            <p>
-              Voluptas saepe natus quidem blanditiis. Non sunt impedit voluptas mollitia beatae. Qui esse molestias.
-              Laudantium libero nisi vitae debitis. Dolorem cupiditate est perferendis iusto.
-            </p>
-            <p>
-              Eum quia in. Magni quas ipsum a. Quis ex voluptatem inventore sint quia modi. Numquam est aut fuga
-              mollitia exercitationem nam accusantium provident quia.
-            </p>
-          </div>
-
-        </div> -->
-
-      </div>
-    </section><!-- #about -->
-
-    <!--==========================
-      Services Section
-    ============================-->
-    <section id="services" class="section-bg">
-      <div class="container">
-
-        <header class="section-header">
-          <h3>Installation</h3>
-          <p>Adding the script from <b> https://storage/...</b></p>
-        </header>
-        <div class="row">
-          <div class="col-md-6 col-lg-5 offset-lg-1 wow bounceInUp" data-wow-duration="1.4s">
-            <div class="box">
-              <div class="icon"><i class="ion-ios-analytics-outline" style="color: #ff689b;"></i></div>
-              <h4 class="title"><a>Angular</a></h4>
-              <p class="description">Add this script to html page<br> &lt; script scr="..."&gt;</script></p>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-5 wow bounceInUp" data-wow-duration="1.4s">
-            <div class="box">
-              <div class="icon"><i class="ion-ios-bookmarks-outline" style="color: #e9bf06;"></i></div>
-              <h4 class="title"><a >Python</a></h4>
-              <p class="description">Add from ... import idetect</p>
-            </div>
-          </div>
-
-          <div class="col-md-6 col-lg-5 offset-lg-1 wow bounceInUp" data-wow-delay="0.1s" data-wow-duration="1.4s">
-            <div class="box">
-              <div class="icon"><i class="ion-ios-paper-outline" style="color: #3fcdc6f5;"></i></div>
-              <h4 class="title"><a >Sed ut perspiciatis</a></h4>
-              <p class="description">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                fugiat nulla pariatur</p>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-5 wow bounceInUp" data-wow-delay="0.1s" data-wow-duration="1.4s">
-            <div class="box">
-              <div class="icon"><i class="ion-ios-speedometer-outline" style="color:#41cf2e;"></i></div>
-              <h4 class="title"><a >Magni Dolores</a></h4>
-              <p class="description">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-                mollit anim id est laborum</p>
-            </div>
-          </div>
-
-          <div class="col-md-6 col-lg-5 offset-lg-1 wow bounceInUp" data-wow-delay="0.2s" data-wow-duration="1.4s">
-            <div class="box">
-              <div class="icon"><i class="ion-ios-world-outline" style="color: #d6ff22;"></i></div>
-              <h4 class="title"><a>Nemo Enim</a></h4>
-              <p class="description">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
-                praesentium voluptatum deleniti atque</p>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-5 wow bounceInUp" data-wow-delay="0.2s" data-wow-duration="1.4s">
-            <div class="box">
-              <div class="icon"><i class="ion-ios-clock-outline" style="color: #4680ff;"></i></div>
-              <h4 class="title"><a>Eiusmod Tempor</a></h4>
-              <p class="description">Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum
-                soluta nobis est eligendi</p>
-            </div>
-          </div>
-
         </div>
 
       </div>
-    </section><!-- #services -->
+    </section>
+    <!-- #about --
 
     <!--==========================
       Why Us Section
@@ -251,19 +182,18 @@
       <div class="container">
         <header class="section-header">
           <h3>Why choose us?</h3>
-          <p>Laudem latine persequeris id sed, ex fabulas delectus quo. No vel partiendo abhorreant vituperatoribus.</p>
         </header>
 
         <div class="row row-eq-height justify-content-center">
 
           <div class="col-lg-4 mb-4">
             <div class="card wow bounceInUp">
-              <i class="fa fa-diamond"></i>
+              <i class="fa fa-hourglass-start"></i>
               <div class="card-body">
                 <h5 class="card-title">Speed</h5>
                 <p class="card-text">Using the extension will save you valuable time manually entering the fields,
-                   and will automatically fill in the fields that you have in the certificate you uploaded.
-                   especially great customer services.</p>
+                  and will automatically fill in the fields that you have in the certificate you uploaded.
+                  especially great customer services.</p>
                 <!-- <a href="#" class="readmore">Read more </a> -->
               </div>
             </div>
@@ -271,11 +201,11 @@
 
           <div class="col-lg-4 mb-4">
             <div class="card wow bounceInUp">
-              <i class="fa fa-language"></i>
+              <i class="fa fa-exclamation"></i>
               <div class="card-body">
                 <h5 class="card-title">Reliability</h5>
                 <p class="card-text">The image you upload is sent in a secure connection,
-                   processed to fill the fields, and returned to you. It is not stored on 
+                  processed to fill the fields, and returned to you. It is not stored on
                   any server and is used for no other purpose than your needs.</p>
                 <!-- <a href="#" class="readmore">Read more </a> -->
               </div>
@@ -284,357 +214,19 @@
 
           <div class="col-lg-4 mb-4">
             <div class="card wow bounceInUp">
-              <i class="fa fa-object-group"></i>
+              <i class="fa fa-check-circle"></i>
               <div class="card-body">
                 <h5 class="card-title">Responsibility </h5>
                 <p class="card-text">We give full responsibility for our services,
-                   if you are not satisfied -
-                   please send us a message and we will endeavor to help you.
+                  if you are not satisfied -
+                  please send us a message and we will endeavor to help you.
                 </p>
-                <!-- <a href="#" class="readmore">Read more </a> -->
               </div>
             </div>
           </div>
 
         </div>
-
-        <div class="row counters">
-
-          <div class="col-lg-3 col-6 text-center">
-            <span data-toggle="counter-up">274</span>
-            <p>Clients</p>
-          </div>
-
-          <div class="col-lg-3 col-6 text-center">
-            <span data-toggle="counter-up">421</span>
-            <p>Projects</p>
-          </div>
-
-          <div class="col-lg-3 col-6 text-center">
-            <span data-toggle="counter-up">1,364</span>
-            <p>Hours Of Support</p>
-          </div>
-
-          <div class="col-lg-3 col-6 text-center">
-            <span data-toggle="counter-up">4</span>
-            <p>Hard Workers</p>
-          </div>
-        </div>
-      </div>
     </section>
-
-    <!--==========================
-      Portfolio Section
-    ============================-->
-    <!-- <section id="portfolio" class="clearfix">
-      <div class="container">
-
-        <header class="section-header">
-          <h3 class="section-title">Our Portfolio</h3>
-        </header>
-
-        <div class="row">
-          <div class="col-lg-12">
-            <ul id="portfolio-flters">
-              <li data-filter="*" class="filter-active">All</li>
-              <li data-filter=".filter-app">App</li>
-              <li data-filter=".filter-card">Card</li>
-              <li data-filter=".filter-web">Web</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="row portfolio-container">
-
-          <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-            <div class="portfolio-wrap">
-              <img src="img/portfolio/app1.jpg" class="img-fluid" alt="">
-              <div class="portfolio-info">
-                <h4><a href="#">App 1</a></h4>
-                <p>App</p>
-                <div>
-                  <a href="img/portfolio/app1.jpg" data-lightbox="portfolio" data-title="App 1" class="link-preview"
-                    title="Preview"><i class="ion ion-eye"></i></a>
-                  <a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 portfolio-item filter-web" data-wow-delay="0.1s">
-            <div class="portfolio-wrap">
-              <img src="img/portfolio/web3.jpg" class="img-fluid" alt="">
-              <div class="portfolio-info">
-                <h4><a href="#">Web 3</a></h4>
-                <p>Web</p>
-                <div>
-                  <a href="img/portfolio/web3.jpg" class="link-preview" data-lightbox="portfolio" data-title="Web 3"
-                    title="Preview"><i class="ion ion-eye"></i></a>
-                  <a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 portfolio-item filter-app" data-wow-delay="0.2s">
-            <div class="portfolio-wrap">
-              <img src="img/portfolio/app2.jpg" class="img-fluid" alt="">
-              <div class="portfolio-info">
-                <h4><a href="#">App 2</a></h4>
-                <p>App</p>
-                <div>
-                  <a href="img/portfolio/app2.jpg" class="link-preview" data-lightbox="portfolio" data-title="App 2"
-                    title="Preview"><i class="ion ion-eye"></i></a>
-                  <a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 portfolio-item filter-card">
-            <div class="portfolio-wrap">
-              <img src="img/portfolio/card2.jpg" class="img-fluid" alt="">
-              <div class="portfolio-info">
-                <h4><a href="#">Card 2</a></h4>
-                <p>Card</p>
-                <div>
-                  <a href="img/portfolio/card2.jpg" class="link-preview" data-lightbox="portfolio" data-title="Card 2"
-                    title="Preview"><i class="ion ion-eye"></i></a>
-                  <a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 portfolio-item filter-web" data-wow-delay="0.1s">
-            <div class="portfolio-wrap">
-              <img src="img/portfolio/web2.jpg" class="img-fluid" alt="">
-              <div class="portfolio-info">
-                <h4><a href="#">Web 2</a></h4>
-                <p>Web</p>
-                <div>
-                  <a href="img/portfolio/web2.jpg" class="link-preview" data-lightbox="portfolio" data-title="Web 2"
-                    title="Preview"><i class="ion ion-eye"></i></a>
-                  <a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 portfolio-item filter-app" data-wow-delay="0.2s">
-            <div class="portfolio-wrap">
-              <img src="img/portfolio/app3.jpg" class="img-fluid" alt="">
-              <div class="portfolio-info">
-                <h4><a href="#">App 3</a></h4>
-                <p>App</p>
-                <div>
-                  <a href="img/portfolio/app3.jpg" class="link-preview" data-lightbox="portfolio" data-title="App 3"
-                    title="Preview"><i class="ion ion-eye"></i></a>
-                  <a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 portfolio-item filter-card">
-            <div class="portfolio-wrap">
-              <img src="img/portfolio/card1.jpg" class="img-fluid" alt="">
-              <div class="portfolio-info">
-                <h4><a href="#">Card 1</a></h4>
-                <p>Card</p>
-                <div>
-                  <a href="img/portfolio/card1.jpg" class="link-preview" data-lightbox="portfolio" data-title="Card 1"
-                    title="Preview"><i class="ion ion-eye"></i></a>
-                  <a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 portfolio-item filter-card" data-wow-delay="0.1s">
-            <div class="portfolio-wrap">
-              <img src="img/portfolio/card3.jpg" class="img-fluid" alt="">
-              <div class="portfolio-info">
-                <h4><a href="#">Card 3</a></h4>
-                <p>Card</p>
-                <div>
-                  <a href="img/portfolio/card3.jpg" class="link-preview" data-lightbox="portfolio" data-title="Card 3"
-                    title="Preview"><i class="ion ion-eye"></i></a>
-                  <a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 portfolio-item filter-web" data-wow-delay="0.2s">
-            <div class="portfolio-wrap">
-              <img src="img/portfolio/web1.jpg" class="img-fluid" alt="">
-              <div class="portfolio-info">
-                <h4><a href="#">Web 1</a></h4>
-                <p>Web</p>
-                <div>
-                  <a href="img/portfolio/web1.jpg" class="link-preview" data-lightbox="portfolio" data-title="Web 1"
-                    title="Preview"><i class="ion ion-eye"></i></a>
-                  <a href="#" class="link-details" title="More Details"><i class="ion ion-android-open"></i></a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-    </section>#portfolio -->
-
-    
-    <!--==========================
-      Clients Section
-    ============================-->
-    <section id="testimonials" class="section-bg">
-      <div class="container">
-
-        <header class="section-header">
-          <h3>Testimonials</h3>
-        </header>
-
-
-        <div class="row justify-content-center">
-          <div class="col-lg-8">
-
-            <div class="owl-carousel testimonials-carousel wow fadeInUp">
-
-              <div class="testimonial-item">
-                <!-- <img src="C:\Users\User\Pictures\Camera Roll\WIN_20190916_15_57_04_Pro.jpg" class="testimonial-img" alt=""> -->
-                <h3>Ester Katz</h3>
-                <h4>Developer</h4>
-                <p>
-                    Student to Computer Science, 
-                    Learn Advanced Algorithms and computational models
-                    Bootcamp at Google Campus for Startups under the direction of "Kamatech",
-                    including building this extension web
-                </p>
-              </div>
-
-              <div class="testimonial-item">
-                <!-- <img src="C:\Users\User\Pictures\Camera Roll\WIN_20190916_16_14_34_Pro.jpg" class="testimonial-img" alt=""> -->
-                <h3>Ruth Zonenshine</h3>
-                <h4>Developer</h4>
-                <p>
-                    Student to Computer Science, 
-                    Learn Advanced Algorithms and computational models
-                    Bootcamp at Google Campus for Startups under the direction of "Kamatech",
-                    including building this extension web
-                </p>
-              </div>
-
-              <div class="testimonial-item">
-                <!-- <img src="img/testimonial-3.jpg" class="testimonial-img" alt=""> -->
-                <h3>Elisheva Portnoy</h3>
-                <h4>Developer</h4>
-                <p>
-                    Student to Computer Science, 
-                    Learn Advanced Algorithms and computational models
-                    Bootcamp at Google Campus for Startups under the direction of "Kamatech",
-                    including building this extension web
-                </p>
-              </div>
-
-              <div class="testimonial-item">
-                <!-- <img src="img/testimonial-4.jpg" class="testimonial-img" alt=""> -->
-                <h3>Sari Huminer</h3>
-                <h4>Developer</h4>
-                <p>
-                    Student to Computer Science, 
-                    Learn Advanced Algorithms and computational models
-                    Bootcamp at Google Campus for Startups under the direction of "Kamatech",
-                    including building this extension web
-                </p>
-              </div>
-
-              <!-- <div class="testimonial-item">
-                <img src="img/testimonial-5.jpg" class="testimonial-img" alt="">
-                <h3>John Larson</h3>
-                <h4>Entrepreneur</h4>
-                <p>
-                  Quis quorum aliqua sint quem legam fore sunt eram irure aliqua veniam tempor noster veniam enim culpa
-                  labore duis sunt culpa nulla illum cillum fugiat legam esse veniam culpa fore nisi cillum quid.
-                </p>
-              </div> -->
-
-            </div>
-
-          </div>
-        </div>
-
-
-      </div>
-    </section><!-- #testimonials -->
-
-    <!--==========================
-      Clients Section
-    ============================-->
-   <!--  <section id="clients" class="section-bg">
-
-      <div class="container">
-
-        <div class="section-header">
-          <h3>Our CLients</h3>
-          <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque dere santome nida.
-          </p>
-        </div>
-
-        <div class="row no-gutters clients-wrap clearfix wow fadeInUp">
-
-          <div class="col-lg-3 col-md-4 col-xs-6">
-            <div class="client-logo">
-              <img src="img/clients/client-1.png" class="img-fluid" alt="">
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-4 col-xs-6">
-            <div class="client-logo">
-              <img src="img/clients/client-2.png" class="img-fluid" alt="">
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-4 col-xs-6">
-            <div class="client-logo">
-              <img src="img/clients/client-3.png" class="img-fluid" alt="">
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-4 col-xs-6">
-            <div class="client-logo">
-              <img src="img/clients/client-4.png" class="img-fluid" alt="">
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-4 col-xs-6">
-            <div class="client-logo">
-              <img src="img/clients/client-5.png" class="img-fluid" alt="">
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-4 col-xs-6">
-            <div class="client-logo">
-              <img src="img/clients/client-6.png" class="img-fluid" alt="">
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-4 col-xs-6">
-            <div class="client-logo">
-              <img src="img/clients/client-7.png" class="img-fluid" alt="">
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-4 col-xs-6">
-            <div class="client-logo">
-              <img src="img/clients/client-8.png" class="img-fluid" alt="">
-            </div>
-          </div>
-        </div>
-      </div>
-    </section> -->
 
     <!--==========================
       Contact Section
@@ -648,64 +240,31 @@
 
         <div class="row wow fadeInUp">
 
-          <div class="col-lg-6">
-            <div class="map mb-4 mb-lg-0">
-              <iframe
-               src="https://maps.google.com/maps?q=jerusalem%20israel&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                frameborder="0" style="border:0; width: 100%; height: 312px;" allowfullscreen></iframe>
+          <div class="col-lg-6 mapDiv">
+            <div class="mapouter">
+              <div class="gmap_canvas"><iframe width="600" height="500" id="gmap_canvas"
+                  src="https://maps.google.com/maps?q=%D7%94%D7%90%D7%95%D7%9E%D7%A0%D7%99%D7%9D&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                  frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe></div>
             </div>
           </div>
           <!-- <div class="mapouter"><div class="gmap_canvas"><iframe width="600" height="500" id="gmap_canvas" 
             src="https://maps.google.com/maps?q=jerusalem%20israel&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><a href="https://www.embedgooglemap.net/blog/best-wordpress-themes/"></a></div><style>.mapouter{position:relative;text-align:right;height:500px;width:600px;}.gmap_canvas {overflow:hidden;background:none!important;height:500px;width:600px;}</style></div>
         </div> -->
 
-          <div class="map mb-4 mb-lg-0" style="text-align: center; margin: auto">
-              <div class="info">
-                <i class="fa fa-map-marker"></i>
-                <!-- <p>A108 Adam Street, NY 535022</p> -->
-                <p>Jerusalem, Israel</p>
-              </div>
-              <div class="info">
-                  <i class="fa fa-envelope"></i>
-                  <p>idetectteam@gmail.com</p>
-              </div>
-              <div class="info">
-                  <i class="fa fa-phone"></i>
-                  <p>+972 5589 55488 55</p>
+          <div class="adress map mb-4 mb-lg-0" style="text-align: center; margin: auto">
+            <div class="info">
+              <i class="fa fa-map-marker"></i>
+              <!-- <p>A108 Adam Street, NY 535022</p> -->
+              <p> HaUmanim,Tel Aviv-Yafo, Israel</p>
             </div>
-
-            <!-- <div class="form">
-              <div id="sendmessage">Your message has been sent. Thank you!</div>
-              <div id="errormessage"></div>
-              <form action="" method="post" role="form" class="contactForm">
-                <div class="form-row">
-                  <div class="form-group col-lg-6">
-                    <input type="text" name="name" id="name" class="form-control" id="name" placeholder="Your Name"
-                      data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
-                    <div class="validation"></div>
-                  </div>
-                  <div class="form-group col-lg-6">
-                    <input type="email" class="form-control" id="email" name="email" id="email" placeholder="Your Email"
-                      data-rule="email" data-msg="Please enter a valid email" />
-                    <div class="validation"></div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject"
-                    data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject" />
-                  <div class="validation"></div>
-                </div>
-                <div class="form-group">
-                  <textarea class="form-control" name="message" id="message"rows="5" data-rule="required"
-                    data-msg="Please write something for us" placeholder="Message"></textarea>
-                  <div class="validation"></div>
-                </div>
-                <div class="text-center"><button type="submit" id="SendMessage" title="Send Message">Send Message</button></div>
-              </form> -->
+            <div class="info">
+              <i class="fa fa-envelope"></i>
+              <p>idetectteam@gmail.com</p>
             </div>
           </div>
-
         </div>
+
+      </div>
 
       </div>
     </section><!-- #contact -->
@@ -717,65 +276,63 @@
   ============================-->
   <footer id="footer">
     <div class="footer-top">
+      <h1>IDetect</h1>
       <div class="container">
         <div class="row">
 
           <div class="col-lg-4 col-md-6 footer-info">
-            <h3>IDetect</h3>
-            <p>IDetect made use of: <br>
-              Google cloud storage <br>
-              Google cloud big table <br>
-              Python<br>
-              HTML & CSS & JS<br>
+            <h4>IDetect made use of:</h4>
+            <p></p>
+            Google cloud storage <br>
+            Google cloud data Store <br>
+            Vision Api <br>
+            Python<br>
+            HTML & CSS & JS<br>
             </p>
           </div>
 
           <div class="col-lg-2 col-md-6 footer-links">
             <h4>Useful Links</h4>
             <ul>
-                <li class="active"><a href="#intro">Home</a></li>
-                <li><a href="#about">About Us</a></li>
-                <li><a href="#services">Installation</a></li>
-                <!-- <li><a href="#portfolio">Portfolio</a></li> -->
-                <!-- <li><a href="#team">Team</a></li> -->
-                <!-- <li class="drop-down"><a href="">Drop Down</a> </li> -->
-                <li><a href="#contact">Contact Us</a></li>
+              <li class="active"><a href="#intro">Home</a></li>
+              <li><a href="#about">About Us</a></li>
+              <!-- <li><a href="#portfolio">Portfolio</a></li> -->
+              <!-- <li><a href="#team">Team</a></li> -->
+              <!-- <li class="drop-down"><a href="">Drop Down</a> </li> -->
+              <li><a href="#contact">Contact Us</a></li>
             </ul>
           </div>
 
           <div class="col-lg-3 col-md-6 footer-contact">
+            <h4>Our Newsletter</h4>
+            <p>All types of ID cards will soon be available,
+              as well as the possibility to add private forms to your site.<br>
+              <i>Do you have another idea for improvement? Suggest us!</i>
+            </p>
+
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-newsletter">
             <h4>Contact Us</h4>
             <p>
               <!-- A108 Adam Street <br> -->
               <!-- New York, NY 535022<br> -->
               <!-- United States <br> -->
-              Jerusalem<br>
-              Israel <br>
-              <strong>Phone:</strong> +972 5589 55488 55<br>
+              HaUmanim,Tel Aviv-Yafo, Israel <br>
               <strong>Email:</strong> idetectteam@gmail.com<br>
             </p>
 
             <div class="social-links">
-                <a class="twitter"><i class="fa fa-twitter"></i></a>
-                <a class="facebook"><i class="fa fa-facebook"></i></a>
-                <a class="instagram"><i class="fa fa-instagram"></i></a>
-                <a class="google-plus"><i class="fa fa-google-plus"></i></a>
-                <a class="linkedin"><i class="fa fa-linkedin"></i></a>
-                <!-- <a href="#" class="twitter"><i class="fa fa-twitter"></i></a>
-                <a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
-                <a href="#" class="instagram"><i class="fa fa-instagram"></i></a>
-                <a href="#" class="google-plus"><i class="fa fa-google-plus"></i></a>
-                <a href="#" class="linkedin"><i class="fa fa-linkedin"></i></a> -->
+              <img title="Ester Katz" style="border-radius: 50%;width: 30px;margin: 5px"
+                src="https://lh6.googleusercontent.com/-q9TTZYHmgRs/AAAAAAAAAAI/AAAAAAAAAN4/mx2PXHkXnSkxjg_zK43aNSbryIP79AqPACLcDEAE/s32-c-k-no/photo.jpg">
+              <img title="Elisheva Portnoy" style="border-radius: 50%;width: 30px;margin: 5px"
+                src="https://lh3.googleusercontent.com/a-/AAuE7mARzTOsrv3lKDGKEkf1bD2CShl_JTW3Wdzy6ALu=s28-c-k-no">
+              <img title="Sari Huminer" style="border-radius: 50%;width: 30px;margin: 5px"
+                src="https://mail.google.com/mail/u/0?ui=2&ik=dc5328e03e&attid=0.2&permmsgid=msg-f:1645552596675315019&th=16d62d5e400dc54b&view=fimg&sz=s0-l75-ft&attbid=ANGjdJ-8Ua-FXs81JOE-Ir3WNn0scacywhuFO4W1fCP5kRUgjTxX6eOBqMqolAI1f90yUSBTcPFFa8yL9qBGzBPqdS4j31f7_00mRj7X9TO2FzWr0mOyPTgzebMWghw&disp=emb&realattid=ii_k0xpbru51">
+              <img title="Ruth Zonenshine" style="border-radius: 50%;width: 30px;margin: 5px"
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRX4OeFWaW7XdCx-F7CarkpDGXNlNf-7wIRzhjBfq33CpKz9h8I">
             </div>
 
-          </div>
-
-          <div class="col-lg-3 col-md-6 footer-newsletter">
-            <h4>Our Newsletter</h4>
-            <p>All types of ID cards will soon be available,
-               as well as the possibility to add private forms to your site.<br>
-              <i>Do you have another idea for improvement? Suggest us!</i>
-              </p>
             <!-- <form action="" method="post">
               <input type="email" name="email"><input type="submit" value="Subscribe">
             </form> -->
@@ -808,16 +365,24 @@
 
   <!-- JavaScript Libraries -->
   <script src="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/jquery/jquery.min.js"></script>
-  <script src="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/jquery/jquery-migrate.min.js"></script>
-  <script src="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script
+    src="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/jquery/jquery-migrate.min.js"></script>
+  <script
+    src="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/easing/easing.min.js"></script>
-  <script src="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/mobile-nav/mobile-nav.js"></script>
+  <script
+    src="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/mobile-nav/mobile-nav.js"></script>
   <script src="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/wow/wow.min.js"></script>
-  <script src="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/waypoints/waypoints.min.js"></script>
-  <script src="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/counterup/counterup.min.js"></script>
-  <script src="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/owlcarousel/owl.carousel.min.js"></script>
-  <script src="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/isotope/isotope.pkgd.min.js"></script>
-  <script src="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/lightbox/js/lightbox.min.js"></script>
+  <script
+    src="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/waypoints/waypoints.min.js"></script>
+  <script
+    src="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/counterup/counterup.min.js"></script>
+  <script
+    src="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/owlcarousel/owl.carousel.min.js"></script>
+  <script
+    src="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/isotope/isotope.pkgd.min.js"></script>
+  <script
+    src="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/lib/lightbox/js/lightbox.min.js"></script>
   <!-- Contact Form JavaScript File -->
   <script src="https://storage.cloud.google.com/idetect-252605.appspot.com/landing/contactform/contactform.js"></script>
   <!-- Template Main Javascript File -->

@@ -21,6 +21,7 @@ var countIcons = 9999;
 var install_icon = document.createElement("i");
 install_icon.style = "position:absolute;color:red;zIndex:100000;width:15px;height:14px";
 install_icon.className = 'fa fa-id-card'
+install_icon.hidden = true;
 
 //create buttonOpenIframe
 var IForButton = document.createElement("i");
@@ -51,7 +52,7 @@ function sendInputId($event) {
         var wn = document.getElementById('idetectiframe').contentWindow;
         if (event.target.id != null && event.target.nodeName == "INPUT") {
             if (inConfiguration) {
-                install_icon.hidden=false;
+                install_icon.hidden = false;
                 var positionCurrentElement = event.target.getBoundingClientRect()
                 install_icon.style.top = (event.target.getBoundingClientRect().top + document.getElementById('idetectiframe').contentWindow.parent.scrollY) + "px";
                 install_icon.style.left = positionCurrentElement.left - 20 + "px";
@@ -67,8 +68,8 @@ function sendInputId($event) {
 //laud page to iframe (install or add image)
 function PrepareIframe() {
     $.ajax({
-         url: "http://127.0.0.1:5000/api/hasConfig",
-        //url: "https://europe-west1-idetect-252605.cloudfunctions.net/hasConfig/api/hasConfig",
+        // url: "http://127.0.0.1:5000/api/hasConfig",
+        url: "https://europe-west1-idetect-252605.cloudfunctions.net/hasConfig/api/hasConfig",
         // send the base64 post parameter
         data: {
             user: document.URL
@@ -111,8 +112,8 @@ function openOrCloseForm() {
         }
          if(dataToInstallation !="false" && divIframe.hidden==true)//close instalation
           {
-              install_icon.hidden="true";
-          }
+            install_icon.hidden = true;
+        }
     }
 
     //listening to message from iframe- choose image
@@ -152,8 +153,8 @@ function openOrCloseForm() {
         configSite = JSON.stringify(configSite);
         json_response = `${configSite}`;
         $.ajax({
-            url: "http://127.0.0.1:5000/api/addConfig",
-            //url: "https://europe-west1-idetect-252605.cloudfunctions.net/addConfig/api/addConfig",
+            //url: "http://127.0.0.1:5000/api/addConfig",
+            url: "https://europe-west1-idetect-252605.cloudfunctions.net/addConfig/api/addConfig",
             data: {
                 adress: document.URL.split("?")[0],
                 configurationsite: json_response
@@ -174,8 +175,8 @@ function openOrCloseForm() {
     function sendImage(imageToSend) {
         setFieldsToEmpty();
         $.ajax({
-            url: "http://127.0.0.1:5000/api/args",
-            //url: "https://europe-west1-idetect-252605.cloudfunctions.net/detectImg/api/args",
+           // url: "http://127.0.0.1:5000/api/args",
+            url: "https://europe-west1-idetect-252605.cloudfunctions.net/detectImg/api/args",
 
             // send the base64 post parameter
             data: {

@@ -272,7 +272,8 @@ function openOrCloseForm() {
     function putDataIntoFields(idFields, textFields) {
 
         if (Object.keys(textFields).length === 0) {
-            alert('no field found, please check the image');
+            var wn = document.getElementById('idetectiframe').contentWindow;
+            wn.postMessage("show swal", '*');
             return;
         }
 

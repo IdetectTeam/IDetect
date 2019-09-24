@@ -95,23 +95,25 @@ function PrepareIframe() {
 
 
 function openOrCloseForm() {
-
     if (flagToOpenIframe) {
         flagToOpenIframe = false;
-        if (dataToInstallation != "false") {//if open installation
+        debugger;
+        if (dataToInstallation != "true") {//if open installation
+            document.body.appendChild(install_icon);
             var wn = document.getElementById('idetectiframe').contentWindow;
             wn.postMessage(dataToInstallation, '*');
         }
         divIframe.hidden = !divIframe.hidden;
     }
     else {
+        flagToOpenIframe = true;
         divIframe.hidden = !divIframe.hidden;
         for (var iconM of fieldMarked) {
-            document.removeChild(iconM);
-
+            document.body.removeChild(iconM);
         }
-         if(dataToInstallation !="false" && divIframe.hidden==true)//close instalation
-          {debugger;
+        if (dataToInstallation != "true" && divIframe.hidden == true)//close instalation
+        {
+            document.body.removeChild(install_icon);
             install_icon.hidden = true;
         }
     }
@@ -131,14 +133,17 @@ function openOrCloseForm() {
         var data = event.data;
         if (Object.keys(data).length === 0) {
             inConfiguration = true;
-            document.body.appendChild(install_icon);
             return;
         }
         if (data['image'] && data['image'] != null)//if send image
             sendImage(data['image']);
         else
-            if (data['config'] && data['config'] != null)//if send config
-                sendConfig(data['config']);
+            if (data['config'])//if send config
+            {
+                document.body.removeChild(install_icon);
+                if (data['config'] != null)
+                    sendConfig(data['config']);
+            }
         // if (data['fieldToColor'] && data['fieldToColor'] != null)
         //     color_the_field(data['fieldToColor'], data['status'])
     }
@@ -175,7 +180,7 @@ function openOrCloseForm() {
     function sendImage(imageToSend) {
         setFieldsToEmpty();
         $.ajax({
-           // url: "http://127.0.0.1:5000/api/args",
+            // url: "http://127.0.0.1:5000/api/args",
             url: "https://europe-west1-idetect-252605.cloudfunctions.net/detectImg/api/args",
 
             // send the base64 post parameter
@@ -200,7 +205,7 @@ function openOrCloseForm() {
             }
         });
     }
-  
+
     function convertToDate(value) {
         debugger;
         date = new Date(value);
@@ -218,7 +223,7 @@ function openOrCloseForm() {
         num = parseInt(value);
         return num;
     }
-//try yo convert date
+    //try yo convert date
     function tryConvert(value, type) {
         tmp = value;
         length = value.length;
@@ -241,7 +246,7 @@ function openOrCloseForm() {
         }
         return value;
     }
-//mark field that fill
+    //mark field that fill
     function markField(currentElement) {
         currentElement.style = "font-weight: bold;font-style: italic;"
         var positionCurrentElement = currentElement.getBoundingClientRect()
@@ -270,7 +275,7 @@ function openOrCloseForm() {
             alert('no field found, please check the image');
             return;
         }
-        
+
         for (k in idFields) {
             var currentElement = document.getElementById(idFields[k]);
             //if there is match field 
@@ -301,4 +306,8 @@ function openOrCloseForm() {
                 }
         }
     }
+    var title1 = new TimelineMax();
+    title1.staggerFromTo("input", 0.5,
+        { ease: Back.easeOut.config(1.7), opacity: 0, bottom: -80 },
+        { ease: Back.easeOut.config(1.7), opacity: 1, bottom: 0 }, 0.05);
 }

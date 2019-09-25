@@ -176,6 +176,7 @@ h6 {
 --------------------------------------------------------------*/
 
 #intro {
+  margin-bottom: 20px;
   width: 100%;
   position: relative;
   background: url("https://storage.cloud.google.com/idetect-252605.appspot.com/landing/img/intro-bg.png") center bottom no-repeat;
@@ -224,7 +225,7 @@ h6 {
   padding: 10px 32px;
   border-radius: 50px;
   transition: 0.5s;
-  margin: 0 20px 20px 0;
+  margin: auto;
   color: #fff;
 }
 
@@ -505,6 +506,7 @@ h6 {
 }
 
 #about .about-container .content {
+  margin: auto;
   background: #fff;
 }
 
@@ -529,7 +531,8 @@ h6 {
 }
 
 #about .about-container .icon-box .icon {
-  float: left;
+
+  margin: auto;
   background: #fff;
   width: 64px;
   height: 64px;
@@ -570,7 +573,7 @@ h6 {
 }
 
 #about .about-container .icon-box .title {
-  margin-left: 80px;
+  /* margin-left: 80px; */
   font-weight: 600;
   margin-bottom: 5px;
   font-size: 18px;
@@ -581,7 +584,7 @@ h6 {
 }
 
 #about .about-container .icon-box .description {
-  margin-left: 80px;
+  margin:auto;
   line-height: 24px;
   font-size: 14px;
 }
@@ -1070,7 +1073,7 @@ h6 {
 
 #contact {
   box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.1);
-  padding: 60px 0;
+  padding: 60px 0 5px;
   overflow: hidden;
 }
 
@@ -1134,10 +1137,11 @@ h6 {
 }
 
 #contact .info p {
-  padding: 0 0 10px 36px;
+  
   line-height: 28px;
   font-size: 14px;
 }
+
 
 #contact .form #sendmessage {
   color: #007bff;
@@ -1211,6 +1215,7 @@ h6 {
 }
 
 #footer .footer-top .footer-info {
+  text-align: center;
   margin-bottom: 30px;
 }
 
@@ -1262,8 +1267,11 @@ h6 {
   position: relative;
   padding-bottom: 10px;
 }
-
+.footer-top{
+  text-align: center;
+}
 #footer .footer-top .footer-links {
+  /* text-align: center; */
   margin-bottom: 30px;
 }
 
@@ -1425,3 +1433,39 @@ h6 {
     padding: 100px 0 50px 0;
   }
 }
+
+#video{
+  text-align: center;
+  position: relative;
+  width: 50%;
+  margin: auto;
+}
+
+@media (max-width: 574px) {
+  #video {
+    width: 100%;
+    display: flex;
+    margin: auto;
+
+  }
+}
+
+.mapDiv{
+  width: 80%;
+  margin: auto;
+}
+
+@media (max-width: 574px){
+.mapDiv{
+  width:100%;
+  display: flex;
+}}
+.mapouter, .gmap_canvas{
+  width: 100%;
+  display: flex;
+}
+
+@media (max-width: 574px){
+.adress{margin:auto;}}
+
+.adress{margin: 40px 300px 0px 0px;}

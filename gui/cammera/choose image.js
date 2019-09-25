@@ -1,22 +1,23 @@
 
-    document.addEventListener('DOMContentLoaded', function () {
-        var box__input = document.getElementById("box__input");
-        var upload_icon = document.getElementById("upload_icon");
-        var choose_file = document.getElementById("choose_file");
-        var formDragDrop = document.getElementById("formDrop");
-        var imageToSend = "";
-        var droppedFiles = false;
-        var about=0;
-        // document.getElementById("aboutButton").addEventListener('click',function () {
-        //     about++;
-        //     if (about %2== 1) {
-        //         document.getElementById("about").style.display = "inline";
-        //     }
-        //     else {
-        //         document.getElementById("about").style.display = "none";
-    
-        //     }
-        // })
+document.write('<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>');
+document.addEventListener('DOMContentLoaded', function () {
+    var box__input = document.getElementById("box__input");
+    var upload_icon = document.getElementById("upload_icon");
+    var choose_file = document.getElementById("choose_file");
+    var formDragDrop = document.getElementById("formDrop");
+    var imageToSend = "";
+    var droppedFiles = false;
+    var about = 0;
+    // document.getElementById("aboutButton").addEventListener('click',function () {
+    //     about++;
+    //     if (about %2== 1) {
+    //         document.getElementById("about").style.display = "inline";
+    //     }
+    //     else {
+    //         document.getElementById("about").style.display = "none";
+
+    //     }
+    // })
     function handleFileSelect(evt) {
         var files = evt.target.files; // FileList object
 
@@ -144,7 +145,7 @@
     dropZone.addEventListener("dragenter", handleDragEnter, false);
     dropZone.addEventListener('drop', handleFileSelectD, false);
     var constraints = { video: { facingMode: "environment" }, audio: false };
-    
+
     // Define constants
     const cameraView = document.querySelector("#camera--view"),
         cameraOutput = document.querySelector("#camera--output"),
@@ -155,15 +156,14 @@
     cameraCencel.addEventListener('click', cameraCencel, false);
     ToTakePicture.addEventListener('click', cameraStart, false);
     var localStream;
-    cameraCencel.onclick = function () {
-
+    cameraCencel.onclick = closeCamera;
+    function closeCamera() {
+        debugger;
         var cameraV = document.getElementById("camera");
         localStream.stop();
-
         cameraV.style.visibility = "hidden";
         var cameraOutput = document.getElementById("camera--output");
         cameraOutput.style.visibility = "hidden";
-
     }
 
     function visibleC() {
@@ -203,6 +203,7 @@
         imageToSend = cameraOutput.src;
         cameraOutput.style.visibility = "visible";
         cameraOutput.classList.add("taken");
+        closeCamera();
         formDragDrop.style = "background-image:url(" + imageToSend + ")";
         uploadImage(imageToSend);
     };
@@ -236,7 +237,18 @@
         window.attachEvent("onmessage", onMessage, false);
     }
     function onMessage(event) {
-        document.getElementById('loading').hidden = true;
-        document.getElementById('formDrop').hidden = false;
+        if (event.data == 'show swal') {
+            Swal.fire({
+                text: 'no field found, please check the image',
+                type: 'error',
+                showCancelButton: false,
+                confirmButtonColor: 'rgb(118, 65, 101)',
+                cancelButtonColor: 'rgb(224, 145, 200)',
+            })
+        }
+        else {
+            document.getElementById('loading').hidden = true;
+            document.getElementById('formDrop').hidden = false;
+        }
     }
 }, false);

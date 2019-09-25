@@ -1,3 +1,14 @@
+.fa-camera:before {
+    content: "\f030";
+    background-color:#b4639b;
+    padding: 3px;
+}
+.fa-times-circle:before {
+	content: "\f057";
+	background-color:#b4639b;
+    padding: 3px;
+}
+}
 ul {
 	padding-inline-start: 0px;
 }

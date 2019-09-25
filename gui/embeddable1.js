@@ -109,11 +109,19 @@ function openOrCloseForm() {
         flagToOpenIframe = true;
         divIframe.hidden = !divIframe.hidden;
         for (var iconM of fieldMarked) {
-            document.body.removeChild(iconM);
+            try{
+            document.body.removeChild(iconM);}
+            catch(error){
+                console.log(error);
+            }
         }
         if (dataToInstallation != "true" && divIframe.hidden == true)//close instalation
         {
-            document.body.removeChild(install_icon);
+            try{
+            document.body.removeChild(install_icon);}
+            catch(error){
+                console.log(error);
+            }
             install_icon.hidden = true;
         }
     }
